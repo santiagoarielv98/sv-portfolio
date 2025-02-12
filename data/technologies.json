@@ -1,0 +1,150 @@
+[
+    {
+        "icon": "typescript",
+        "name": "TypeScript"
+    },
+    {
+        "icon": "react",
+        "name": "React"
+    },
+    {
+        "icon": "redux",
+        "name": "Redux"
+    },
+    {
+        "icon": "mui",
+        "name": "MUI Core"
+    },
+    {
+        "icon": "sass",
+        "name": "SASS"
+    },
+    {
+        "icon": "nextjs",
+        "name": "Next.js"
+    },
+    {
+        "icon": "angular",
+        "name": "Angular"
+    },
+    {
+        "icon": "figma",
+        "name": "Figma"
+    },
+    {
+        "icon": "java",
+        "name": "Java"
+    },
+    {
+        "icon": "spring",
+        "name": "Spring Boot"
+    },
+    {
+        "icon": "nestjs",
+        "name": "NestJS"
+    },
+    {
+        "icon": "firebase",
+        "name": "Firebase"
+    },
+    {
+        "icon": "aws",
+        "name": "AWS"
+    },
+    {
+        "icon": "docker",
+        "name": "Docker"
+    },
+    {
+        "icon": "mongodb",
+        "name": "MongoDB"
+    },
+    {
+        "icon": "mysql",
+        "name": "MySQL"
+    },
+    {
+        "icon": "postgresql",
+        "name": "PostgreSQL"
+    },
+    {
+        "icon": "gcp",
+        "name": "Google Cloud"
+    },
+    {
+        "icon": "github",
+        "name": "GitHub"
+    },
+    {
+        "icon": "gitlab",
+        "name": "GitLab"
+    },
+    {
+        "icon": "laravel",
+        "name": "Laravel"
+    },
+    {
+        "icon": "supabase",
+        "name": "Supabase"
+    },
+    {
+        "icon": "html",
+        "name": "HTML"
+    },
+    {
+        "icon": "tailwindcss",
+        "name": "Tailwind CSS"
+    },
+    {
+        "icon": "axios",
+        "name": "Axios"
+    },
+    {
+        "icon": "bootstrap",
+        "name": "Bootstrap"
+    },
+    {
+        "icon": "inertia",
+        "name": "Inertia"
+    },
+    {
+        "icon": "leaflet",
+        "name": "Leaflet"
+    },
+    {
+        "icon": "tanstack",
+        "name": "TanStack"
+    },
+    {
+        "icon": "swagger",
+        "name": "Swagger"
+    },
+    {
+        "icon": "javascript",
+        "name": "JavaScript"
+    },
+    {
+        "icon": "code",
+        "name": "code"
+    },
+    {
+        "icon": "graphql",
+        "name": "GraphQL"
+    },
+    {
+        "icon": "scrum",
+        "name": "Scrum"
+    },
+    {
+        "icon": "prisma",
+        "name": "Prisma"
+    },
+    {
+        "icon": "shadcn",
+        "name": "shadcn/ui"
+    },
+    {
+        "icon": "mercadopago",
+        "name": "MercadoPago API"
+    }
+]
