@@ -27,30 +27,7 @@ export const skillType = defineType({
       name: 'technologies',
       title: 'Technologies',
       type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            {
-              name: 'name',
-              title: 'Name',
-              type: 'string',
-            },
-            {
-              name: 'level',
-              title: 'Level',
-              type: 'string',
-              options: {
-                list: [
-                  {title: 'Beginner', value: 'beginner'},
-                  {title: 'Intermediate', value: 'intermediate'},
-                  {title: 'Advanced', value: 'advanced'},
-                ],
-              },
-            },
-          ],
-        },
-      ],
+      of: [{type: 'reference', to: [{type: 'iconType'}]}],
     },
   ],
   preview: {
