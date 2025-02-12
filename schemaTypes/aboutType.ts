@@ -22,4 +22,10 @@ export const aboutType = defineType({
       options: {hotspot: true},
     },
   ],
+  preview: {
+    select: {
+      title: 'title.en',
+      media: 'profileImage',
+    },
+  },
 })
