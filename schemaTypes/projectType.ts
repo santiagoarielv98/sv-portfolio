@@ -6,20 +6,13 @@ export const projectType = defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'name',
-      type: 'string',
-    }),
-    defineField({
       name: 'slug',
       type: 'slug',
-      options: {
-        source: 'name',
-        maxLength: 96,
-      },
+      options: {source: 'title'},
     }),
     defineField({
       name: 'title',
-      type: 'localeString',
+      type: 'string',
     }),
     defineField({
       name: 'description',
@@ -58,7 +51,8 @@ export const projectType = defineType({
   ],
   preview: {
     select: {
-      title: `name`,
+      title: 'title',
+      media: 'image',
     },
   },
 })

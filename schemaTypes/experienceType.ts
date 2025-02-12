@@ -39,4 +39,19 @@ export const experienceType = defineType({
       of: [{type: 'reference', to: [{type: 'iconType'}]}],
     },
   ],
+  preview: {
+    // titulo + (fecha de inicio - fecha de fin)
+    select: {
+      title: 'company',
+      startDate: 'startDate',
+      endDate: 'endDate',
+    },
+    prepare({title, startDate, endDate}) {
+      const start = new Date(startDate).getFullYear()
+      const end = new Date(endDate).getFullYear()
+      return {
+        title: `${title} (${start} - ${end})`,
+      }
+    },
+  },
 })

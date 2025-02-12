@@ -6,9 +6,17 @@ export const skillType = defineType({
   type: 'document',
   fields: [
     {
-      name: 'name',
-      title: 'Name',
+      name: 'category',
+      title: 'Category',
       type: 'string',
+      options: {
+        list: [
+          {title: 'Frontend', value: 'frontend'},
+          {title: 'Backend', value: 'backend'},
+          {title: 'Cloud', value: 'cloud'},
+        ],
+        layout: 'radio', // Opcional: para mostrar como botones de selección
+      },
     },
     {
       name: 'description',
@@ -16,21 +24,38 @@ export const skillType = defineType({
       type: 'localeString',
     },
     {
-      name: 'level',
-      title: 'Level',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Beginner', value: 'beginner'},
-          {title: 'Intermediate', value: 'intermediate'},
-          {title: 'Advanced', value: 'advanced'},
-        ],
-      },
-    },
-    {
-      name: 'icon',
-      title: 'Icon',
-      type: 'string',
+      name: 'technologies',
+      title: 'Technologies',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'name',
+              title: 'Name',
+              type: 'string',
+            },
+            {
+              name: 'level',
+              title: 'Level',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'Beginner', value: 'beginner'},
+                  {title: 'Intermediate', value: 'intermediate'},
+                  {title: 'Advanced', value: 'advanced'},
+                ],
+              },
+            },
+          ],
+        },
+      ],
     },
   ],
+  preview: {
+    select: {
+      title: 'category',
+    },
+  },
 })
