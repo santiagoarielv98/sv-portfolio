@@ -6,6 +6,7 @@ import {aboutType} from './aboutType'
 import {experienceType} from './experienceType'
 import {projectType} from './projectType'
 import {skillType} from './skillType'
+import {sectionType} from './sectionType'
 
 export const schemaTypes = [
   aboutType,
@@ -15,4 +16,5 @@ export const schemaTypes = [
   localeText,
   projectType,
   iconType,
+  sectionType,
 ]

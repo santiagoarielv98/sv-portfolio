@@ -8,7 +8,7 @@ export const aboutType = defineType({
     {
       name: 'title',
       title: 'Title',
-      type: 'localeString',
+      type: 'string',
     },
     {
       name: 'aboutMe',
@@ -24,7 +24,7 @@ export const aboutType = defineType({
   ],
   preview: {
     select: {
-      title: 'title.en',
+      title: 'title',
       media: 'profileImage',
     },
   },

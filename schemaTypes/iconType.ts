@@ -2,7 +2,7 @@ import {defineType} from 'sanity'
 
 export const iconType = defineType({
   name: 'iconType',
-  title: 'Icon Type',
+  title: 'Icons',
   type: 'document',
   fields: [
     {
