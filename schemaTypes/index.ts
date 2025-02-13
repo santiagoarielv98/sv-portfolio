@@ -58,6 +58,11 @@ export const personalInfo = defineType({
       type: 'localeString',
     },
     {
+      name: 'greating',
+      title: 'Saludo',
+      type: 'localeString',
+    },
+    {
       name: 'professionalTitle',
       title: 'Título Profesional',
       type: 'localeString',
@@ -77,6 +82,18 @@ export const personalInfo = defineType({
       name: 'resume',
       title: 'Currículum',
       type: 'file',
+    },
+    {
+      name: 'socialMedia',
+      title: 'Redes Sociales',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'socialMedia'}]}],
+    },
+    {
+      name: 'skillCategory',
+      title: 'Categoría',
+      type: 'reference',
+      to: [{type: 'skillCategory'}],
     },
   ],
   preview: {
@@ -225,12 +242,6 @@ export const skill = defineType({
         ],
       },
     },
-    {
-      name: 'category',
-      title: 'Categoría',
-      type: 'reference',
-      to: [{type: 'skillCategory'}],
-    },
   ],
 })
 
@@ -243,6 +254,12 @@ export const skillCategory = defineType({
       name: 'name',
       title: 'Nombre',
       type: 'localeString',
+    },
+    {
+      name: 'skills',
+      title: 'Habilidades',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'skill'}]}],
     },
   ],
   preview: {
@@ -306,6 +323,24 @@ export const project = defineType({
   },
 })
 
+export const socialMedia = defineType({
+  name: 'socialMedia',
+  title: 'Red Social',
+  type: 'document',
+  fields: [
+    {
+      name: 'platform',
+      title: 'Plataforma',
+      type: 'string',
+    },
+    {
+      name: 'url',
+      title: 'URL',
+      type: 'url',
+    },
+  ],
+})
+
 // schemas/contact.js
 export const contact = defineType({
   name: 'contact',
@@ -326,23 +361,7 @@ export const contact = defineType({
       name: 'socialMedia',
       title: 'Redes Sociales',
       type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            {
-              name: 'platform',
-              title: 'Plataforma',
-              type: 'string',
-            },
-            {
-              name: 'url',
-              title: 'URL',
-              type: 'url',
-            },
-          ],
-        },
-      ],
+      of: [{type: 'reference', to: [{type: 'socialMedia'}]}],
     },
   ],
 })
@@ -428,6 +447,11 @@ export const section = defineType({
       type: 'localeString',
     },
     {
+      name: 'subtitle',
+      title: 'Subtítulo',
+      type: 'localeString',
+    },
+    {
       name: 'description',
       title: 'Descripción',
       type: 'localeText',
@@ -488,19 +512,24 @@ export const section = defineType({
       description: 'Número para ordenar las secciones',
     },
     {
-      name: 'cta',
-      title: 'Botón de acción',
-      type: 'object',
-      fields: [
+      name: 'ctas',
+      title: 'Botones de acción',
+      type: 'array',
+      of: [
         {
-          name: 'text',
-          title: 'Texto',
-          type: 'localeString',
-        },
-        {
-          name: 'link',
-          title: 'Enlace',
-          type: 'url',
+          type: 'object',
+          fields: [
+            {
+              name: 'text',
+              title: 'Texto',
+              type: 'localeString',
+            },
+            {
+              name: 'action',
+              title: 'Acción',
+              type: 'string',
+            },
+          ],
         },
       ],
     },
@@ -526,4 +555,5 @@ export const schemaTypes = [
   testimonial,
   seo,
   section,
+  socialMedia,
 ]
