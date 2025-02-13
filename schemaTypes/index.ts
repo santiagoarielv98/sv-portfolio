@@ -199,6 +199,12 @@ export const education = defineType({
       title: 'Descripción',
       type: 'localeText',
     },
+    {
+      name: 'achievements',
+      title: 'Logros',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'skill'}]}],
+    },
   ],
   preview: {
     select: {
