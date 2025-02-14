@@ -1,13 +1,12 @@
 import {defineType} from 'sanity'
 
-// schemas/supportedLanguages.js
+// Base language configuration
 export const supportedLanguages = [
   {id: 'es', title: 'Spanish', isDefault: true},
   {id: 'en', title: 'English'},
-  // Agrega más idiomas según necesites
 ]
 
-// schemas/localeString.js
+// Base types for localization
 export const localeString = defineType({
   title: 'Localized string',
   name: 'localeString',
@@ -16,7 +15,7 @@ export const localeString = defineType({
     {
       title: 'Translations',
       name: 'translations',
-      options: {collapsible: true, collapsed: true},
+      options: {collapsible: true},
     },
   ],
   fields: supportedLanguages.map((lang) => ({
@@ -46,197 +45,186 @@ export const localeText = defineType({
   })),
 })
 
-// schemas/personalInfo.js
-export const personalInfo = defineType({
-  name: 'personalInfo',
-  title: 'Información Personal',
-  type: 'document',
+// Base content type with common fields
+const baseContent = {
   fields: [
     {
-      name: 'fullName',
-      title: 'Nombre Completo',
+      name: 'title',
+      type: 'localeString',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'description',
+      type: 'localeText',
+    },
+    {
+      name: 'slug',
+      type: 'slug',
+      options: {source: 'title.es'},
+    },
+  ],
+}
+
+// Main portfolio content types
+export const profile = defineType({
+  name: 'profile',
+  title: 'Perfil',
+  type: 'document',
+  fields: [
+    ...baseContent.fields,
+    {
+      name: 'role',
+      title: 'Rol Profesional',
       type: 'localeString',
     },
     {
-      name: 'greating',
-      title: 'Saludo',
-      type: 'localeString',
-    },
-    {
-      name: 'professionalTitle',
-      title: 'Título Profesional',
-      type: 'localeString',
-    },
-    {
-      name: 'bio',
-      title: 'Biografía',
-      type: 'localeText', // Deberías crear un localeText similar al localeString pero con type: 'text'
-    },
-    {
-      name: 'profileImage',
-      title: 'Foto de Perfil',
+      name: 'avatar',
       type: 'image',
       options: {hotspot: true},
     },
     {
       name: 'resume',
-      title: 'Currículum',
       type: 'file',
     },
     {
-      name: 'socialMedia',
-      title: 'Redes Sociales',
+      name: 'skills',
       type: 'array',
-      of: [{type: 'reference', to: [{type: 'socialMedia'}]}],
+      of: [{type: 'reference', to: [{type: 'skillCategory'}]}],
     },
     {
-      name: 'skillCategory',
-      title: 'Categoría',
+      name: 'availability',
       type: 'reference',
-      to: [{type: 'skillCategory'}],
+      to: [{type: 'availabilityStatus'}],
+    },
+    {
+      name: 'contact',
+      type: 'object',
+      fields: [
+        {name: 'email', type: 'string'},
+        {name: 'phone', type: 'string'},
+        {name: 'location', type: 'localeString'},
+        {
+          name: 'socials',
+          type: 'array',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                {name: 'platform', type: 'string'},
+                {name: 'url', type: 'url'},
+                {name: 'tooltip', type: 'localeString'},
+              ],
+            },
+          ],
+        },
+      ],
     },
   ],
-  preview: {
-    select: {
-      title: 'fullName.es',
-      subtitle: 'professionalTitle.es',
-      media: 'profileImage',
-    },
-  },
 })
 
-// schemas/workExperience.js
-export const workExperience = defineType({
-  name: 'workExperience',
-  title: 'Experiencia Laboral',
+export const experience = defineType({
+  name: 'experience',
+  title: 'Experiencia',
   type: 'document',
   fields: [
+    ...baseContent.fields,
     {
-      name: 'company',
-      title: 'Empresa',
+      name: 'organization',
       type: 'string',
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'position',
-      title: 'Cargo',
+      name: 'role',
       type: 'localeString',
     },
     {
-      name: 'startDate',
-      title: 'Fecha de Inicio',
-      type: 'date',
+      name: 'type',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Trabajo', value: 'work'},
+          {title: 'Educación', value: 'education'},
+          {title: 'Voluntariado', value: 'volunteer'},
+        ],
+      },
     },
     {
-      name: 'endDate',
-      title: 'Fecha de Finalización',
-      type: 'date',
+      name: 'dateRange',
+      type: 'object',
+      fields: [
+        {name: 'start', type: 'date'},
+        {name: 'end', type: 'date'},
+        {name: 'isCurrent', type: 'boolean'},
+      ],
     },
     {
-      name: 'location',
-      title: 'Ubicación',
-      type: 'localeString',
-    },
-    {
-      name: 'description',
-      title: 'Descripción',
+      name: 'highlights',
       type: 'array',
       of: [{type: 'localeText'}],
     },
     {
-      name: 'technologies',
-      title: 'Tecnologías Utilizadas',
+      name: 'skills',
       type: 'array',
       of: [{type: 'reference', to: [{type: 'skill'}]}],
     },
-  ],
-  preview: {
-    select: {
-      title: 'company',
-      subtitle: 'position.es',
-      media: 'logo',
-      startDate: 'startDate',
-      endDate: 'endDate',
-    },
-    prepare({title, subtitle, media, endDate, startDate}) {
-      const dateRange = `${new Date(startDate).getFullYear()} - ${new Date(endDate).getFullYear()}`
-      return {
-        title,
-        subtitle: `${subtitle} (${dateRange})`,
-        media,
-      }
-    },
-  },
-})
-
-// schemas/education.js
-export const education = defineType({
-  name: 'education',
-  title: 'Educación',
-  type: 'document',
-  fields: [
     {
-      name: 'institution',
-      title: 'Institución',
-      type: 'string',
-    },
-    {
-      name: 'degree',
-      title: 'Título',
+      name: 'location',
       type: 'localeString',
     },
+  ],
+})
+
+export const project = defineType({
+  name: 'project',
+  title: 'Proyecto',
+  type: 'document',
+  fields: [
+    ...baseContent.fields,
     {
-      name: 'startDate',
-      title: 'Fecha de Inicio',
-      type: 'date',
+      name: 'thumbnail',
+      type: 'image',
+      options: {hotspot: true},
     },
     {
-      name: 'endDate',
-      title: 'Fecha de Finalización',
-      type: 'date',
+      name: 'gallery',
+      type: 'array',
+      of: [{type: 'image'}],
     },
     {
-      name: 'description',
-      title: 'Descripción',
-      type: 'localeText',
-    },
-    {
-      name: 'achievements',
-      title: 'Logros',
+      name: 'skills',
       type: 'array',
       of: [{type: 'reference', to: [{type: 'skill'}]}],
     },
+    {
+      name: 'links',
+      type: 'object',
+      fields: [
+        {name: 'live', type: 'url'},
+        {name: 'source', type: 'url'},
+        {name: 'documentation', type: 'url'},
+      ],
+    },
+    {
+      name: 'featured',
+      type: 'boolean',
+    },
   ],
-  preview: {
-    select: {
-      title: 'institution',
-      subtitle: 'degree.es',
-      startDate: 'startDate',
-      endDate: 'endDate',
-    },
-    prepare({title, subtitle, startDate, endDate}) {
-      const dateRange = `${new Date(startDate).getFullYear()} - ${new Date(endDate).getFullYear()}`
-      return {
-        title,
-        subtitle: `${subtitle} (${dateRange})`,
-      }
-    },
-  },
 })
 
-// schemas/skills.js
 export const skill = defineType({
   name: 'skill',
-  title: 'Habilidad',
   type: 'document',
   fields: [
     {
       name: 'name',
-      title: 'Nombre',
       type: 'localeString',
     },
     {
-      name: 'level',
-      title: 'Nivel',
+      name: 'icon',
+      type: 'image',
+    },
+    {
+      name: 'proficiency',
       type: 'number',
       options: {
         list: [
@@ -244,398 +232,112 @@ export const skill = defineType({
           {title: 'Intermedio', value: 2},
           {title: 'Avanzado', value: 3},
           {title: 'Experto', value: 4},
-          {title: 'Especialista', value: 5},
         ],
       },
     },
   ],
-  preview: {
-    select: {
-      title: 'name.es',
-      level: 'level',
-    },
-    prepare({title, level}) {
-      return {
-        title: title,
-        subtitle: `Nivel: ${level}`,
-      }
-    },
-  },
 })
 
 export const skillCategory = defineType({
   name: 'skillCategory',
-  title: 'Categoría de Habilidad',
   type: 'document',
   fields: [
     {
       name: 'name',
-      title: 'Nombre',
       type: 'localeString',
     },
     {
       name: 'skills',
-      title: 'Habilidades',
       type: 'array',
       of: [{type: 'reference', to: [{type: 'skill'}]}],
     },
   ],
-  preview: {
-    select: {
-      title: 'name.es',
-    },
-  },
 })
 
-// schemas/projects.js
-export const project = defineType({
-  name: 'project',
-  title: 'Proyecto',
-  type: 'document',
-  fields: [
-    {
-      name: 'title',
-      title: 'Título',
-      type: 'localeString',
-    },
-    {
-      name: 'description',
-      title: 'Descripción',
-      type: 'localeText',
-    },
-    {
-      name: 'technologies',
-      title: 'Tecnologías',
-      type: 'array',
-      of: [{type: 'reference', to: [{type: 'skill'}]}],
-    },
-    {
-      name: 'links',
-      title: 'Enlaces',
-      type: 'object',
-      fields: [
-        {
-          name: 'live',
-          title: 'Demo',
-          type: 'url',
-        },
-        {
-          name: 'repo',
-          title: 'Repositorio',
-          type: 'url',
-        },
-      ],
-    },
-    {
-      name: 'featuredImage',
-      title: 'Imagen Destacada',
-      type: 'image',
-      options: {hotspot: true},
-    },
-  ],
-  preview: {
-    select: {
-      title: 'title.es',
-      media: 'featuredImage',
-    },
-  },
-})
-
-export const socialMedia = defineType({
-  name: 'socialMedia',
-  title: 'Red Social',
-  type: 'document',
-  fields: [
-    {
-      name: 'platform',
-      title: 'Plataforma',
-      type: 'string',
-    },
-    {
-      name: 'url',
-      title: 'URL',
-      type: 'url',
-    },
-    {
-      name: 'tooltip',
-      title: 'Tooltip',
-      type: 'localeString',
-    },
-  ],
-})
-
-//schemas/availabilityStatus.js
 export const availabilityStatus = defineType({
   name: 'availabilityStatus',
-  title: 'Estado de Disponibilidad',
   type: 'document',
   fields: [
     {
       name: 'status',
-      title: 'Estado',
       type: 'string',
       options: {
         list: [
-          {title: 'Disponible Inmediatamente', value: 'available'},
-          {title: 'Abierto a Oportunidades', value: 'open'},
-          {title: 'No Disponible', value: 'unavailable'},
-          {title: 'Disponible a partir de', value: 'availableFrom'},
+          {title: 'Disponible', value: 'available'},
+          {title: 'Abierto a ofertas', value: 'open'},
+          {title: 'No disponible', value: 'unavailable'},
         ],
       },
     },
     {
-      name: 'statusText',
-      title: 'Texto del Estado',
+      name: 'message',
       type: 'localeString',
-      description: 'Texto traducible que se mostrará para este estado',
-    },
-    {
-      name: 'date',
-      title: 'Fecha de Disponibilidad',
-      type: 'date',
-      hidden: ({parent}) => parent.status !== 'availableFrom',
-    },
-  ],
-  preview: {
-    select: {
-      title: 'statusText.es',
-      date: 'date',
-    },
-    prepare({title, date}) {
-      return {
-        title: title,
-        subtitle: date ? `Disponible desde: ${date}` : '',
-      }
-    },
-  },
-})
-
-// schemas/contact.js
-export const contact = defineType({
-  name: 'contact',
-  title: 'Contacto',
-  type: 'document',
-  fields: [
-    {
-      name: 'email',
-      title: 'Email',
-      type: 'string',
-    },
-    {
-      name: 'phone',
-      title: 'Teléfono',
-      type: 'string',
-    },
-    {
-      name: 'address',
-      title: 'Dirección',
-      type: 'localeString',
-    },
-    {
-      name: 'socialMedia',
-      title: 'Redes Sociales',
-      type: 'array',
-      of: [{type: 'reference', to: [{type: 'socialMedia'}]}],
-    },
-    {
-      name: 'availability',
-      title: 'Disponibilidad',
-      type: 'reference',
-      to: [{type: 'availabilityStatus'}],
     },
   ],
 })
 
-// schemas/testimonials.js
-export const testimonial = defineType({
-  name: 'testimonial',
-  title: 'Recomendaciones',
-  type: 'document',
-  fields: [
-    {
-      name: 'author',
-      title: 'Autor',
-      type: 'string',
-    },
-    {
-      name: 'role',
-      title: 'Cargo',
-      type: 'localeString',
-    },
-    {
-      name: 'company',
-      title: 'Empresa',
-      type: 'string',
-    },
-    {
-      name: 'text',
-      title: 'Texto',
-      type: 'localeText',
-    },
-    {
-      name: 'date',
-      title: 'Fecha',
-      type: 'string',
-    },
-  ],
-})
-
-// schemas/seo.js
-export const seo = defineType({
-  name: 'seo',
-  title: 'SEO',
-  type: 'document',
-  fields: [
-    {
-      name: 'metaTitle',
-      title: 'Meta Título',
-      type: 'localeString',
-    },
-    {
-      name: 'metaDescription',
-      title: 'Meta Descripción',
-      type: 'localeText',
-    },
-    {
-      name: 'keywords',
-      title: 'Palabras Clave',
-      type: 'array',
-      of: [{type: 'localeString'}],
-    },
-  ],
-})
-
-// schemas/section.js
 export const section = defineType({
   name: 'section',
-  title: 'Sección',
   type: 'document',
   fields: [
     {
       name: 'identifier',
-      title: 'Identificador único',
       type: 'slug',
       validation: (Rule) => Rule.required(),
-      description: 'Usado para identificar la sección en el código',
-      options: {
-        source: 'title.en',
-      },
     },
     {
       name: 'title',
-      title: 'Título de la sección',
       type: 'localeString',
     },
     {
-      name: 'subtitle',
-      title: 'Subtítulo',
-      type: 'localeString',
-    },
-    {
-      name: 'description',
-      title: 'Descripción',
-      type: 'localeText',
-    },
-    {
-      name: 'sectionType',
-      title: 'Tipo de Sección',
+      name: 'type',
       type: 'string',
       options: {
         list: [
           {title: 'Hero', value: 'hero'},
-          {title: 'Acerca de', value: 'about'},
-          {title: 'Experiencia Laboral', value: 'workExperience'},
+          {title: 'Experiencia', value: 'experience'},
           {title: 'Proyectos', value: 'projects'},
           {title: 'Habilidades', value: 'skills'},
-          {title: 'Educación', value: 'education'},
           {title: 'Contacto', value: 'contact'},
-          {title: 'Personalizado', value: 'custom'},
         ],
       },
-      validation: (Rule) => Rule.required(),
     },
     {
       name: 'content',
-      title: 'Contenido Dinámico',
       type: 'array',
       of: [
         {
           type: 'reference',
-          to: [
-            {type: 'personalInfo'},
-            {type: 'workExperience'},
-            {type: 'project'},
-            {type: 'skillCategory'},
-            {type: 'education'},
-            {type: 'contact'},
-          ],
+          to: [{type: 'profile'}, {type: 'experience'}, {type: 'project'}, {type: 'skillCategory'}],
         },
       ],
-      description: 'Contenido específico según el tipo de sección',
     },
     {
       name: 'layout',
-      title: 'Diseño',
       type: 'string',
       options: {
         list: [
           {title: 'Grid', value: 'grid'},
           {title: 'Lista', value: 'list'},
-          {title: 'Tarjetas', value: 'cards'},
           {title: 'Timeline', value: 'timeline'},
         ],
       },
     },
     {
       name: 'order',
-      title: 'Orden de aparición',
       type: 'number',
-      description: 'Número para ordenar las secciones',
-    },
-    {
-      name: 'ctas',
-      title: 'Botones de acción',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            {
-              name: 'text',
-              title: 'Texto',
-              type: 'localeString',
-            },
-            {
-              name: 'action',
-              title: 'Acción',
-              type: 'string',
-            },
-          ],
-        },
-      ],
     },
   ],
-  preview: {
-    select: {
-      title: 'title.es',
-      subtitle: 'sectionType',
-    },
-  },
 })
 
 export const schemaTypes = [
   localeString,
   localeText,
-  personalInfo,
-  workExperience,
-  education,
+  profile,
+  experience,
+  project,
   skill,
   skillCategory,
-  project,
-  contact,
-  // testimonial,
-  // seo,
-  section,
-  socialMedia,
   availabilityStatus,
+  section,
 ]
