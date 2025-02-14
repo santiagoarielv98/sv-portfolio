@@ -45,6 +45,24 @@ export const localeText = defineType({
   })),
 })
 
+// Esquema simplificado para iconos
+const iconField = defineField({
+  name: 'icon',
+  title: 'Icono',
+  type: 'object',
+  fields: [
+    {
+      name: 'name',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'icon',
+      type: 'string',
+    },
+  ],
+})
+
 // Base content type with common fields
 const baseContent = defineField({
   name: 'baseContent',
@@ -136,7 +154,18 @@ export const profile = defineType({
                 {name: 'platform', type: 'string'},
                 {name: 'url', type: 'url'},
                 {name: 'tooltip', type: 'localeString'},
+                iconField,
               ],
+              preview: {
+                select: {
+                  platform: 'platform',
+                },
+                prepare({platform, icon}) {
+                  return {
+                    title: platform,
+                  }
+                },
+              },
             },
           ],
         },
@@ -287,6 +316,7 @@ export const project = defineType({
   },
 })
 
+// Actualizar skill para usar el nuevo esquema de icono
 export const skill = defineType({
   name: 'skill',
   title: 'Habilidades',
@@ -296,10 +326,7 @@ export const skill = defineType({
       name: 'name',
       type: 'localeString',
     },
-    {
-      name: 'icon',
-      type: 'image',
-    },
+    iconField,
     {
       name: 'tooltip',
       title: 'Descripción al pasar el mouse',
@@ -322,10 +349,10 @@ export const skill = defineType({
   preview: {
     select: {
       title: 'name.es',
-      media: 'icon',
+      icon: 'icon',
       proficiency: 'proficiency',
     },
-    prepare({title, media, proficiency}) {
+    prepare({title, icon, proficiency}) {
       const levels: Record<number, string> = {
         1: '⚪ Básico',
         2: '🔵 Intermedio',
@@ -333,14 +360,14 @@ export const skill = defineType({
         4: '⭐ Experto',
       }
       return {
-        title,
+        title: `${title}`,
         subtitle: levels[proficiency] || 'Sin nivel',
-        media,
       }
     },
   },
 })
 
+// Actualizar skillCategory para permitir iconos
 export const skillCategory = defineType({
   name: 'skillCategory',
   title: 'Categorías de Habilidades',
@@ -350,6 +377,7 @@ export const skillCategory = defineType({
       name: 'name',
       type: 'localeString',
     },
+    iconField,
     {
       name: 'skills',
       type: 'array',
@@ -360,10 +388,11 @@ export const skillCategory = defineType({
     select: {
       title: 'name.es',
       skills: 'skills',
+      icon: 'icon',
     },
-    prepare({title, skills = []}) {
+    prepare({title, skills = [], icon}) {
       return {
-        title,
+        title: `${title}`,
         subtitle: `${skills.length} habilidades`,
       }
     },
@@ -422,6 +451,10 @@ export const section = defineType({
     },
     {
       name: 'title',
+      type: 'localeString',
+    },
+    {
+      name: 'subtitle',
       type: 'localeString',
     },
     {
