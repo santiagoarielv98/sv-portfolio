@@ -249,6 +249,18 @@ export const skill = defineType({
       },
     },
   ],
+  preview: {
+    select: {
+      title: 'name.es',
+      level: 'level',
+    },
+    prepare({title, level}) {
+      return {
+        title: title,
+        subtitle: `Nivel: ${level}`,
+      }
+    },
+  },
 })
 
 export const skillCategory = defineType({
@@ -344,6 +356,39 @@ export const socialMedia = defineType({
       title: 'URL',
       type: 'url',
     },
+    {
+      name: 'tooltip',
+      title: 'Tooltip',
+      type: 'localeString',
+    },
+  ],
+})
+
+//schemas/availabilityStatus.js
+export const availabilityStatus = defineType({
+  name: 'availabilityStatus',
+  title: 'Estado de Disponibilidad',
+  type: 'document',
+  fields: [
+    {
+      name: 'status',
+      title: 'Estado',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Disponible Inmediatamente', value: 'available'},
+          {title: 'Abierto a Oportunidades', value: 'open'},
+          {title: 'No Disponible', value: 'unavailable'},
+          {title: 'Disponible a partir de', value: 'availableFrom'},
+        ],
+      },
+    },
+    {
+      name: 'date',
+      title: 'Fecha de Disponibilidad',
+      type: 'date',
+      hidden: ({parent}) => parent.status !== 'availableFrom',
+    },
   ],
 })
 
@@ -364,10 +409,21 @@ export const contact = defineType({
       type: 'string',
     },
     {
+      name: 'address',
+      title: 'Dirección',
+      type: 'localeString',
+    },
+    {
       name: 'socialMedia',
       title: 'Redes Sociales',
       type: 'array',
       of: [{type: 'reference', to: [{type: 'socialMedia'}]}],
+    },
+    {
+      name: 'availability',
+      title: 'Disponibilidad',
+      type: 'reference',
+      to: [{type: 'availabilityStatus'}],
     },
   ],
 })
@@ -493,6 +549,7 @@ export const section = defineType({
             {type: 'project'},
             {type: 'skillCategory'},
             {type: 'education'},
+            {type: 'contact'},
           ],
         },
       ],
@@ -558,8 +615,9 @@ export const schemaTypes = [
   skillCategory,
   project,
   contact,
-  testimonial,
-  seo,
+  // testimonial,
+  // seo,
   section,
   socialMedia,
+  availabilityStatus,
 ]
