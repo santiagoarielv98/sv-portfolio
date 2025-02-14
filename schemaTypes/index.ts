@@ -117,6 +117,25 @@ export const profile = defineType({
       to: [{type: 'availabilityStatus'}],
     },
     {
+      name: 'greeting',
+      type: 'localeString',
+    },
+    {
+      name: 'topSkills',
+      type: 'object',
+      fields: [
+        {
+          name: 'title',
+          type: 'localeString',
+        },
+        {
+          name: 'skills',
+          type: 'array',
+          of: [{type: 'reference', to: [{type: 'skill'}]}],
+        },
+      ],
+    },
+    {
       name: 'contact',
       type: 'object',
       fields: [
@@ -160,7 +179,7 @@ export const profile = defineType({
                 select: {
                   platform: 'platform',
                 },
-                prepare({platform, icon}) {
+                prepare({platform}) {
                   return {
                     title: platform,
                   }
@@ -352,7 +371,7 @@ export const skill = defineType({
       icon: 'icon',
       proficiency: 'proficiency',
     },
-    prepare({title, icon, proficiency}) {
+    prepare({title, proficiency}) {
       const levels: Record<number, string> = {
         1: '⚪ Básico',
         2: '🔵 Intermedio',
@@ -390,7 +409,7 @@ export const skillCategory = defineType({
       skills: 'skills',
       icon: 'icon',
     },
-    prepare({title, skills = [], icon}) {
+    prepare({title, skills = []}) {
       return {
         title: `${title}`,
         subtitle: `${skills.length} habilidades`,
@@ -463,6 +482,7 @@ export const section = defineType({
       options: {
         list: [
           {title: 'Hero', value: 'hero'},
+          {title: 'Sobre mí', value: 'about'},
           {title: 'Experiencia', value: 'experience'},
           {title: 'Proyectos', value: 'projects'},
           {title: 'Habilidades', value: 'skills'},
@@ -506,6 +526,7 @@ export const section = defineType({
     prepare({title, type, layout, order}) {
       const typeEmojis: Record<string, string> = {
         hero: '👋',
+        about: '📝',
         experience: '💼',
         projects: '🚀',
         skills: '💪',
