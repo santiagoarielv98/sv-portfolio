@@ -384,12 +384,30 @@ export const availabilityStatus = defineType({
       },
     },
     {
+      name: 'statusText',
+      title: 'Texto del Estado',
+      type: 'localeString',
+      description: 'Texto traducible que se mostrará para este estado',
+    },
+    {
       name: 'date',
       title: 'Fecha de Disponibilidad',
       type: 'date',
       hidden: ({parent}) => parent.status !== 'availableFrom',
     },
   ],
+  preview: {
+    select: {
+      title: 'statusText.es',
+      date: 'date',
+    },
+    prepare({title, date}) {
+      return {
+        title: title,
+        subtitle: date ? `Disponible desde: ${date}` : '',
+      }
+    },
+  },
 })
 
 // schemas/contact.js
