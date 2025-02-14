@@ -85,6 +85,70 @@ const baseContent = defineField({
   ],
 })
 
+// Agregar después de los tipos base y antes de los tipos principales
+export const action = defineType({
+  name: 'action',
+  title: 'Acción',
+  type: 'document',
+  fields: [
+    {
+      name: 'label',
+      type: 'localeString',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'type',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Botón Primario', value: 'primary'},
+          {title: 'Botón Secundario', value: 'secondary'},
+          {title: 'Enlace', value: 'link'},
+          {title: 'Ancla', value: 'anchor'},
+        ],
+      },
+      validation: (Rule) => Rule.required(),
+    },
+    iconField,
+    {
+      name: 'action',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Ir a sección', value: 'goto'},
+          {title: 'Descargar', value: 'download'},
+          {title: 'Enlace externo', value: 'external'},
+          {title: 'Contacto', value: 'contact'},
+        ],
+      },
+    },
+    {
+      name: 'target',
+      type: 'string',
+      description: 'URL, ID de sección o email dependiendo del tipo de acción',
+    },
+  ],
+  preview: {
+    select: {
+      label: 'label.es',
+      type: 'type',
+      action: 'action',
+    },
+    prepare({label, type, action}) {
+      const typeEmojis: Record<string, string> = {
+        primary: '🔵',
+        secondary: '⚪',
+        link: '🔗',
+        anchor: '⚓',
+      }
+      return {
+        title: `${typeEmojis[type] || '📎'} ${label}`,
+        subtitle: `${type} • ${action}`,
+      }
+    },
+  },
+})
+
 // Main portfolio content types
 export const profile = defineType({
   name: 'profile',
@@ -491,6 +555,16 @@ export const section = defineType({
       },
     },
     {
+      name: 'actions',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'action'}],
+        },
+      ],
+    },
+    {
       name: 'content',
       type: 'array',
       of: [
@@ -543,6 +617,7 @@ export const section = defineType({
 export const schemaTypes = [
   localeString,
   localeText,
+  action,
   profile,
   experience,
   project,
