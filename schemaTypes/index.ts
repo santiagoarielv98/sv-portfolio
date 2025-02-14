@@ -100,9 +100,30 @@ export const profile = defineType({
       name: 'contact',
       type: 'object',
       fields: [
-        {name: 'email', type: 'string'},
-        {name: 'phone', type: 'string'},
-        {name: 'location', type: 'localeString'},
+        {
+          name: 'email',
+          type: 'object',
+          fields: [
+            {name: 'label', type: 'localeString'},
+            {name: 'value', type: 'string'},
+          ],
+        },
+        {
+          name: 'phone',
+          type: 'object',
+          fields: [
+            {name: 'label', type: 'localeString'},
+            {name: 'value', type: 'string'},
+          ],
+        },
+        {
+          name: 'location',
+          type: 'object',
+          fields: [
+            {name: 'label', type: 'localeString'},
+            {name: 'value', type: 'localeString'},
+          ],
+        },
         {
           name: 'socials',
           type: 'array',
@@ -222,6 +243,12 @@ export const skill = defineType({
     {
       name: 'icon',
       type: 'image',
+    },
+    {
+      name: 'tooltip',
+      title: 'Descripción al pasar el mouse',
+      type: 'localeText',
+      description: 'Breve descripción que aparecerá al pasar el mouse sobre la skill',
     },
     {
       name: 'proficiency',
