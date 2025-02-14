@@ -46,10 +46,10 @@ export const localeText = defineType({
 })
 
 // Esquema simplificado para iconos
-const iconField = defineField({
+export const icon = defineType({
   name: 'icon',
-  title: 'Icono',
-  type: 'object',
+  title: 'Iconos',
+  type: 'document',
   fields: [
     {
       name: 'name',
@@ -59,9 +59,18 @@ const iconField = defineField({
     {
       name: 'icon',
       type: 'string',
+      description: 'Nombre del icono (ej: FaGithub)',
+      validation: (Rule) => Rule.required(),
     },
   ],
 })
+
+// Modificar los tipos que usan iconos para usar referencias
+const iconReference = {
+  name: 'icon',
+  type: 'reference',
+  to: [{type: 'icon'}],
+}
 
 // Base content type with common fields
 const baseContent = defineField({
@@ -109,7 +118,7 @@ export const action = defineType({
       },
       validation: (Rule) => Rule.required(),
     },
-    iconField,
+    iconReference,
     {
       name: 'action',
       type: 'string',
@@ -144,6 +153,39 @@ export const action = defineType({
       return {
         title: `${typeEmojis[type] || '📎'} ${label}`,
         subtitle: `${type} • ${action}`,
+      }
+    },
+  },
+})
+
+export const social = defineType({
+  name: 'social',
+  title: 'Redes Sociales',
+  type: 'document',
+  fields: [
+    {
+      name: 'platform',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'url',
+      type: 'url',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'tooltip',
+      type: 'localeString',
+    },
+    iconReference,
+  ],
+  preview: {
+    select: {
+      platform: 'platform',
+    },
+    prepare({platform}) {
+      return {
+        title: platform,
       }
     },
   },
@@ -230,27 +272,7 @@ export const profile = defineType({
         {
           name: 'socials',
           type: 'array',
-          of: [
-            {
-              type: 'object',
-              fields: [
-                {name: 'platform', type: 'string'},
-                {name: 'url', type: 'url'},
-                {name: 'tooltip', type: 'localeString'},
-                iconField,
-              ],
-              preview: {
-                select: {
-                  platform: 'platform',
-                },
-                prepare({platform}) {
-                  return {
-                    title: platform,
-                  }
-                },
-              },
-            },
-          ],
+          of: [{type: 'reference', to: [{type: 'social'}]}],
         },
       ],
     },
@@ -409,7 +431,7 @@ export const skill = defineType({
       name: 'name',
       type: 'localeString',
     },
-    iconField,
+    iconReference,
     {
       name: 'tooltip',
       title: 'Descripción al pasar el mouse',
@@ -460,7 +482,7 @@ export const skillCategory = defineType({
       name: 'name',
       type: 'localeString',
     },
-    iconField,
+    iconReference,
     {
       name: 'skills',
       type: 'array',
@@ -617,6 +639,7 @@ export const section = defineType({
 export const schemaTypes = [
   localeString,
   localeText,
+  icon,
   action,
   profile,
   experience,
@@ -625,4 +648,5 @@ export const schemaTypes = [
   skillCategory,
   availabilityStatus,
   section,
+  social,
 ]
