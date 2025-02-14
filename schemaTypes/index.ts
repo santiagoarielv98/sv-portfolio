@@ -1,4 +1,4 @@
-import {defineType} from 'sanity'
+import {defineField, defineType} from 'sanity'
 
 // Base language configuration
 export const supportedLanguages = [
@@ -8,7 +8,7 @@ export const supportedLanguages = [
 
 // Base types for localization
 export const localeString = defineType({
-  title: 'Localized string',
+  title: 'Texto Traducible',
   name: 'localeString',
   type: 'object',
   fieldsets: [
@@ -27,7 +27,7 @@ export const localeString = defineType({
 })
 
 export const localeText = defineType({
-  title: 'Localized text',
+  title: 'Texto Largo Traducible',
   name: 'localeText',
   type: 'object',
   fieldsets: [
@@ -46,7 +46,9 @@ export const localeText = defineType({
 })
 
 // Base content type with common fields
-const baseContent = {
+const baseContent = defineField({
+  name: 'baseContent',
+  type: 'object',
   fields: [
     {
       name: 'title',
@@ -63,12 +65,12 @@ const baseContent = {
       options: {source: 'title.es'},
     },
   ],
-}
+})
 
 // Main portfolio content types
 export const profile = defineType({
   name: 'profile',
-  title: 'Perfil',
+  title: 'Perfil Personal',
   type: 'document',
   fields: [
     ...baseContent.fields,
@@ -141,11 +143,26 @@ export const profile = defineType({
       ],
     },
   ],
+  preview: {
+    select: {
+      title: 'title.es',
+      subtitle: 'role.es',
+      media: 'avatar',
+      email: 'contact.email.value',
+    },
+    prepare({title, subtitle, media, email}) {
+      return {
+        title: title || 'Perfil sin nombre',
+        subtitle: `${subtitle || 'Sin rol'} • ${email || 'Sin email'}`,
+        media,
+      }
+    },
+  },
 })
 
 export const experience = defineType({
   name: 'experience',
-  title: 'Experiencia',
+  title: 'Experiencia Profesional',
   type: 'document',
   fields: [
     ...baseContent.fields,
@@ -193,11 +210,34 @@ export const experience = defineType({
       type: 'localeString',
     },
   ],
+  preview: {
+    select: {
+      org: 'organization',
+      role: 'role.es',
+      type: 'type',
+      start: 'dateRange.start',
+      end: 'dateRange.end',
+      isCurrent: 'dateRange.isCurrent',
+    },
+    prepare({org, role, type, start, end, isCurrent}) {
+      const typeLabels: Record<string, string> = {
+        work: '💼 Trabajo',
+        education: '🎓 Educación',
+        volunteer: '🤝 Voluntariado',
+      }
+      const dateEnd = isCurrent ? 'Presente' : new Date(end).getFullYear()
+      const dateRange = `${new Date(start).getFullYear()} - ${dateEnd}`
+      return {
+        title: `${org} • ${role || 'Sin cargo'}`,
+        subtitle: `${typeLabels[type] || 'Sin tipo'} | ${dateRange}`,
+      }
+    },
+  },
 })
 
 export const project = defineType({
   name: 'project',
-  title: 'Proyecto',
+  title: 'Proyectos',
   type: 'document',
   fields: [
     ...baseContent.fields,
@@ -230,10 +270,26 @@ export const project = defineType({
       type: 'boolean',
     },
   ],
+  preview: {
+    select: {
+      title: 'title.es',
+      description: 'description.es',
+      media: 'thumbnail',
+      featured: 'featured',
+    },
+    prepare({title, description, media, featured}) {
+      return {
+        title: `${featured ? '⭐ ' : ''}${title}`,
+        subtitle: description?.slice(0, 50) + (description?.length > 50 ? '...' : ''),
+        media,
+      }
+    },
+  },
 })
 
 export const skill = defineType({
   name: 'skill',
+  title: 'Habilidades',
   type: 'document',
   fields: [
     {
@@ -263,10 +319,31 @@ export const skill = defineType({
       },
     },
   ],
+  preview: {
+    select: {
+      title: 'name.es',
+      media: 'icon',
+      proficiency: 'proficiency',
+    },
+    prepare({title, media, proficiency}) {
+      const levels: Record<number, string> = {
+        1: '⚪ Básico',
+        2: '🔵 Intermedio',
+        3: '🟢 Avanzado',
+        4: '⭐ Experto',
+      }
+      return {
+        title,
+        subtitle: levels[proficiency] || 'Sin nivel',
+        media,
+      }
+    },
+  },
 })
 
 export const skillCategory = defineType({
   name: 'skillCategory',
+  title: 'Categorías de Habilidades',
   type: 'document',
   fields: [
     {
@@ -279,10 +356,23 @@ export const skillCategory = defineType({
       of: [{type: 'reference', to: [{type: 'skill'}]}],
     },
   ],
+  preview: {
+    select: {
+      title: 'name.es',
+      skills: 'skills',
+    },
+    prepare({title, skills = []}) {
+      return {
+        title,
+        subtitle: `${skills.length} habilidades`,
+      }
+    },
+  },
 })
 
 export const availabilityStatus = defineType({
   name: 'availabilityStatus',
+  title: 'Estado de Disponibilidad',
   type: 'document',
   fields: [
     {
@@ -301,10 +391,28 @@ export const availabilityStatus = defineType({
       type: 'localeString',
     },
   ],
+  preview: {
+    select: {
+      status: 'status',
+      message: 'message.es',
+    },
+    prepare({status, message}) {
+      const statusEmoji: Record<string, string> = {
+        available: '🟢',
+        open: '🟡',
+        unavailable: '🔴',
+      }
+      return {
+        title: `${statusEmoji[status] || '⚪'} ${message || 'Sin mensaje'}`,
+        subtitle: status,
+      }
+    },
+  },
 })
 
 export const section = defineType({
   name: 'section',
+  title: 'Secciones del Portfolio',
   type: 'document',
   fields: [
     {
@@ -355,6 +463,27 @@ export const section = defineType({
       type: 'number',
     },
   ],
+  preview: {
+    select: {
+      title: 'title.es',
+      type: 'type',
+      layout: 'layout',
+      order: 'order',
+    },
+    prepare({title, type, layout, order}) {
+      const typeEmojis: Record<string, string> = {
+        hero: '👋',
+        experience: '💼',
+        projects: '🚀',
+        skills: '💪',
+        contact: '📬',
+      }
+      return {
+        title: `${typeEmojis[type] || '📄'} ${title || 'Sin título'}`,
+        subtitle: `${type} • ${layout} • Orden: ${order || 'No definido'}`,
+      }
+    },
+  },
 })
 
 export const schemaTypes = [

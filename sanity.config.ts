@@ -8,7 +8,7 @@ export default defineConfig({
   title: 'sv-portfolio',
 
   projectId: 'kr073obv',
-  dataset: 'production',
+  dataset: 'portfolio',
 
   plugins: [structureTool(), visionTool()],
 
