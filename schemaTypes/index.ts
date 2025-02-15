@@ -170,8 +170,8 @@ export const social = defineType({
     },
     {
       name: 'url',
-      type: 'url',
-      validation: (Rule) => Rule.required(),
+      type: 'string',
+      // validation: (Rule) => Rule.required(),
     },
     {
       name: 'tooltip',
@@ -563,12 +563,18 @@ export const section = defineType({
       type: 'localeString',
     },
     {
+      name: 'icon',
+      type: 'reference',
+      to: [{type: 'icon'}],
+    },
+    {
       name: 'type',
       type: 'string',
       options: {
         list: [
           {title: 'Hero', value: 'hero'},
           {title: 'Sobre mí', value: 'about'},
+          {title: 'Educación', value: 'education'},
           {title: 'Experiencia', value: 'experience'},
           {title: 'Proyectos', value: 'projects'},
           {title: 'Habilidades', value: 'skills'},
