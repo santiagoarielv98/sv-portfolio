@@ -562,11 +562,7 @@ export const section = defineType({
       name: 'subtitle',
       type: 'localeString',
     },
-    {
-      name: 'icon',
-      type: 'reference',
-      to: [{type: 'icon'}],
-    },
+    iconReference,
     {
       name: 'type',
       type: 'string',
