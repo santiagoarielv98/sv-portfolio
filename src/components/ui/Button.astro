@@ -1,0 +1,64 @@
+---
+interface Props {
+	href?: string;
+	type?: 'button' | 'submit' | 'reset';
+	variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'link';
+	size?: 'sm' | 'default' | 'lg' | 'icon';
+	target?: '_blank' | '_self' | '_parent' | '_top';
+	rel?: string;
+	disabled?: boolean;
+	ariaLabel?: string;
+	class?: string;
+}
+
+const {
+	href,
+	type = 'button',
+	variant = 'default',
+	size = 'default',
+	target,
+	rel,
+	disabled = false,
+	ariaLabel,
+	class: className = '',
+} = Astro.props as Props;
+
+const baseClass =
+	'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-main disabled:pointer-events-none disabled:opacity-50';
+
+const variantClass: Record<NonNullable<Props['variant']>, string> = {
+	default:
+		'border border-white/10 bg-linear-to-r from-accent-primary/90 to-accent-secondary/90 text-white shadow-glow-primary hover:from-accent-primary hover:to-accent-secondary',
+	secondary:
+		'border border-border-subtle bg-bg-hover text-tx-main hover:border-border-strong hover:bg-bg-card',
+	outline: 'border border-border-strong bg-transparent text-tx-main hover:bg-bg-hover',
+	ghost: 'text-tx-secondary hover:bg-bg-hover hover:text-tx-main',
+	link: 'rounded-sm p-0 text-accent-glow underline-offset-4 hover:text-accent-primary hover:underline',
+};
+
+const sizeClass: Record<NonNullable<Props['size']>, string> = {
+	sm: 'h-8 px-3 text-xs',
+	default: 'h-10 px-4 py-2 text-sm',
+	lg: 'h-11 px-6 text-sm',
+	icon: 'h-10 w-10 p-0',
+};
+
+const rootClass = [baseClass, variantClass[variant], variant !== 'link' ? sizeClass[size] : '', className];
+---
+
+{href ? (
+	<a
+		href={href}
+		target={target}
+		rel={rel}
+		aria-label={ariaLabel}
+		aria-disabled={disabled ? 'true' : undefined}
+		class:list={rootClass}
+	>
+		<slot />
+	</a>
+) : (
+	<button type={type} aria-label={ariaLabel} disabled={disabled} class:list={rootClass}>
+		<slot />
+	</button>
+)}

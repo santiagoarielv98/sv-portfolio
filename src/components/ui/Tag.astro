@@ -1,0 +1,25 @@
+---
+interface Props {
+	interactive?: boolean;
+	size?: 'sm' | 'md';
+	class?: string;
+}
+
+const { interactive = false, size = 'md', class: className = '' } = Astro.props as Props;
+
+const sizeClass: Record<NonNullable<Props['size']>, string> = {
+	sm: 'px-2 py-0.5 text-[10px]',
+	md: 'px-2.5 py-1 text-xs',
+};
+---
+
+<span
+	class:list={[
+		'inline-flex items-center rounded-lg border border-border-subtle bg-bg-hover font-mono text-tx-secondary',
+		sizeClass[size],
+		interactive ? 'transition-colors duration-200 hover:border-border-strong hover:text-tx-main' : '',
+		className,
+	]}
+>
+	<slot />
+</span>
