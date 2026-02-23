@@ -75,6 +75,18 @@ const relatedProjects = relatedProjectsByMatch.length > 0 ? relatedProjectsByMat
 			</div>
 		</header>
 
+		<div class="flex flex-wrap gap-3">
+			<Button href={project.data.link} target="_blank" rel="noreferrer noopener" variant="default">
+				Demo / Sitio
+				<Icon name="external-link" class="h-4 w-4" aria-hidden="true" />
+			</Button>
+			<Button href={project.data.github} target="_blank" rel="noreferrer noopener" variant="secondary">
+				Repositorio
+				<Icon name="github" class="h-4 w-4" aria-hidden="true" />
+			</Button>
+		</div>
+
+
 		<section class="grid gap-3 sm:gap-4 lg:grid-cols-[1.25fr_0.75fr] lg:gap-5">
 			<Card as="article" class="h-fit">
 				<CardHeader class="pb-0">
