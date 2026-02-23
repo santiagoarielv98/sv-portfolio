@@ -1,0 +1,86 @@
+---
+import { Icon } from 'astro-icon/components';
+import Button from '../ui/Button.astro';
+import Toast from '../ui/Toast.astro';
+
+interface Props {
+	email: string;
+}
+
+const { email } = Astro.props as Props;
+---
+
+<section id="contacto" class="border-t border-border-subtle pt-8 md:pt-10">
+	<div class="mb-5">
+		<p class="mb-2 font-mono text-xs text-accent-glow">Contacto</p>
+		<h2 class="text-2xl font-semibold md:text-3xl">¿Trabajamos juntos?</h2>
+		<p class="mt-2 max-w-2xl text-sm text-tx-secondary md:text-base">
+			Maquetación del formulario de contacto para demo UX. El envío muestra una confirmación visual sin integrar backend.
+		</p>
+	</div>
+
+	<form id="contact-form" class="surface p-4 sm:p-5 md:p-6">
+		<div class="grid gap-4 md:grid-cols-2">
+			<label class="flex flex-col gap-1.5 md:col-span-2">
+				<span class="text-sm font-medium text-tx-main">Correo electrónico</span>
+				<input
+					type="email"
+					name="email"
+					required
+					placeholder={email}
+					class="h-10 rounded-lg border border-border-subtle bg-bg-main px-3 text-sm text-tx-main outline-none transition-colors placeholder:text-tx-muted focus:border-accent-primary/50"
+				/>
+			</label>
+			<label class="flex flex-col gap-1.5 md:col-span-2">
+				<span class="flex items-center justify-between text-sm font-medium text-tx-main">
+					<span>Mensaje</span>
+					<span class="text-xs font-normal text-tx-muted">Opcional</span>
+				</span>
+				<textarea
+					name="message"
+					rows={4}
+					placeholder="Contame brevemente el proyecto, objetivos y tiempos estimados..."
+					class="rounded-lg border border-border-subtle bg-bg-main px-3 py-2.5 text-sm text-tx-main outline-none transition-colors placeholder:text-tx-muted focus:border-accent-primary/50"
+				></textarea>
+			</label>
+		</div>
+		<div class="mt-4 flex flex-wrap items-center gap-3">
+			<Button type="submit" variant="default">
+				<Icon name="send" class="h-4 w-4" aria-hidden="true" />
+				Enviar mensaje
+			</Button>
+			<p class="text-xs text-tx-muted">
+				También podés escribir directo a
+				<a href={`mailto:${email}`} class="text-accent-glow hover:text-accent-primary"> {email}</a>
+			</p>
+		</div>
+	</form>
+
+	<Toast id="contact-toast" title="Mensaje enviado" message="Tu consulta fue enviada correctamente. Te responderé pronto." variant="success" />
+</section>
+
+<script>
+	const form = document.getElementById('contact-form') as HTMLFormElement | null;
+	const toast = document.getElementById('contact-toast');
+	let toastTimeout: number | undefined;
+
+	const hideToast = () => {
+		toast?.classList.add('hidden');
+	};
+
+	const showToast = () => {
+		toast?.classList.remove('hidden');
+		if (toastTimeout) window.clearTimeout(toastTimeout);
+		toastTimeout = window.setTimeout(hideToast, 3000);
+	};
+
+	form?.addEventListener('submit', (event) => {
+		event.preventDefault();
+		showToast();
+		form.reset();
+	});
+
+	document.querySelectorAll('[data-toast-close="contact-toast"]').forEach((button) => {
+		button.addEventListener('click', hideToast);
+	});
+</script>

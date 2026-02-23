@@ -1,0 +1,39 @@
+---
+import { Icon } from 'astro-icon/components';
+import { navItems } from './navItems';
+import ThemeToggle from '../ui/ThemeToggle.astro';
+
+interface Props {
+	pathname: string;
+}
+
+const { pathname } = Astro.props as Props;
+const currentPath = pathname.endsWith('/') && pathname !== '/' ? pathname.slice(0, -1) : pathname;
+const isActive = (id: string) => {
+	if (id === 'home') return currentPath === '/';
+	if (id === 'projects') return currentPath.startsWith('/proyectos');
+	return false;
+};
+---
+
+<div class="fixed bottom-4 left-1/2 z-40 -translate-x-1/2">
+	<div class="inline-flex items-center gap-1.5 rounded-2xl border border-border-strong bg-bg-card/85 p-2 shadow-glass backdrop-blur-xl">
+		{navItems.map((item) => (
+			<a
+				href={item.href}
+				class:list={[
+					'inline-flex h-10 w-10 items-center justify-center rounded-xl border transition-colors',
+					isActive(item.id)
+						? 'border-accent-primary/30 bg-accent-primary/10 text-accent-glow'
+						: 'border-transparent text-tx-secondary hover:border-border-subtle hover:bg-bg-hover hover:text-tx-main',
+				]}
+				aria-label={item.label}
+				title={item.label}
+			>
+				<Icon name={item.icon} class="h-4.5 w-4.5" aria-hidden="true" />
+			</a>
+		))}
+		<div class="mx-1 h-6 w-px bg-border-strong"></div>
+		<ThemeToggle buttonClass="h-10 w-10 rounded-xl border-transparent bg-transparent hover:border-border-subtle" />
+	</div>
+</div>

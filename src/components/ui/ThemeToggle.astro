@@ -1,0 +1,53 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+	buttonClass?: string;
+}
+
+const { buttonClass = '' } = Astro.props as Props;
+---
+
+<button
+	type="button"
+	data-theme-toggle
+	class:list={[
+		'inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border-subtle bg-bg-card text-tx-secondary transition-colors hover:border-border-strong hover:text-tx-main',
+		buttonClass,
+	]}
+	aria-label="Cambiar tema"
+	title="Cambiar tema"
+>
+	<Icon name="sun" data-theme-icon="sun" class="h-4 w-4" aria-hidden="true" />
+	<Icon name="moon" data-theme-icon="moon" class="hidden h-4 w-4" aria-hidden="true" />
+</button>
+
+<script>
+	const setTheme = (theme: 'dark' | 'light') => {
+		document.documentElement.classList.toggle('light', theme === 'light');
+		document.documentElement.classList.toggle('dark', theme === 'dark');
+		localStorage.setItem('theme', theme);
+
+		document.querySelectorAll('[data-theme-icon="sun"]').forEach((icon) => {
+			icon.classList.toggle('hidden', theme === 'dark');
+		});
+		document.querySelectorAll('[data-theme-icon="moon"]').forEach((icon) => {
+			icon.classList.toggle('hidden', theme === 'light');
+		});
+	};
+
+	const getCurrentTheme = (): 'dark' | 'light' => {
+		if (document.documentElement.classList.contains('light')) return 'light';
+		return 'dark';
+	};
+
+	const syncIcons = () => setTheme(getCurrentTheme());
+	syncIcons();
+
+	document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+		button.addEventListener('click', () => {
+			const next = getCurrentTheme() === 'dark' ? 'light' : 'dark';
+			setTheme(next);
+		});
+	});
+</script>

@@ -32,6 +32,21 @@
 }
 
 @layer base {
+	html.light {
+		--color-bg-main: #f5f5f7;
+		--color-bg-card: #ffffff;
+		--color-bg-hover: #f1f5f9;
+
+		--color-tx-main: #09090b;
+		--color-tx-secondary: #52525b;
+		--color-tx-muted: #71717a;
+
+		--color-border-subtle: rgba(9, 9, 11, 0.12);
+		--color-border-strong: rgba(9, 9, 11, 0.18);
+
+		--shadow-glass: 0 0 0 1px rgba(9, 9, 11, 0.08), 0 8px 24px rgba(9, 9, 11, 0.08);
+	}
+
 	html,
 	body {
 		margin: 0;
@@ -43,8 +58,15 @@
 		background-color: var(--color-bg-main);
 		color: var(--color-tx-main);
 		font-family: var(--font-sans);
+		transition:
+			background-color 200ms ease,
+			color 200ms ease;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
+	}
+
+	body.has-dock-nav {
+		padding-bottom: 5.5rem;
 	}
 
 	h1,
@@ -67,11 +89,11 @@
 	}
 
 	::-webkit-scrollbar-track {
-		background: #09090b;
+		background: var(--color-bg-main);
 	}
 
 	::-webkit-scrollbar-thumb {
-		background: #27272a;
+		background: var(--color-bg-hover);
 		border-radius: 999px;
 	}
 

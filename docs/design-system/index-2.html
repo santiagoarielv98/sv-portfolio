@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design System | Santiago - Full Stack Dev</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN for preview purposes) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Configuration Injection -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'], // Body
+                        display: ['Plus Jakarta Sans', 'sans-serif'], // Headers
+                        mono: ['JetBrains Mono', 'monospace'], // Code & Tags
+                    },
+                    colors: {
+                        // Backgrounds
+                        bg: {
+                            main: '#09090B', // zinc-950
+                            card: '#18181B', // zinc-900
+                            hover: '#27272A', // zinc-800
+                        },
+                        // Texts
+                        tx: {
+                            main: '#FAFAFA', // zinc-50
+                            secondary: '#A1A1AA', // zinc-400
+                            muted: '#52525B', // zinc-600
+                        },
+                        // Accents (Cloud Blue + Astro Orange)
+                        accent: {
+                            primary: '#3B82F6', // blue-500
+                            glow: '#60A5FA', // blue-400
+                            secondary: '#F97316', // orange-500
+                        },
+                        // States
+                        state: {
+                            success: '#10B981', // emerald-500
+                            warning: '#F59E0B', // amber-500
+                            error: '#EF4444', // red-500
+                        },
+                        // UI Lines
+                        border: {
+                            subtle: 'rgba(255, 255, 255, 0.08)',
+                            strong: 'rgba(255, 255, 255, 0.15)',
+                        }
+                    },
+                    boxShadow: {
+                        // Vercel/Linear style shadows (Diffuse glows and hard 1px borders via shadow)
+                        'glass': '0 0 0 1px rgba(255, 255, 255, 0.08), 0 4px 16px rgba(0, 0, 0, 0.4)',
+                        'glow-primary': '0 0 20px -5px rgba(59, 130, 246, 0.4)',
+                        'glow-secondary': '0 0 20px -5px rgba(249, 115, 22, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for a premium feel */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #09090B; }
+        ::-webkit-scrollbar-thumb { background: #27272A; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3F3F46; }
+    </style>
+</head>
+<body class="bg-bg-main text-tx-main font-sans antialiased selection:bg-accent-primary selection:text-white min-h-screen pb-20">
+
+    <div class="max-w-5xl mx-auto px-6 pt-16">
+        
+        <!-- Header -->
+        <header class="mb-16 border-b border-border-subtle pb-8">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-primary/10 border border-accent-primary/20 text-accent-glow font-mono text-xs font-medium mb-6">
+                <span class="w-2 h-2 rounded-full bg-accent-glow animate-pulse"></span>
+                Design System v1.0
+            </div>
+            <h1 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4">Santiago Portfolio UI</h1>
+            <p class="text-tx-secondary text-lg max-w-2xl font-light">
+                Minimalista, moderno y orientado al rendimiento. Diseñado para transmitir seniority en arquitecturas Cloud y el ecosistema JavaScript/TypeScript.
+            </p>
+        </header>
+
+        <!-- 1. Colors -->
+        <section class="mb-20">
+            <h2 class="font-display text-2xl font-semibold mb-6 flex items-center gap-2">
+                <span class="text-tx-muted font-mono text-sm font-normal">01 //</span> Paleta de Colores (Tokens)
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- Swatch 1 -->
+                <div class="p-4 rounded-xl bg-bg-card border border-border-subtle shadow-glass flex flex-col gap-4">
+                    <div class="h-16 rounded-lg bg-bg-main border border-border-subtle"></div>
+                    <div>
+                        <p class="font-mono text-xs text-tx-muted mb-1">bg-bg-main</p>
+                        <p class="font-medium text-sm">Main Background</p>
+                        <p class="text-xs text-tx-secondary">#09090B</p>
+                    </div>
+                </div>
+                <!-- Swatch 2 -->
+                <div class="p-4 rounded-xl bg-bg-card border border-border-subtle shadow-glass flex flex-col gap-4">
+                    <div class="h-16 rounded-lg bg-bg-card border border-border-subtle"></div>
+                    <div>
+                        <p class="font-mono text-xs text-tx-muted mb-1">bg-bg-card</p>
+                        <p class="font-medium text-sm">Card/Surface</p>
+                        <p class="text-xs text-tx-secondary">#18181B</p>
+                    </div>
+                </div>
+                <!-- Swatch 3 -->
+                <div class="p-4 rounded-xl bg-bg-card border border-border-subtle shadow-glass flex flex-col gap-4">
+                    <div class="h-16 rounded-lg bg-accent-primary shadow-glow-primary"></div>
+                    <div>
+                        <p class="font-mono text-xs text-tx-muted mb-1">bg-accent-primary</p>
+                        <p class="font-medium text-sm">Cloud Blue (Main)</p>
+                        <p class="text-xs text-tx-secondary">#3B82F6</p>
+                    </div>
+                </div>
+                <!-- Swatch 4 -->
+                <div class="p-4 rounded-xl bg-bg-card border border-border-subtle shadow-glass flex flex-col gap-4">
+                    <div class="h-16 rounded-lg bg-accent-secondary shadow-glow-secondary"></div>
+                    <div>
+                        <p class="font-mono text-xs text-tx-muted mb-1">bg-accent-secondary</p>
+                        <p class="font-medium text-sm">Astro Orange</p>
+                        <p class="text-xs text-tx-secondary">#F97316</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- States -->
+            <div class="mt-6 flex gap-4 overflow-x-auto pb-2">
+                <div class="flex items-center gap-3 px-4 py-2 rounded-lg bg-bg-card border border-border-subtle">
+                    <div class="w-3 h-3 rounded-full bg-state-success"></div>
+                    <span class="text-sm text-tx-secondary">Success (#10B981)</span>
+                </div>
+                <div class="flex items-center gap-3 px-4 py-2 rounded-lg bg-bg-card border border-border-subtle">
+                    <div class="w-3 h-3 rounded-full bg-state-warning"></div>
+                    <span class="text-sm text-tx-secondary">Warning (#F59E0B)</span>
+                </div>
+                <div class="flex items-center gap-3 px-4 py-2 rounded-lg bg-bg-card border border-border-subtle">
+                    <div class="w-3 h-3 rounded-full bg-state-error"></div>
+                    <span class="text-sm text-tx-secondary">Error (#EF4444)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Typography -->
+        <section class="mb-20">
+            <h2 class="font-display text-2xl font-semibold mb-6 flex items-center gap-2">
+                <span class="text-tx-muted font-mono text-sm font-normal">02 //</span> Tipografía
+            </h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Headers -->
+                <div class="p-6 rounded-xl bg-bg-card border border-border-subtle">
+                    <p class="font-mono text-xs text-accent-glow mb-4">font-display</p>
+                    <h3 class="font-display text-3xl font-bold mb-2">Plus Jakarta Sans</h3>
+                    <p class="text-sm text-tx-secondary mb-4">Uso: Encabezados (H1-H6). Geométrica, moderna y transmite innovación.</p>
+                    <div class="text-tx-main font-display text-lg">Aa Bb Cc Dd 0123</div>
+                </div>
+                <!-- Body -->
+                <div class="p-6 rounded-xl bg-bg-card border border-border-subtle">
+                    <p class="font-mono text-xs text-tx-secondary mb-4">font-sans</p>
+                    <h3 class="font-sans text-2xl font-medium mb-2">Inter</h3>
+                    <p class="text-sm text-tx-secondary mb-4">Uso: Cuerpo de texto. Altamente legible, limpia, el estándar de la industria.</p>
+                    <div class="text-tx-main font-sans text-lg">Aa Bb Cc Dd 0123</div>
+                </div>
+                <!-- Mono -->
+                <div class="p-6 rounded-xl bg-bg-card border border-border-subtle">
+                    <p class="font-mono text-xs text-accent-secondary mb-4">font-mono</p>
+                    <h3 class="font-mono text-xl font-medium mb-2">JetBrains Mono</h3>
+                    <p class="text-sm text-tx-secondary mb-4">Uso: Código, etiquetas, metadatos. Estética de desarrollador puro.</p>
+                    <div class="text-tx-main font-mono text-lg">Aa Bb Cc Dd 0123</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. UI Feeling -->
+        <section class="mb-20">
+            <h2 class="font-display text-2xl font-semibold mb-6 flex items-center gap-2">
+                <span class="text-tx-muted font-mono text-sm font-normal">03 //</span> UI Feeling & Estilo 2026
+            </h2>
+            <div class="p-8 rounded-2xl bg-bg-card border border-border-subtle shadow-glass relative overflow-hidden">
+                <!-- Decorative background glow -->
+                <div class="absolute -top-20 -right-20 w-64 h-64 bg-accent-primary/10 blur-[60px] rounded-full pointer-events-none"></div>
+                
+                <div class="relative z-10">
+                    <h3 class="font-display text-xl font-semibold mb-4 text-tx-main">Filosofía "Vercel / Linear"</h3>
+                    <ul class="space-y-4 text-tx-secondary text-sm md:text-base">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-accent-glow shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span><strong>Radios (Border Radius):</strong> Medios y elegantes. Usaremos <code class="font-mono text-xs bg-bg-hover px-1 rounded text-tx-main">rounded-xl</code> (12px) para contenedores grandes y <code class="font-mono text-xs bg-bg-hover px-1 rounded text-tx-main">rounded-lg</code> (8px) para botones/etiquetas. Evita radios excesivos estilo "pill" a menos que sean insignias (badges).</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-accent-glow shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span><strong>Bordes:</strong> Cristalinos y sutiles. Usamos bordes translúcidos <code class="font-mono text-xs bg-bg-hover px-1 rounded text-tx-main">border-white/10</code> para simular el reflejo de la luz sobre vidrio oscuro.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-accent-glow shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span><strong>Sombras:</strong> Nada de sombras negras duras. Usamos sombras compuestas (una para el borde interior, otra difusa para la profundidad) <code class="font-mono text-xs bg-bg-hover px-1 rounded text-tx-main">shadow-glass</code> y resplandores de color (glows) para interacciones de hover.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Tailwind Config -->
+        <section class="mb-20">
+            <h2 class="font-display text-2xl font-semibold mb-6 flex items-center gap-2">
+                <span class="text-tx-muted font-mono text-sm font-normal">04 //</span> Tailwind Config (.mjs)
+            </h2>
+            <div class="relative group">
+                <div class="absolute inset-0 bg-gradient-to-r from-accent-primary/20 to-accent-secondary/20 rounded-xl blur-lg opacity-50 group-hover:opacity-100 transition duration-500"></div>
+                <div class="relative rounded-xl bg-[#0d0d12] border border-border-subtle overflow-hidden text-sm font-mono text-tx-secondary p-6 shadow-glass">
+                    <div class="flex items-center gap-2 mb-4 pb-4 border-b border-border-subtle">
+                        <div class="w-3 h-3 rounded-full bg-state-error"></div>
+                        <div class="w-3 h-3 rounded-full bg-state-warning"></div>
+                        <div class="w-3 h-3 rounded-full bg-state-success"></div>
+                        <span class="ml-2 text-xs">tailwind.config.mjs</span>
+                    </div>
+<pre class="overflow-x-auto"><code><span class="text-accent-secondary">/** @type {import('tailwindcss').Config} */</span>
+<span class="text-accent-primary">export default</span> {
+  content: [<span class="text-state-success">'./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'</span>],
+  darkMode: <span class="text-state-success">'class'</span>,
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: [<span class="text-state-success">'Inter'</span>, <span class="text-state-success">'sans-serif'</span>],
+        display: [<span class="text-state-success">'Plus Jakarta Sans'</span>, <span class="text-state-success">'sans-serif'</span>],
+        mono: [<span class="text-state-success">'JetBrains Mono'</span>, <span class="text-state-success">'monospace'</span>],
+      },
+      colors: {
+        bg: {
+          main: <span class="text-state-success">'#09090B'</span>, <span class="text-tx-muted">// Light: #FFFFFF</span>
+          card: <span class="text-state-success">'#18181B'</span>, <span class="text-tx-muted">// Light: #F4F4F5</span>
+          hover: <span class="text-state-success">'#27272A'</span>,
+        },
+        tx: {
+          main: <span class="text-state-success">'#FAFAFA'</span>, <span class="text-tx-muted">// Light: #09090B</span>
+          secondary: <span class="text-state-success">'#A1A1AA'</span>, <span class="text-tx-muted">// Light: #52525B</span>
+          muted: <span class="text-state-success">'#52525B'</span>,
+        },
+        accent: {
+          primary: <span class="text-state-success">'#3B82F6'</span>,   <span class="text-tx-muted">// Cloud Blue</span>
+          glow: <span class="text-state-success">'#60A5FA'</span>,      
+          secondary: <span class="text-state-success">'#F97316'</span>, <span class="text-tx-muted">// Astro Orange</span>
+        },
+        border: {
+          subtle: <span class="text-state-success">'rgba(255, 255, 255, 0.08)'</span>, <span class="text-tx-muted">// Light: rgba(0,0,0,0.1)</span>
+          strong: <span class="text-state-success">'rgba(255, 255, 255, 0.15)'</span>,
+        }
+      },
+      boxShadow: {
+        <span class="text-state-success">'glass'</span>: <span class="text-state-success">'0 0 0 1px rgba(255, 255, 255, 0.08), 0 4px 16px rgba(0, 0, 0, 0.4)'</span>,
+        <span class="text-state-success">'glow-primary'</span>: <span class="text-state-success">'0 0 20px -5px rgba(59, 130, 246, 0.4)'</span>,
+      }
+    },
+  },
+  plugins: [],
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Componentes Base -->
+        <section>
+            <h2 class="font-display text-2xl font-semibold mb-6 flex items-center gap-2">
+                <span class="text-tx-muted font-mono text-sm font-normal">05 //</span> Componentes en Acción
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-10 items-start">
+                
+                <!-- Component: Project Card -->
+                <div>
+                    <p class="font-mono text-xs text-tx-secondary mb-3">Project Card</p>
+                    
+                    <a href="#" class="block group relative rounded-xl bg-bg-card border border-border-subtle p-6 hover:shadow-glow-primary hover:border-accent-primary/30 transition-all duration-300 overflow-hidden">
+                        
+                        <!-- Hover Gradient Effect -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-accent-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                        <div class="relative z-10">
+                            <!-- Header Card -->
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="w-12 h-12 rounded-lg bg-bg-main border border-border-subtle flex items-center justify-center text-accent-glow shadow-glass">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                                </div>
+                                <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-state-success/10 border border-state-success/20 text-state-success font-mono text-[10px] uppercase tracking-wider">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-state-success"></span>
+                                    En Producción
+                                </span>
+                            </div>
+
+                            <!-- Content -->
+                            <h3 class="font-display text-xl font-bold text-tx-main mb-2 group-hover:text-accent-glow transition-colors">Serverless Cloud Architecture</h3>
+                            <p class="text-tx-secondary text-sm leading-relaxed mb-6 font-light">
+                                Microservicios escalables desplegados en AWS usando Astro SSR y funciones de Firebase para un rendimiento sub-50ms en LATAM.
+                            </p>
+
+                            <!-- Tech Stack Tags -->
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 bg-bg-main border border-border-subtle rounded-md text-xs font-mono text-tx-secondary group-hover:border-border-strong transition-colors">Astro</span>
+                                <span class="px-2 py-1 bg-bg-main border border-border-subtle rounded-md text-xs font-mono text-tx-secondary group-hover:border-border-strong transition-colors">AWS</span>
+                                <span class="px-2 py-1 bg-bg-main border border-border-subtle rounded-md text-xs font-mono text-tx-secondary group-hover:border-border-strong transition-colors">TypeScript</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Component: Buttons & Interactions -->
+                <div>
+                    <p class="font-mono text-xs text-tx-secondary mb-3">Interacciones & Botones</p>
+                    
+                    <div class="p-8 rounded-xl bg-bg-card border border-border-subtle shadow-glass flex flex-col gap-6 items-start">
+                        
+                        <!-- Primary Button -->
+                        <button class="relative group overflow-hidden rounded-lg p-[1px]">
+                            <span class="absolute inset-0 bg-gradient-to-r from-accent-primary to-accent-secondary opacity-70 group-hover:opacity-100 transition-opacity blur-sm"></span>
+                            <div class="relative flex items-center gap-2 px-6 py-3 bg-bg-main rounded-[7px] border border-white/10 group-hover:bg-bg-hover transition-colors">
+                                <span class="font-medium text-sm text-tx-main group-hover:text-white">Ver Repositorio GitHub</span>
+                                <svg class="w-4 h-4 text-tx-secondary group-hover:text-white transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </div>
+                        </button>
+
+                        <!-- Secondary Button -->
+                        <button class="flex items-center gap-2 px-6 py-3 rounded-lg bg-bg-hover border border-border-subtle text-tx-secondary font-medium text-sm hover:text-tx-main hover:border-border-strong transition-all">
+                            Contacto Directo
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 6. Navegación & Dock -->
+        <section class="mb-20">
+            <h2 class="font-display text-2xl font-semibold mb-6 flex items-center gap-2">
+                <span class="text-tx-muted font-mono text-sm font-normal">06 //</span> Navegación & Dock
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- Navbar Showcase -->
+                <div>
+                    <p class="font-mono text-xs text-tx-secondary mb-3">Navbar (Glassmorphism)</p>
+                    <div class="relative w-full h-16 rounded-xl border border-border-subtle bg-bg-main/50 backdrop-blur-md flex items-center justify-between px-6 shadow-glass">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded bg-tx-main text-bg-main flex items-center justify-center font-display font-bold text-lg">S</div>
+                            <span class="font-mono text-sm hidden sm:block">santiago.dev</span>
+                        </div>
+                        <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-tx-secondary">
+                            <a href="#" class="hover:text-tx-main transition-colors">Inicio</a>
+                            <a href="#" class="text-tx-main text-shadow-glow">Proyectos</a>
+                            <a href="#" class="hover:text-tx-main transition-colors">Stack</a>
+                            <a href="#" class="hover:text-tx-main transition-colors">Artículos</a>
+                        </nav>
+                        <button class="px-4 py-2 text-xs font-semibold bg-white text-black rounded-lg hover:bg-gray-200 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                            Contactar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Floating Dock Showcase -->
+                <div>
+                    <p class="font-mono text-xs text-tx-secondary mb-3">Floating Dock (Estilo macOS / Vercel Toolbar)</p>
+                    <div class="w-full flex justify-center py-6 border border-border-subtle border-dashed rounded-xl bg-bg-main/30">
+                        <div class="inline-flex items-center gap-1.5 p-2 rounded-2xl bg-bg-card/70 backdrop-blur-xl border border-border-strong shadow-glass">
+                            <button class="p-2.5 rounded-xl hover:bg-bg-hover text-tx-secondary hover:text-tx-main transition-all group relative">
+                                <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                            </button>
+                            <button class="p-2.5 rounded-xl bg-accent-primary/10 border border-accent-primary/20 text-accent-glow shadow-glow-primary transition-all group">
+                                <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                            </button>
+                            <div class="w-px h-6 bg-border-strong mx-1"></div>
+                            <button class="p-2.5 rounded-xl hover:bg-bg-hover text-tx-secondary hover:text-tx-main transition-all group">
+                                <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            </button>
+                            <button class="p-2.5 rounded-xl hover:bg-bg-hover text-tx-secondary hover:text-tx-main transition-all group">
+                                <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. Formularios, Search & Filtros -->
+        <section class="mb-20">
+            <h2 class="font-display text-2xl font-semibold mb-6 flex items-center gap-2">
+                <span class="text-tx-muted font-mono text-sm font-normal">07 //</span> Inputs, Search & Filtros
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-10">
+                <!-- Search & Filters -->
+                <div class="space-y-8">
+                    <div>
+                        <p class="font-mono text-xs text-tx-secondary mb-3">Search Input (Cmd/Ctrl + K)</p>
+                        <div class="relative group">
+                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-tx-muted group-focus-within:text-accent-primary transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            <input type="text" placeholder="Buscar proyectos, artículos..." class="w-full bg-bg-card border border-border-subtle rounded-xl pl-10 pr-16 py-3 text-sm text-tx-main placeholder:text-tx-muted focus:outline-none focus:border-accent-primary/50 focus:ring-1 focus:ring-accent-primary/20 transition-all shadow-glass hover:border-border-strong">
+                            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                                <kbd class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-bg-main border border-border-subtle text-tx-muted shadow-sm">⌘</kbd>
+                                <kbd class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-bg-main border border-border-subtle text-tx-muted shadow-sm">K</kbd>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="font-mono text-xs text-tx-secondary mb-3">Filtros (Pills)</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="px-4 py-1.5 rounded-full text-xs font-medium bg-accent-primary/10 border border-accent-primary/30 text-accent-glow shadow-[0_0_10px_rgba(59,130,246,0.2)]">
+                                Todos
+                            </button>
+                            <button class="px-4 py-1.5 rounded-full text-xs font-medium bg-bg-card border border-border-subtle text-tx-secondary hover:text-tx-main hover:border-border-strong transition-all">
+                                Frontend
+                            </button>
+                            <button class="px-4 py-1.5 rounded-full text-xs font-medium bg-bg-card border border-border-subtle text-tx-secondary hover:text-tx-main hover:border-border-strong transition-all">
+                                Backend / AWS
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Controls -->
+                <div class="p-6 rounded-xl bg-bg-card border border-border-subtle shadow-glass space-y-5">
+                    <p class="font-mono text-xs text-tx-secondary mb-2 border-b border-border-subtle pb-2">Formulario Base</p>
+                    
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-tx-main">Correo electrónico</label>
+                        <input type="email" class="bg-bg-main border border-border-subtle rounded-lg px-4 py-2.5 text-sm text-tx-main placeholder:text-tx-muted focus:outline-none focus:border-accent-primary/50 focus:ring-1 focus:ring-accent-primary/20 transition-all" placeholder="tucorreo@empresa.com">
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-tx-main flex justify-between">
+                            <span>Mensaje</span>
+                            <span class="text-tx-muted text-xs font-normal">Opcional</span>
+                        </label>
+                        <textarea rows="3" class="bg-bg-main border border-border-subtle rounded-lg px-4 py-2.5 text-sm text-tx-main placeholder:text-tx-muted focus:outline-none focus:border-accent-primary/50 focus:ring-1 focus:ring-accent-primary/20 transition-all resize-none" placeholder="¿En qué te puedo ayudar?"></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. Feedbacks: Toasts & Tooltips -->
+        <section>
+            <h2 class="font-display text-2xl font-semibold mb-6 flex items-center gap-2">
+                <span class="text-tx-muted font-mono text-sm font-normal">08 //</span> Feedback (Toasts & Tooltips)
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-10 items-start">
+                
+                <!-- Toasts/Alerts -->
+                <div class="space-y-4">
+                    <p class="font-mono text-xs text-tx-secondary mb-3">Toast Notifications</p>
+                    
+                    <!-- Success Toast -->
+                    <div class="flex items-start gap-3 p-4 rounded-xl bg-bg-card border border-border-subtle shadow-glass relative overflow-hidden group">
+                        <div class="w-1 h-full bg-state-success absolute left-0 top-0 shadow-[0_0_10px_#10B981]"></div>
+                        <div class="text-state-success shrink-0 mt-0.5">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-semibold text-tx-main">Despliegue Exitoso</h4>
+                            <p class="text-xs text-tx-secondary mt-1 font-light">Tu infraestructura en AWS ha sido actualizada correctamente en 450ms.</p>
+                        </div>
+                        <button class="ml-auto text-tx-muted hover:text-tx-main transition-colors opacity-0 group-hover:opacity-100"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                    </div>
+
+                    <!-- Error/Warning Toast -->
+                    <div class="flex items-start gap-3 p-4 rounded-xl bg-bg-card border border-border-subtle shadow-glass relative overflow-hidden group">
+                        <div class="w-1 h-full bg-state-error absolute left-0 top-0 shadow-[0_0_10px_#EF4444]"></div>
+                        <div class="text-state-error shrink-0 mt-0.5">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-semibold text-tx-main">Fallo de conexión</h4>
+                            <p class="text-xs text-tx-secondary mt-1 font-light">No se pudo contactar con la API. Reintentando en 5s...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tooltips -->
+                <div>
+                    <p class="font-mono text-xs text-tx-secondary mb-3">Tooltips (Hover)</p>
+                    <div class="p-8 rounded-xl bg-bg-card border border-border-subtle border-dashed flex items-center justify-center gap-6 h-[216px]">
+                        
+                        <!-- Tooltip Top -->
+                        <div class="relative group inline-block">
+                            <button class="px-4 py-2 text-sm bg-bg-main border border-border-subtle rounded-lg text-tx-secondary hover:text-tx-main hover:border-border-strong transition-all cursor-help">
+                                Pasa el cursor aquí
+                            </button>
+                            <!-- Tooltip Content -->
+                            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 bg-tx-main text-bg-main text-xs font-medium rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl">
+                                ⌘ + C para copiar enlace
+                                <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-tx-main"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 9. Dev UI & Advanced Components -->
+        <section class="mb-20">
+            <h2 class="font-display text-2xl font-semibold mb-6 flex items-center gap-2">
+                <span class="text-tx-muted font-mono text-sm font-normal">09 //</span> Componentes Dev & Data
+            </h2>
+            
+            <div class="space-y-10">
+                
+                <!-- Terminal / Code Block -->
+                <div>
+                    <p class="font-mono text-xs text-tx-secondary mb-3">Bloque de Código / Terminal</p>
+                    <div class="relative group rounded-xl bg-[#0d0d12] border border-border-subtle shadow-glass overflow-hidden max-w-3xl">
+                        <!-- Mac OS Window Controls & Filename -->
+                        <div class="flex items-center justify-between px-4 py-3 border-b border-border-subtle bg-bg-card/50">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-state-error/80 border border-state-error"></div>
+                                <div class="w-3 h-3 rounded-full bg-state-warning/80 border border-state-warning"></div>
+                                <div class="w-3 h-3 rounded-full bg-state-success/80 border border-state-success"></div>
+                            </div>
+                            <span class="font-mono text-xs text-tx-muted absolute left-1/2 -translate-x-1/2">deploy-infra.ts</span>
+                            <!-- Copy Button -->
+                            <button class="text-tx-muted hover:text-tx-main transition-colors opacity-0 group-hover:opacity-100 p-1 bg-bg-hover rounded-md border border-border-subtle" title="Copiar código">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                        </div>
+                        <!-- Code Content -->
+                        <div class="p-4 overflow-x-auto text-sm font-mono leading-relaxed">
+                            <pre><code class="text-tx-secondary"><span class="text-accent-primary">import</span> { Stack, App } <span class="text-accent-primary">from</span> <span class="text-state-success">'aws-cdk-lib'</span>;
+<span class="text-accent-primary">import</span> { NodejsFunction } <span class="text-accent-primary">from</span> <span class="text-state-success">'aws-cdk-lib/aws-lambda-nodejs'</span>;
+
+<span class="text-tx-muted">// Configuración de alta disponibilidad y baja latencia</span>
+<span class="text-accent-primary">const</span> app = <span class="text-accent-primary">new</span> App();
+<span class="text-accent-primary">const</span> edgeStack = <span class="text-accent-primary">new</span> Stack(app, <span class="text-state-success">'EdgeComputingStack'</span>, {
+  env: { region: <span class="text-state-success">'us-east-1'</span> }
+});
+
+<span class="text-accent-primary">const</span> api = <span class="text-accent-primary">new</span> NodejsFunction(edgeStack, <span class="text-state-success">'GraphQLApi'</span>, {
+  memorySize: <span class="text-accent-secondary">1024</span>,
+  timeout: Duration.seconds(<span class="text-accent-secondary">5</span>),
+  bundling: { minify: <span class="text-accent-primary">true</span> }
+});</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-10">
+                    <!-- Metrics Cards -->
+                    <div>
+                        <p class="font-mono text-xs text-tx-secondary mb-3">Data Metrics (Para KPIs de Cloud/Rendimiento)</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Metric 1 -->
+                            <div class="p-5 rounded-xl bg-bg-card border border-border-subtle shadow-glass relative overflow-hidden group hover:border-accent-primary/40 transition-colors">
+                                <div class="absolute -right-4 -top-4 w-16 h-16 bg-accent-primary/10 rounded-full blur-xl group-hover:bg-accent-primary/20 transition-colors"></div>
+                                <div class="w-8 h-8 rounded-lg bg-bg-main border border-border-subtle flex items-center justify-center text-accent-glow mb-4">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                </div>
+                                <p class="text-xs text-tx-secondary font-medium mb-1">Latencia Media</p>
+                                <div class="flex items-end gap-2">
+                                    <h4 class="font-display text-3xl font-bold text-tx-main">45<span class="text-lg text-tx-muted">ms</span></h4>
+                                    <span class="flex items-center text-xs font-medium text-state-success mb-1.5">
+                                        <svg class="w-3 h-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                                        12%
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Metric 2 -->
+                            <div class="p-5 rounded-xl bg-bg-card border border-border-subtle shadow-glass relative overflow-hidden group hover:border-accent-secondary/40 transition-colors">
+                                <div class="absolute -right-4 -top-4 w-16 h-16 bg-accent-secondary/10 rounded-full blur-xl group-hover:bg-accent-secondary/20 transition-colors"></div>
+                                <div class="w-8 h-8 rounded-lg bg-bg-main border border-border-subtle flex items-center justify-center text-accent-secondary mb-4">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
+                                </div>
+                                <p class="text-xs text-tx-secondary font-medium mb-1">Uptime Global</p>
+                                <div class="flex items-end gap-2">
+                                    <h4 class="font-display text-3xl font-bold text-tx-main">99.9<span class="text-lg text-tx-muted">%</span></h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Skeleton Loader -->
+                    <div>
+                        <p class="font-mono text-xs text-tx-secondary mb-3">Skeleton Loader (Loading State)</p>
+                        <div class="rounded-xl bg-bg-card border border-border-subtle p-6 shadow-glass w-full">
+                            <div class="animate-pulse flex space-x-4">
+                                <!-- Avatar/Icon skeleton -->
+                                <div class="rounded-lg bg-bg-hover h-12 w-12 border border-border-subtle"></div>
+                                <!-- Content skeleton -->
+                                <div class="flex-1 space-y-4 py-1">
+                                    <div class="h-4 bg-bg-hover rounded-md w-3/4"></div>
+                                    <div class="space-y-2">
+                                        <div class="h-3 bg-bg-hover rounded-md"></div>
+                                        <div class="h-3 bg-bg-hover rounded-md w-5/6"></div>
+                                    </div>
+                                    <div class="flex gap-2 pt-2">
+                                        <div class="h-6 w-16 bg-bg-hover rounded-md"></div>
+                                        <div class="h-6 w-16 bg-bg-hover rounded-md"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>
