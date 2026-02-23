@@ -13,7 +13,7 @@ const { personal, about, skills, experience, education, projects } = portfolio;
 ---
 
 <Layout title={`${personal.name} | ${personal.role}`} description={about}>
-	<main class="mx-auto flex w-full max-w-6xl flex-col gap-16 px-6 py-14 md:px-8">
+	<main class="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-8 sm:gap-12 sm:px-5 sm:py-10 md:gap-16 md:px-8 md:py-14">
 		<HeroSection personal={personal} about={about} />
 		<SkillsSection skills={skills} />
 		<ExperienceSection experience={experience} />

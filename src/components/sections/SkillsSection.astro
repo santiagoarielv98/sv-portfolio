@@ -12,12 +12,12 @@ const { skills } = Astro.props as Props;
 ---
 
 <section>
-	<h2 class="mb-6 text-2xl font-semibold">Skills</h2>
-	<div class="grid gap-5 md:grid-cols-3">
+	<h2 class="mb-4 text-2xl font-semibold md:mb-6">Skills</h2>
+	<div class="grid gap-3 sm:gap-4 md:grid-cols-3 md:gap-5">
 		{skills.map((group) => (
-			<article class="card p-5">
+			<article class="card card-pad">
 				<div class="card-content">
-					<h3 class="mb-4 text-lg font-semibold text-tx-main">{group.category}</h3>
+					<h3 class="mb-3 text-lg font-semibold text-tx-main md:mb-4">{group.category}</h3>
 					<ul class="flex flex-wrap gap-2">
 						{group.items.map((item) => (
 							<li class="rounded-lg border border-border-subtle bg-bg-hover px-2.5 py-1 font-mono text-xs text-tx-secondary transition-colors duration-300 hover:border-border-strong hover:text-tx-main">{item}</li>

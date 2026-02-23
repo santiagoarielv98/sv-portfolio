@@ -19,12 +19,12 @@ const { experience } = Astro.props as Props;
 ---
 
 <section>
-	<h2 class="mb-6 text-2xl font-semibold">Experiencia</h2>
-	<div class="space-y-5">
+	<h2 class="mb-4 text-2xl font-semibold md:mb-6">Experiencia</h2>
+	<div class="space-y-3 sm:space-y-4 md:space-y-5">
 		{experience.map((job) => (
-			<article class="card group p-6">
+			<article class="card group card-pad">
 				<div class="card-content">
-					<div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+					<div class="mb-3 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
 					<h3 class="text-xl font-semibold">{job.role} · {job.company}</h3>
 					<span class="inline-flex items-center gap-1.5 font-mono text-xs text-tx-secondary">
 						<Icon name="calendar" class="h-3.5 w-3.5" aria-hidden="true" />

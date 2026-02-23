@@ -128,4 +128,20 @@
 		position: relative;
 		z-index: 10;
 	}
+
+	.card-pad {
+		padding: 1rem;
+	}
+
+	@media (min-width: 640px) {
+		.card-pad {
+			padding: 1.25rem;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.card-pad {
+			padding: 1.5rem;
+		}
+	}
 }
