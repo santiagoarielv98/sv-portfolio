@@ -1,0 +1,110 @@
+{
+  "personal": {
+    "name": "Santiago Ariel Villanueva",
+    "role": "Desarrollador Full Stack",
+    "email": "santiagovillanuevaariel@gmail.com",
+    "location": "Buenos Aires, Argentina",
+    "availability": "Disponible para nuevos retos",
+    "social": [
+      {
+        "platform": "GitHub",
+        "url": "https://github.com/santiagoarielv98",
+        "icon": "github"
+      },
+      {
+        "platform": "LinkedIn",
+        "url": "https://www.linkedin.com/in/santiagoarielv/",
+        "icon": "linkedin"
+      }
+    ]
+  },
+  "about": "Desarrollador de software enfocado en construir aplicaciones web escalables, arquitecturas en la nube y experiencias de usuario de alto rendimiento. Me apasiona transformar ideas complejas en productos digitales eficientes, optimizando infraestructuras y aportando valor a través de código limpio.",
+  "skills": [
+    {
+      "category": "Frontend",
+      "items": ["Next.js", "React", "Astro", "TypeScript", "Tailwind CSS", "Redux"]
+    },
+    {
+      "category": "Backend & Cloud",
+      "items": ["Node.js", "NestJS", "Laravel", "AWS Amplify", "Firebase", "Google Cloud"]
+    },
+    {
+      "category": "Bases de Datos & Herramientas",
+      "items": ["PostgreSQL", "MySQL", "MongoDB", "Git", "GitHub Actions"]
+    }
+  ],
+  "experience": [
+    {
+      "company": "Zertify",
+      "role": "Full Stack Developer",
+      "location": "España (Remoto)",
+      "startDate": "2025-04",
+      "endDate": "Presente",
+      "highlights": [
+        "Lideré el desarrollo y el despliegue a producción de una aplicación web orientada al usuario final utilizando Next.js y React.",
+        "Arquitecté e implementé la infraestructura en la nube mediante AWS Amplify, garantizando servicios escalables y de alta disponibilidad.",
+        "Desarrollé un panel administrativo (backoffice) a medida, optimizando los flujos de trabajo internos para la gestión de datos y análisis de interacción.",
+        "Ejecuté refactorizaciones arquitectónicas reduciendo significativamente el peso de los recursos web y mejorando los tiempos de carga."
+      ]
+    },
+    {
+      "company": "Waco Digital Hub",
+      "role": "Desarrollador Front-end",
+      "location": "Colombia (Remoto)",
+      "startDate": "2023-10",
+      "endDate": "2024-04",
+      "highlights": [
+        "Mejoré la accesibilidad global mediante la implementación de un sistema de traducción multilingüe con React i18n.",
+        "Incrementé la eficiencia del sistema en un 25% conectando y activando funcionalidades avanzadas usando Firebase y Google Cloud.",
+        "Aumenté la seguridad y rendimiento de la plataforma al trasladar operaciones sensibles del frontend hacia Firebase Functions."
+      ]
+    },
+    {
+      "company": "Waco Digital Hub",
+      "role": "Desarrollador de Software",
+      "location": "Colombia (Remoto)",
+      "startDate": "2022-04",
+      "endDate": "2022-08",
+      "highlights": [
+        "Diseñé y desarrollé interfaces web interactivas y responsivas utilizando React.js y MUI Core.",
+        "Implementé integraciones eficientes con el backend a través de APIs RESTful y GraphQL.",
+        "Gestioné el estado global de la aplicación utilizando Redux y Context API, mejorando la experiencia del usuario."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Instituto Técnico Superior Leopoldo Marechal",
+      "degree": "Tecnicatura Superior en Desarrollo de Software",
+      "startDate": "2023-03",
+      "endDate": "2025-11",
+      "location": "Ituzaingó, Argentina"
+    }
+  ],
+  "projects": [
+    {
+      "title": "Sistema B2B de Gestión Funeraria (SaaS)",
+      "description": "Plataforma integral para la administración logística, gestión de inventarios y facturación automatizada de servicios funerarios.",
+      "techStack": ["Next.js", "NestJS", "PostgreSQL", "AWS"],
+      "link": "#",
+      "github": "#",
+      "status": "Planeado para 2026"
+    },
+    {
+      "title": "Gestor Headless de Catálogos Mayoristas",
+      "description": "CMS ultra rápido para comercios de gran volumen (repuestos automotores) con integración directa a Meta Business para ventas vía WhatsApp.",
+      "techStack": ["Astro", "Laravel", "MySQL", "Tailwind CSS"],
+      "link": "#",
+      "github": "#",
+      "status": "Planeado para 2026"
+    },
+    {
+      "title": "React i18n Auto-Router",
+      "description": "Librería Open Source para automatizar la configuración de rutas multilingües y detección de idioma en aplicaciones React complejas.",
+      "techStack": ["React", "TypeScript", "NPM"],
+      "link": "#",
+      "github": "#",
+      "status": "Planeado para 2026"
+    }
+  ]
+}
