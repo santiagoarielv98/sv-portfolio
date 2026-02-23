@@ -1,12 +1,52 @@
 import eslintPluginAstro from "eslint-plugin-astro";
-export default [
-  // add more generic rule sets here, such as:
-  // js.configs.recommended,
-  ...eslintPluginAstro.configs.recommended,
+import { defineConfig } from "eslint/config";
+import globals from "globals";
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
+import prettier from "eslint-plugin-prettier";
+
+const tsParser = tseslint.parser;
+const astroParser = eslintPluginAstro.parser;
+
+export default defineConfig([
   {
-    rules: {
-      // override/add rules settings here, such as:
-      // "astro/no-set-html-directive": "error"
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
     },
   },
-];
+  js.configs.recommended,
+  tseslint.configs.recommended,
+  {
+    plugins: {
+      prettier: prettier,
+    },
+    rules: {
+      "prettier/prettier": "off",
+    },
+  },
+  astro.configs.recommended,
+  astro.configs["jsx-a11y-recommended"],
+  {
+    files: ["**/*.astro"],
+    languageOptions: {
+      parser: astroParser,
+      parserOptions: {
+        parser: tsParser,
+        extraFileExtensions: [".astro"],
+        sourceType: "module",
+        ecmaVersion: "latest",
+        project: "./tsconfig.json",
+      },
+    },
+    rules: {
+      "no-undef": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
+  {
+    ignores: ["dist/**", "**/*.d.ts", ".github/"],
+  },
+]);

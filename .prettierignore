@@ -1,1 +1,10 @@
-node_modules
+.prettierrc
+package.json
+package-lock.json
+tsconfig.json
+README.md
+dist
+.astro
+public
+**/node_modules
+**/.git
