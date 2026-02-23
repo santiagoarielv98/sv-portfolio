@@ -27,8 +27,7 @@ export default defineConfig([
       "prettier/prettier": "off",
     },
   },
-  astro.configs.recommended,
-  astro.configs["jsx-a11y-recommended"],
+  eslintPluginAstro.configs.recommended,
   {
     files: ["**/*.astro"],
     languageOptions: {
