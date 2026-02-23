@@ -17,10 +17,8 @@ const statusClass = status.toLowerCase().includes('planeado')
 	: 'bg-state-success/15 text-state-success border-state-success/30';
 ---
 
-<article class="group relative overflow-hidden rounded-xl border border-border-subtle bg-bg-card p-6 shadow-glass transition-all duration-500 ease-out hover:border-accent-primary/30 hover:shadow-glow-primary focus-within:border-accent-primary/35 focus-within:shadow-glow-primary">
-	<div class="absolute inset-0 bg-linear-to-br from-accent-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-
-	<div class="relative z-10">
+<article class="card group p-6">
+	<div class="card-content">
 		<div class="mb-4 flex items-start justify-between gap-3">
 			<div class="flex h-11 w-11 items-center justify-center rounded-lg border border-border-subtle bg-bg-main text-accent-glow shadow-glass">
 				<Icon name="folder-code" class="h-5 w-5" aria-hidden="true" />
@@ -38,8 +36,8 @@ const statusClass = status.toLowerCase().includes('planeado')
 		</ul>
 
 		<div class="flex items-center gap-4 text-sm">
-			<a href={link} class="inline-flex items-center gap-1 text-accent-glow transition-all duration-300 hover:text-accent-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-card rounded-sm" target="_blank" rel="noreferrer noopener">
-				<Icon name="external-link" class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true" />
+			<a href={link} class="inline-flex items-center gap-1 rounded-sm text-accent-glow transition-all duration-300 hover:text-accent-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-card" target="_blank" rel="noreferrer noopener">
+				<Icon name="external-link" class="h-3.5 w-3.5 transition-transform duration-300" aria-hidden="true" />
 				Ver proyecto
 			</a>
 			<a href={github} class="inline-flex items-center gap-1 text-tx-secondary transition-all duration-300 hover:text-tx-main focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-card rounded-sm" target="_blank" rel="noreferrer noopener">
