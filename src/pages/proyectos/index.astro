@@ -65,7 +65,7 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 				<p class="mb-2 text-xs font-mono text-tx-secondary">Filtrar por tecnología</p>
 				<div class="flex flex-wrap gap-2">
 					{allTechnologies.map((tech) => (
-						<label class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-border-subtle bg-bg-main px-2.5 py-1.5 text-xs text-tx-secondary transition-colors hover:border-border-strong hover:text-tx-main">
+						<label class="tech-chip inline-flex cursor-pointer items-center gap-2 rounded-lg border border-border-subtle bg-bg-main px-2.5 py-1.5 text-xs text-tx-secondary transition-colors hover:border-border-strong hover:text-tx-main">
 							<input class="tech-filter sr-only" type="checkbox" value={tech} />
 							<span>{tech}</span>
 						</label>
@@ -139,6 +139,20 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 			});
 		};
 
+		const syncTechChips = () => {
+			techInputs.forEach((input) => {
+				const chip = input.closest('.tech-chip');
+				if (!chip) return;
+
+				chip.classList.toggle('border-accent-primary/35', input.checked);
+				chip.classList.toggle('bg-accent-primary/10', input.checked);
+				chip.classList.toggle('text-accent-glow', input.checked);
+				chip.classList.toggle('border-border-subtle', !input.checked);
+				chip.classList.toggle('bg-bg-main', !input.checked);
+				chip.classList.toggle('text-tx-secondary', !input.checked);
+			});
+		};
+
 		const updateUrl = (query: string, tech: string[], status: string) => {
 			const next = new URLSearchParams();
 			if (query) next.set('q', query);
@@ -173,7 +187,12 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 		};
 
 		searchInput?.addEventListener('input', applyFilters);
-		techInputs.forEach((input) => input.addEventListener('change', applyFilters));
+		techInputs.forEach((input) => {
+			input.addEventListener('change', () => {
+				syncTechChips();
+				applyFilters();
+			});
+		});
 		statusButtons.forEach((button) => {
 			button.addEventListener('click', () => {
 				selectedStatus = button.dataset.status ?? 'all';
@@ -188,10 +207,12 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 				input.checked = false;
 			});
 			selectedStatus = 'all';
+			syncTechChips();
 			syncStatusButtons();
 			applyFilters();
 		});
 
+		syncTechChips();
 		syncStatusButtons();
 		applyFilters();
 	</script>

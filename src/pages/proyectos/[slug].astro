@@ -2,6 +2,7 @@
 import { Icon } from 'astro-icon/components';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
 import Card from '../../components/ui/Card.astro';
 import CardHeader from '../../components/ui/CardHeader.astro';
 import CardTitle from '../../components/ui/CardTitle.astro';
@@ -23,6 +24,31 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props as { project: CollectionEntry<'projects'> };
 const { Content } = await project.render();
+const toSlug = (id: string) => id.replace(/\.md$/, '');
+const currentSlug = toSlug(project.id);
+const allProjects = await getCollection('projects');
+
+const relatedProjects = allProjects
+	.filter((entry) => toSlug(entry.id) !== currentSlug)
+	.map((entry) => {
+		const overlap = entry.data.techStack.filter((tech) => project.data.techStack.includes(tech)).length;
+		return {
+			slug: toSlug(entry.id),
+			title: entry.data.title,
+			description: entry.data.description,
+			techStack: entry.data.techStack,
+			status: entry.data.status,
+			year: Number(entry.data.year),
+			github: entry.data.github,
+			score: overlap,
+		};
+	})
+	.filter((entry) => entry.score > 0)
+	.sort((a, b) => {
+		if (b.score !== a.score) return b.score - a.score;
+		return b.year - a.year;
+	})
+	.slice(0, 3);
 ---
 
 <Layout title={`${project.data.title} | Proyecto`} description={project.data.description}>
@@ -160,5 +186,26 @@ const { Content } = await project.render();
 				<Icon name="github" class="h-4 w-4" aria-hidden="true" />
 			</Button>
 		</div>
+
+		{relatedProjects.length > 0 && (
+			<section class="border-t border-border-subtle pt-6 md:pt-8">
+				<div class="mb-4 flex items-center justify-between gap-3 md:mb-6">
+					<h2 class="text-2xl font-semibold">Otros proyectos similares</h2>
+					<Button href="/proyectos" variant="ghost" size="sm">Ver todos</Button>
+				</div>
+				<div class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
+					{relatedProjects.map((entry) => (
+						<ProjectCard
+							title={entry.title}
+							description={entry.description}
+							techStack={entry.techStack}
+							status={entry.status}
+							link={`/proyectos/${entry.slug}`}
+							github={entry.github}
+						/>
+					))}
+				</div>
+			</section>
+		)}
 	</main>
 </Layout>

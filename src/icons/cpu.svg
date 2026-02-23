@@ -1,0 +1,5 @@
+<!-- Suggested icon: cpu / microchip (Lucide, Heroicons) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="7" y="7" width="10" height="10" rx="2" />
+  <path d="M10 1v3M14 1v3M10 20v3M14 20v3M1 10h3M1 14h3M20 10h3M20 14h3" />
+</svg>
