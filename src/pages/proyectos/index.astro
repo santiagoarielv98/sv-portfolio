@@ -102,13 +102,14 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 		</section>
 
 		<section id="projects-grid" class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
-			{projects.map((project) => (
+			{projects.map((project, i) => (
 				<div
 					class="project-item"
 					data-title={project.title.toLowerCase()}
 					data-description={project.description.toLowerCase()}
 					data-status={project.status}
 					data-tech={project.techStack.join('|').toLowerCase()}
+					style={`view-transition-name: project-${i};`}
 				>
 					<ProjectCard {...project} />
 				</div>
@@ -119,6 +120,48 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 			No hay proyectos que coincidan con esos filtros.
 		</p>
 	</main>
+
+	<style>
+		.project-item {
+			contain: layout;
+			view-transition-class: project-item;
+		}
+
+		::view-transition-old(.project-item) {
+			animation: vt-project-out var(--motion-base) var(--motion-ease) both;
+		}
+
+		::view-transition-new(.project-item) {
+			animation: vt-project-in var(--motion-base) var(--motion-ease) both;
+		}
+
+		::view-transition-group(.project-item) {
+			animation-duration: var(--motion-slow);
+			animation-timing-function: var(--motion-ease);
+		}
+
+		@keyframes vt-project-in {
+			from {
+				opacity: 0;
+				transform: scale(0.96);
+			}
+		}
+
+		@keyframes vt-project-out {
+			to {
+				opacity: 0;
+				transform: scale(0.96);
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			::view-transition-old(.project-item),
+			::view-transition-new(.project-item),
+			::view-transition-group(.project-item) {
+				animation: none !important;
+			}
+		}
+	</style>
 
 	<script>
 		const filtersWindow = window as Window & { __projectFiltersReady?: boolean };
@@ -180,23 +223,6 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 				window.history.replaceState({}, '', nextUrl);
 			};
 
-			const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-			let filterRunId = 0;
-			const itemAnimations = new WeakMap<HTMLElement, Animation[]>();
-
-			const stopAnimations = (element: HTMLElement) => {
-				const animations = itemAnimations.get(element) ?? [];
-				animations.forEach((animation) => animation.cancel());
-				itemAnimations.delete(element);
-			};
-
-			const runAnimation = (element: HTMLElement, keyframes: Keyframe[], options: KeyframeAnimationOptions) => {
-				stopAnimations(element);
-				const animation = element.animate(keyframes, options);
-				itemAnimations.set(element, [animation]);
-				return animation;
-			};
-
 			const matchItem = (item: HTMLDivElement, query: string, selectedTechLower: string[]) => {
 				const title = item.dataset.title ?? '';
 				const description = item.dataset.description ?? '';
@@ -209,111 +235,30 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 				return queryOk && statusOk && techOk;
 			};
 
-			const applyFilters = () => {
+			const commitFilterChanges = () => {
 				const query = searchInput.value.trim().toLowerCase();
 				const selectedTechLower = Array.from(selectedTech).map((value) => value.toLowerCase());
-				const currentRun = ++filterRunId;
-				const beforeRects = new Map<HTMLDivElement, DOMRect>();
-				const shouldShowMap = new Map<HTMLDivElement, boolean>();
 
 				projectItems.forEach((item) => {
-					shouldShowMap.set(item, matchItem(item, query, selectedTechLower));
-					if (!item.classList.contains('hidden')) {
-						beforeRects.set(item, item.getBoundingClientRect());
-					}
+					const shouldShow = matchItem(item, query, selectedTechLower);
+					item.classList.toggle('hidden', !shouldShow);
 				});
 
-				const exitingItems = projectItems.filter((item) => !item.classList.contains('hidden') && !shouldShowMap.get(item));
-				const enteringItems = projectItems.filter((item) => item.classList.contains('hidden') && shouldShowMap.get(item));
+				const visibleCount = projectItems.filter((item) => !item.classList.contains('hidden')).length;
+				emptyState?.classList.toggle('hidden', visibleCount > 0);
+				updateUrl(query, selectedStatus);
+			};
 
-				const finalize = () => {
-					if (currentRun !== filterRunId) return;
-
-					exitingItems.forEach((item) => {
-						stopAnimations(item);
-						item.classList.add('hidden');
-						item.style.opacity = '';
-						item.style.transform = '';
+			const applyFilters = () => {
+				if (document.startViewTransition) {
+					document.documentElement.style.viewTransitionName = 'none';
+					const transition = document.startViewTransition(() => commitFilterChanges());
+					transition.finished.then(() => {
+						document.documentElement.style.viewTransitionName = '';
 					});
-
-					enteringItems.forEach((item) => {
-						item.classList.remove('hidden');
-						item.style.opacity = prefersReducedMotion ? '' : '0';
-						item.style.transform = prefersReducedMotion ? '' : 'scale(0.98)';
-					});
-
-					const afterRects = new Map<HTMLDivElement, DOMRect>();
-					projectItems.forEach((item) => {
-						if (!item.classList.contains('hidden')) {
-							afterRects.set(item, item.getBoundingClientRect());
-						}
-					});
-
-					if (!prefersReducedMotion) {
-						afterRects.forEach((newRect, item) => {
-							const oldRect = beforeRects.get(item);
-							if (!oldRect) return;
-
-							const deltaX = oldRect.left - newRect.left;
-							const deltaY = oldRect.top - newRect.top;
-							if (Math.abs(deltaX) < 0.5 && Math.abs(deltaY) < 0.5) return;
-
-							runAnimation(
-								item,
-								[
-									{ transform: `translate(${deltaX}px, ${deltaY}px)` },
-									{ transform: 'translate(0, 0)' },
-								],
-								{ duration: 260, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'both' },
-							);
-						});
-
-						enteringItems.forEach((item) => {
-							runAnimation(
-								item,
-								[
-									{ opacity: 0, transform: 'scale(0.98)' },
-									{ opacity: 1, transform: 'scale(1)' },
-								],
-								{ duration: 220, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'both' },
-							).onfinish = () => {
-								item.style.opacity = '';
-								item.style.transform = '';
-							};
-						});
-					} else {
-						enteringItems.forEach((item) => {
-							item.style.opacity = '';
-							item.style.transform = '';
-						});
-					}
-
-					const visibleCount = projectItems.filter((item) => !item.classList.contains('hidden')).length;
-					emptyState?.classList.toggle('hidden', visibleCount > 0);
-					updateUrl(query, selectedStatus);
-				};
-
-				if (prefersReducedMotion || exitingItems.length === 0) {
-					finalize();
-					return;
+				} else {
+					commitFilterChanges();
 				}
-
-				let completedExits = 0;
-				exitingItems.forEach((item) => {
-					runAnimation(
-						item,
-						[
-							{ opacity: 1, transform: 'scale(1)' },
-							{ opacity: 0, transform: 'scale(0.98)' },
-						],
-						{ duration: 180, easing: 'ease-out', fill: 'both' },
-					).onfinish = () => {
-						completedExits += 1;
-						if (completedExits === exitingItems.length) {
-							finalize();
-						}
-					};
-				});
 			};
 
 			if (searchInput.dataset.bound !== 'true') {
@@ -358,7 +303,7 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 
 			syncTechButtons();
 			syncStatusButtons();
-			applyFilters();
+			commitFilterChanges();
 		};
 
 		initProjectFilters();
