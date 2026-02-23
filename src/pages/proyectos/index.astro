@@ -180,28 +180,140 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 				window.history.replaceState({}, '', nextUrl);
 			};
 
+			const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			let filterRunId = 0;
+			const itemAnimations = new WeakMap<HTMLElement, Animation[]>();
+
+			const stopAnimations = (element: HTMLElement) => {
+				const animations = itemAnimations.get(element) ?? [];
+				animations.forEach((animation) => animation.cancel());
+				itemAnimations.delete(element);
+			};
+
+			const runAnimation = (element: HTMLElement, keyframes: Keyframe[], options: KeyframeAnimationOptions) => {
+				stopAnimations(element);
+				const animation = element.animate(keyframes, options);
+				itemAnimations.set(element, [animation]);
+				return animation;
+			};
+
+			const matchItem = (item: HTMLDivElement, query: string, selectedTechLower: string[]) => {
+				const title = item.dataset.title ?? '';
+				const description = item.dataset.description ?? '';
+				const tech = item.dataset.tech ?? '';
+				const status = item.dataset.status ?? '';
+
+				const queryOk = !query || title.includes(query) || description.includes(query) || tech.includes(query);
+				const statusOk = selectedStatus === 'all' || status === selectedStatus;
+				const techOk = selectedTechLower.length === 0 || selectedTechLower.every((value) => tech.includes(value));
+				return queryOk && statusOk && techOk;
+			};
+
 			const applyFilters = () => {
 				const query = searchInput.value.trim().toLowerCase();
 				const selectedTechLower = Array.from(selectedTech).map((value) => value.toLowerCase());
+				const currentRun = ++filterRunId;
+				const beforeRects = new Map<HTMLDivElement, DOMRect>();
+				const shouldShowMap = new Map<HTMLDivElement, boolean>();
 
-				let visibleCount = 0;
 				projectItems.forEach((item) => {
-					const title = item.dataset.title ?? '';
-					const description = item.dataset.description ?? '';
-					const tech = item.dataset.tech ?? '';
-					const status = item.dataset.status ?? '';
-
-					const queryOk = !query || title.includes(query) || description.includes(query) || tech.includes(query);
-					const statusOk = selectedStatus === 'all' || status === selectedStatus;
-					const techOk = selectedTechLower.length === 0 || selectedTechLower.every((value) => tech.includes(value));
-
-					const show = queryOk && statusOk && techOk;
-					item.classList.toggle('hidden', !show);
-					if (show) visibleCount += 1;
+					shouldShowMap.set(item, matchItem(item, query, selectedTechLower));
+					if (!item.classList.contains('hidden')) {
+						beforeRects.set(item, item.getBoundingClientRect());
+					}
 				});
 
-				emptyState?.classList.toggle('hidden', visibleCount > 0);
-				updateUrl(query, selectedStatus);
+				const exitingItems = projectItems.filter((item) => !item.classList.contains('hidden') && !shouldShowMap.get(item));
+				const enteringItems = projectItems.filter((item) => item.classList.contains('hidden') && shouldShowMap.get(item));
+
+				const finalize = () => {
+					if (currentRun !== filterRunId) return;
+
+					exitingItems.forEach((item) => {
+						stopAnimations(item);
+						item.classList.add('hidden');
+						item.style.opacity = '';
+						item.style.transform = '';
+					});
+
+					enteringItems.forEach((item) => {
+						item.classList.remove('hidden');
+						item.style.opacity = prefersReducedMotion ? '' : '0';
+						item.style.transform = prefersReducedMotion ? '' : 'scale(0.98)';
+					});
+
+					const afterRects = new Map<HTMLDivElement, DOMRect>();
+					projectItems.forEach((item) => {
+						if (!item.classList.contains('hidden')) {
+							afterRects.set(item, item.getBoundingClientRect());
+						}
+					});
+
+					if (!prefersReducedMotion) {
+						afterRects.forEach((newRect, item) => {
+							const oldRect = beforeRects.get(item);
+							if (!oldRect) return;
+
+							const deltaX = oldRect.left - newRect.left;
+							const deltaY = oldRect.top - newRect.top;
+							if (Math.abs(deltaX) < 0.5 && Math.abs(deltaY) < 0.5) return;
+
+							runAnimation(
+								item,
+								[
+									{ transform: `translate(${deltaX}px, ${deltaY}px)` },
+									{ transform: 'translate(0, 0)' },
+								],
+								{ duration: 260, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'both' },
+							);
+						});
+
+						enteringItems.forEach((item) => {
+							runAnimation(
+								item,
+								[
+									{ opacity: 0, transform: 'scale(0.98)' },
+									{ opacity: 1, transform: 'scale(1)' },
+								],
+								{ duration: 220, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'both' },
+							).onfinish = () => {
+								item.style.opacity = '';
+								item.style.transform = '';
+							};
+						});
+					} else {
+						enteringItems.forEach((item) => {
+							item.style.opacity = '';
+							item.style.transform = '';
+						});
+					}
+
+					const visibleCount = projectItems.filter((item) => !item.classList.contains('hidden')).length;
+					emptyState?.classList.toggle('hidden', visibleCount > 0);
+					updateUrl(query, selectedStatus);
+				};
+
+				if (prefersReducedMotion || exitingItems.length === 0) {
+					finalize();
+					return;
+				}
+
+				let completedExits = 0;
+				exitingItems.forEach((item) => {
+					runAnimation(
+						item,
+						[
+							{ opacity: 1, transform: 'scale(1)' },
+							{ opacity: 0, transform: 'scale(0.98)' },
+						],
+						{ duration: 180, easing: 'ease-out', fill: 'both' },
+					).onfinish = () => {
+						completedExits += 1;
+						if (completedExits === exitingItems.length) {
+							finalize();
+						}
+					};
+				});
 			};
 
 			if (searchInput.dataset.bound !== 'true') {

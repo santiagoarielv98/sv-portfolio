@@ -7,13 +7,13 @@
 	--font-display: 'Plus Jakarta Sans', sans-serif;
 	--font-mono: 'JetBrains Mono', monospace;
 
-	--color-bg-main: #09090b;
-	--color-bg-card: #18181b;
-	--color-bg-hover: #27272a;
+	--color-bg-main: #f5f5f7;
+	--color-bg-card: #ffffff;
+	--color-bg-hover: #f1f5f9;
 
-	--color-tx-main: #fafafa;
-	--color-tx-secondary: #a1a1aa;
-	--color-tx-muted: #52525b;
+	--color-tx-main: #09090b;
+	--color-tx-secondary: #52525b;
+	--color-tx-muted: #71717a;
 
 	--color-accent-primary: #3b82f6;
 	--color-accent-glow: #60a5fa;
@@ -23,10 +23,10 @@
 	--color-state-warning: #f59e0b;
 	--color-state-error: #ef4444;
 
-	--color-border-subtle: rgba(255, 255, 255, 0.08);
-	--color-border-strong: rgba(255, 255, 255, 0.15);
+	--color-border-subtle: rgba(9, 9, 11, 0.12);
+	--color-border-strong: rgba(9, 9, 11, 0.18);
 
-	--shadow-glass: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 4px 16px rgba(0, 0, 0, 0.4);
+	--shadow-glass: 0 0 0 1px rgba(9, 9, 11, 0.08), 0 8px 24px rgba(9, 9, 11, 0.08);
 	--shadow-glow-primary: 0 0 20px -5px rgba(59, 130, 246, 0.4);
 	--shadow-glow-secondary: 0 0 20px -5px rgba(249, 115, 22, 0.4);
 
@@ -37,19 +37,19 @@
 }
 
 @layer base {
-	html.light {
-		--color-bg-main: #f5f5f7;
-		--color-bg-card: #ffffff;
-		--color-bg-hover: #f1f5f9;
+	html.dark {
+		--color-bg-main: #09090b;
+		--color-bg-card: #18181b;
+		--color-bg-hover: #27272a;
 
-		--color-tx-main: #09090b;
-		--color-tx-secondary: #52525b;
-		--color-tx-muted: #71717a;
+		--color-tx-main: #fafafa;
+		--color-tx-secondary: #a1a1aa;
+		--color-tx-muted: #52525b;
 
-		--color-border-subtle: rgba(9, 9, 11, 0.12);
-		--color-border-strong: rgba(9, 9, 11, 0.18);
+		--color-border-subtle: rgba(255, 255, 255, 0.08);
+		--color-border-strong: rgba(255, 255, 255, 0.15);
 
-		--shadow-glass: 0 0 0 1px rgba(9, 9, 11, 0.08), 0 8px 24px rgba(9, 9, 11, 0.08);
+		--shadow-glass: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 4px 16px rgba(0, 0, 0, 0.4);
 	}
 
 	html,
@@ -68,12 +68,15 @@
 			color var(--motion-base) var(--motion-ease);
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
-	}
-
-	body.has-dock-nav {
 		padding-bottom: 5.5rem;
 	}
 
+	[data-icon="sun"] { display: block; }
+	[data-icon="moon"] { display: none; }
+
+	:global(.dark) [data-icon="sun"] { display: none; }
+	:global(.dark) [data-icon="moon"] { display: block; }
+	
 	h1,
 	h2,
 	h3,
