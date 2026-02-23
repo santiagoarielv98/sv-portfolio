@@ -3,6 +3,7 @@ import { Icon } from 'astro-icon/components';
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import Button from '../../components/ui/Button.astro';
 import '../../styles/global.css';
 
 const projectEntries = await getCollection('projects');
@@ -30,6 +31,13 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 	description="Listado de proyectos y productos construidos por Santiago Ariel Villanueva."
 >
 	<main class="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-5 sm:py-10 md:gap-12 md:px-8 md:py-14">
+		<div class="flex flex-wrap items-center justify-between gap-3">
+			<Button href="/" variant="ghost" size="sm">
+				<Icon name="home" class="h-4 w-4" aria-hidden="true" />
+				Volver al inicio
+			</Button>
+		</div>
+
 		<header class="border-b border-border-subtle pb-8 md:pb-10">
 			<p class="mb-3 inline-flex items-center gap-2 font-mono text-xs text-accent-glow">
 				<Icon name="folder-open" class="h-4 w-4" aria-hidden="true" />
