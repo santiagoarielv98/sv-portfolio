@@ -44,7 +44,10 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 		<section class="rounded-xl border border-border-subtle bg-bg-card p-4 shadow-glass sm:p-5 md:p-6">
 			<div class="mb-4 grid gap-3 md:grid-cols-[1fr_auto] md:items-end">
 				<label class="flex flex-col gap-1.5">
-					<span class="text-xs font-mono text-tx-secondary">Buscar proyecto</span>
+					<span class="inline-flex items-center gap-1.5 text-xs font-mono text-tx-secondary">
+						<Icon name="search" class="h-3.5 w-3.5" aria-hidden="true" />
+						Buscar proyecto
+					</span>
 					<input
 						id="project-search"
 						type="search"
@@ -57,12 +60,16 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 					type="button"
 					class="inline-flex h-10 items-center justify-center rounded-lg border border-border-subtle px-3 text-sm text-tx-secondary transition-colors hover:border-border-strong hover:text-tx-main"
 				>
+					<Icon name="filter" class="mr-1 h-3.5 w-3.5" aria-hidden="true" />
 					Limpiar filtros
 				</button>
 			</div>
 
 			<div class="mb-3">
-				<p class="mb-2 text-xs font-mono text-tx-secondary">Filtrar por tecnología</p>
+				<p class="mb-2 inline-flex items-center gap-1.5 text-xs font-mono text-tx-secondary">
+					<Icon name="cpu" class="h-3.5 w-3.5" aria-hidden="true" />
+					Filtrar por tecnología
+				</p>
 				<div class="flex flex-wrap gap-2">
 					{allTechnologies.map((tech) => (
 						<label class="tech-chip inline-flex cursor-pointer items-center gap-2 rounded-lg border border-border-subtle bg-bg-main px-2.5 py-1.5 text-xs text-tx-secondary transition-colors hover:border-border-strong hover:text-tx-main">
@@ -74,7 +81,10 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 			</div>
 
 			<div>
-				<p class="mb-2 text-xs font-mono text-tx-secondary">Estado</p>
+				<p class="mb-2 inline-flex items-center gap-1.5 text-xs font-mono text-tx-secondary">
+					<Icon name="circle-check" class="h-3.5 w-3.5" aria-hidden="true" />
+					Estado
+				</p>
 				<div class="flex flex-wrap gap-2">
 					<button type="button" data-status="all" class="status-filter rounded-lg border border-accent-primary/35 bg-accent-primary/10 px-2.5 py-1.5 text-xs text-accent-glow">Todos</button>
 					{allStatuses.map((status) => (

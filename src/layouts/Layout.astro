@@ -3,6 +3,10 @@ const {
 	title = 'Santiago Villanueva | Full Stack Developer',
 	description = 'Portfolio profesional enfocado en JavaScript/TypeScript, cloud y arquitecturas de alto rendimiento.',
 } = Astro.props;
+
+const pathname = Astro.url.pathname;
+const isHome = pathname === '/';
+const isProjects = pathname.startsWith('/proyectos');
 ---
 
 <!doctype html>
@@ -24,6 +28,35 @@ const {
 		<title>{title}</title>
 	</head>
 	<body>
+		<header class="border-b border-border-subtle bg-bg-main/80 backdrop-blur">
+			<nav class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 sm:px-5 md:px-8">
+				<a href="/" class="font-mono text-xs text-accent-glow transition-colors hover:text-accent-primary">sv</a>
+				<div class="flex items-center gap-2 text-sm">
+					<a
+						href="/"
+						class:list={[
+							'rounded-lg border px-3 py-1.5 transition-colors',
+							isHome
+								? 'border-accent-primary/35 bg-accent-primary/10 text-accent-glow'
+								: 'border-border-subtle text-tx-secondary hover:border-border-strong hover:text-tx-main',
+						]}
+					>
+						Inicio
+					</a>
+					<a
+						href="/proyectos"
+						class:list={[
+							'rounded-lg border px-3 py-1.5 transition-colors',
+							isProjects
+								? 'border-accent-primary/35 bg-accent-primary/10 text-accent-glow'
+								: 'border-border-subtle text-tx-secondary hover:border-border-strong hover:text-tx-main',
+						]}
+					>
+						Proyectos
+					</a>
+				</div>
+			</nav>
+		</header>
 		<slot />
 	</body>
 </html>

@@ -28,7 +28,7 @@ const toSlug = (id: string) => id.replace(/\.md$/, '');
 const currentSlug = toSlug(project.id);
 const allProjects = await getCollection('projects');
 
-const relatedProjects = allProjects
+const scoredRelatedProjects = allProjects
 	.filter((entry) => toSlug(entry.id) !== currentSlug)
 	.map((entry) => {
 		const overlap = entry.data.techStack.filter((tech) => project.data.techStack.includes(tech)).length;
@@ -47,8 +47,10 @@ const relatedProjects = allProjects
 	.sort((a, b) => {
 		if (b.score !== a.score) return b.score - a.score;
 		return b.year - a.year;
-	})
-	.slice(0, 3);
+	});
+
+const relatedProjectsByMatch = scoredRelatedProjects.filter((entry) => entry.score > 0).slice(0, 3);
+const relatedProjects = relatedProjectsByMatch.length > 0 ? relatedProjectsByMatch : scoredRelatedProjects.slice(0, 3);
 ---
 
 <Layout title={`${project.data.title} | Proyecto`} description={project.data.description}>
@@ -121,7 +123,7 @@ const relatedProjects = allProjects
 					<ul class="space-y-2 text-sm text-tx-secondary">
 						{project.data.challenges.map((challenge) => (
 							<li class="flex gap-2">
-								<Icon name="circle-check" class="mt-0.5 h-4 w-4 shrink-0 text-state-warning" aria-hidden="true" />
+								<Icon name="triangle-alert" class="mt-0.5 h-4 w-4 shrink-0 text-state-warning" aria-hidden="true" />
 								<span>{challenge}</span>
 							</li>
 						))}
@@ -190,7 +192,10 @@ const relatedProjects = allProjects
 		{relatedProjects.length > 0 && (
 			<section class="border-t border-border-subtle pt-6 md:pt-8">
 				<div class="mb-4 flex items-center justify-between gap-3 md:mb-6">
-					<h2 class="text-2xl font-semibold">Otros proyectos similares</h2>
+					<h2 class="inline-flex items-center gap-2 text-2xl font-semibold">
+						<Icon name="sparkles" class="h-5 w-5 text-accent-secondary" aria-hidden="true" />
+						Otros proyectos similares
+					</h2>
 					<Button href="/proyectos" variant="ghost" size="sm">Ver todos</Button>
 				</div>
 				<div class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
