@@ -1,5 +1,4 @@
 ---
-import Navbar from './Navbar.astro';
 import FloatingDock from './FloatingDock.astro';
 
 interface Props {
@@ -9,52 +8,8 @@ interface Props {
 const { pathname } = Astro.props as Props;
 ---
 
-<div class="border-b border-border-subtle bg-bg-main/80 px-4 py-2 text-xs text-tx-secondary backdrop-blur sm:px-5 md:px-8">
-	<div class="mx-auto flex w-full max-w-6xl items-center justify-between gap-3">
-		<p class="font-mono">Navegación</p>
-		<label class="inline-flex items-center gap-2">
-			<span class="font-mono text-[11px] text-tx-muted">Navbar</span>
-			<button
-				type="button"
-				id="nav-variant-toggle"
-				class="relative inline-flex h-6 w-11 items-center rounded-full border border-border-subtle bg-bg-card"
-				aria-label="Cambiar variante de navegación"
-			>
-				<span id="nav-variant-knob" class="h-4 w-4 translate-x-1 rounded-full bg-accent-primary transition-transform"></span>
-			</button>
-			<span class="font-mono text-[11px] text-tx-muted">Dock</span>
-		</label>
-	</div>
-</div>
-
-<div id="site-nav-navbar">
-	<Navbar pathname={pathname} />
-</div>
-<div id="site-nav-dock" class="hidden">
-	<FloatingDock pathname={pathname} />
-</div>
+<FloatingDock pathname={pathname} />
 
 <script>
-	const key = 'nav-variant';
-	const navbar = document.getElementById('site-nav-navbar');
-	const dock = document.getElementById('site-nav-dock');
-	const toggle = document.getElementById('nav-variant-toggle');
-	const knob = document.getElementById('nav-variant-knob');
-
-	const applyVariant = (variant: 'navbar' | 'dock') => {
-		navbar?.classList.toggle('hidden', variant === 'dock');
-		dock?.classList.toggle('hidden', variant === 'navbar');
-		document.body.classList.toggle('has-dock-nav', variant === 'dock');
-		knob?.classList.toggle('translate-x-1', variant === 'navbar');
-		knob?.classList.toggle('translate-x-6', variant === 'dock');
-		localStorage.setItem(key, variant);
-	};
-
-	const initial = (localStorage.getItem(key) as 'navbar' | 'dock' | null) ?? 'navbar';
-	applyVariant(initial);
-
-	toggle?.addEventListener('click', () => {
-		const current = (localStorage.getItem(key) as 'navbar' | 'dock' | null) ?? 'navbar';
-		applyVariant(current === 'navbar' ? 'dock' : 'navbar');
-	});
+	document.body.classList.add('has-dock-nav');
 </script>
