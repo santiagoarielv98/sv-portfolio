@@ -20,6 +20,7 @@ export interface ProjectDetail {
 	duration: string;
 	github: string;
 	link: string;
+	mainImage: string;
 	features: string[];
 	challenges: string[];
 	gallery: ProjectGalleryItem[];
@@ -50,6 +51,7 @@ export const projects: ProjectDetail[] = [
 		duration: 'Q1 2026 - Q4 2026',
 		github: '#',
 		link: '#',
+		mainImage: '/projects/gallery-1.svg',
 		features: [
 			'Gestión de servicios y seguimiento por estado',
 			'Inventario con movimientos auditables',
@@ -103,6 +105,7 @@ export const projects: ProjectDetail[] = [
 		duration: 'Q2 2026 - Q4 2026',
 		github: '#',
 		link: '#',
+		mainImage: '/projects/gallery-2.svg',
 		features: [
 			'Catálogo headless con secciones configurables',
 			'Búsqueda rápida por SKU, marca y categoría',
@@ -156,6 +159,7 @@ export const projects: ProjectDetail[] = [
 		duration: 'Q3 2026 - Q4 2026',
 		github: '#',
 		link: '#',
+		mainImage: '/projects/gallery-3.svg',
 		features: [
 			'Auto-generación de rutas por locale',
 			'Detección de idioma configurable',

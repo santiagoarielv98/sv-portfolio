@@ -40,6 +40,7 @@
       "location": "España (Remoto)",
       "startDate": "2025-04",
       "endDate": "Presente",
+      "image": "/experiences/zertify.jpg",
       "highlights": [
         "Lideré el desarrollo y el despliegue a producción de una aplicación web orientada al usuario final utilizando Next.js y React.",
         "Arquitecté e implementé la infraestructura en la nube mediante AWS Amplify, garantizando servicios escalables y de alta disponibilidad.",
@@ -53,6 +54,7 @@
       "location": "Colombia (Remoto)",
       "startDate": "2023-10",
       "endDate": "2024-04",
+      "image": "/experiences/waco.png",
       "highlights": [
         "Mejoré la accesibilidad global mediante la implementación de un sistema de traducción multilingüe con React i18n.",
         "Incrementé la eficiencia del sistema en un 25% conectando y activando funcionalidades avanzadas usando Firebase y Google Cloud.",
@@ -65,6 +67,7 @@
       "location": "Colombia (Remoto)",
       "startDate": "2022-04",
       "endDate": "2022-08",
+      "image": "/experiences/waco.png",
       "highlights": [
         "Diseñé y desarrollé interfaces web interactivas y responsivas utilizando React.js y MUI Core.",
         "Implementé integraciones eficientes con el backend a través de APIs RESTful y GraphQL.",
@@ -86,6 +89,7 @@
       "title": "Sistema B2B de Gestión Funeraria (SaaS)",
       "description": "Plataforma integral para la administración logística, gestión de inventarios y facturación automatizada de servicios funerarios.",
       "techStack": ["Next.js", "NestJS", "PostgreSQL", "AWS"],
+      "image": "/projects/gallery-1.svg",
       "link": "#",
       "github": "#",
       "status": "Planeado para 2026"
@@ -94,6 +98,7 @@
       "title": "Gestor Headless de Catálogos Mayoristas",
       "description": "CMS ultra rápido para comercios de gran volumen (repuestos automotores) con integración directa a Meta Business para ventas vía WhatsApp.",
       "techStack": ["Astro", "Laravel", "MySQL", "Tailwind CSS"],
+      "image": "/projects/gallery-2.svg",
       "link": "#",
       "github": "#",
       "status": "Planeado para 2026"
@@ -102,6 +107,7 @@
       "title": "React i18n Auto-Router",
       "description": "Librería Open Source para automatizar la configuración de rutas multilingües y detección de idioma en aplicaciones React complejas.",
       "techStack": ["React", "TypeScript", "NPM"],
+      "image": "/projects/gallery-3.svg",
       "link": "#",
       "github": "#",
       "status": "Planeado para 2026"
