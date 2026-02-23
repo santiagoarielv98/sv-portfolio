@@ -1,16 +1,28 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import Card from '../../components/ui/Card.astro';
-import CardHeader from '../../components/ui/CardHeader.astro';
-import CardTitle from '../../components/ui/CardTitle.astro';
-import CardDescription from '../../components/ui/CardDescription.astro';
-import CardContent from '../../components/ui/CardContent.astro';
-import Badge from '../../components/ui/Badge.astro';
-import Tag from '../../components/ui/Tag.astro';
-import Button from '../../components/ui/Button.astro';
-import { projects } from '../../data/projects';
+import ProjectCard from '../../components/ProjectCard.astro';
 import '../../styles/global.css';
+
+const projectEntries = await getCollection('projects');
+const toSlug = (id: string) => id.replace(/\.md$/, '');
+
+const projects = projectEntries
+	.map((entry) => ({
+		slug: toSlug(entry.id),
+		title: entry.data.title,
+		description: entry.data.description,
+		techStack: entry.data.techStack,
+		status: entry.data.status,
+		year: entry.data.year,
+		github: entry.data.github,
+		link: `/proyectos/${toSlug(entry.id)}`,
+	}))
+	.sort((a, b) => Number(b.year) - Number(a.year));
+
+const allTechnologies = [...new Set(projects.flatMap((project) => project.techStack))].sort();
+const allStatuses = [...new Set(projects.map((project) => project.status))];
 ---
 
 <Layout
@@ -29,34 +41,158 @@ import '../../styles/global.css';
 			</p>
 		</header>
 
-		<section class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
+		<section class="rounded-xl border border-border-subtle bg-bg-card p-4 shadow-glass sm:p-5 md:p-6">
+			<div class="mb-4 grid gap-3 md:grid-cols-[1fr_auto] md:items-end">
+				<label class="flex flex-col gap-1.5">
+					<span class="text-xs font-mono text-tx-secondary">Buscar proyecto</span>
+					<input
+						id="project-search"
+						type="search"
+						placeholder="Buscar por título, descripción o tecnología..."
+						class="h-10 rounded-lg border border-border-subtle bg-bg-main px-3 text-sm text-tx-main outline-none transition-colors placeholder:text-tx-muted focus:border-accent-primary/50"
+					/>
+				</label>
+				<button
+					id="filters-reset"
+					type="button"
+					class="inline-flex h-10 items-center justify-center rounded-lg border border-border-subtle px-3 text-sm text-tx-secondary transition-colors hover:border-border-strong hover:text-tx-main"
+				>
+					Limpiar filtros
+				</button>
+			</div>
+
+			<div class="mb-3">
+				<p class="mb-2 text-xs font-mono text-tx-secondary">Filtrar por tecnología</p>
+				<div class="flex flex-wrap gap-2">
+					{allTechnologies.map((tech) => (
+						<label class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-border-subtle bg-bg-main px-2.5 py-1.5 text-xs text-tx-secondary transition-colors hover:border-border-strong hover:text-tx-main">
+							<input class="tech-filter sr-only" type="checkbox" value={tech} />
+							<span>{tech}</span>
+						</label>
+					))}
+				</div>
+			</div>
+
+			<div>
+				<p class="mb-2 text-xs font-mono text-tx-secondary">Estado</p>
+				<div class="flex flex-wrap gap-2">
+					<button type="button" data-status="all" class="status-filter rounded-lg border border-accent-primary/35 bg-accent-primary/10 px-2.5 py-1.5 text-xs text-accent-glow">Todos</button>
+					{allStatuses.map((status) => (
+						<button type="button" data-status={status} class="status-filter rounded-lg border border-border-subtle bg-bg-main px-2.5 py-1.5 text-xs text-tx-secondary transition-colors hover:border-border-strong hover:text-tx-main">{status}</button>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<section id="projects-grid" class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
 			{projects.map((project) => (
-				<Card as="article" class="group">
-					<CardHeader class="pb-0">
-						<div class="flex items-start justify-between gap-3">
-							<div class="flex h-11 w-11 items-center justify-center rounded-lg border border-border-subtle bg-bg-main text-accent-glow shadow-glass">
-								<Icon name="folder-code" class="h-5 w-5" aria-hidden="true" />
-							</div>
-							<Badge variant="outline" size="md">{project.year}</Badge>
-						</div>
-						<CardTitle class="mt-4 text-xl transition-colors duration-300 group-hover:text-accent-glow">{project.title}</CardTitle>
-						<CardDescription class="mt-2">{project.description}</CardDescription>
-					</CardHeader>
-					<CardContent class="pt-4">
-						<ul class="mb-5 flex flex-wrap gap-2">
-							{project.techStack.slice(0, 4).map((tech) => (
-								<li>
-									<Tag>{tech}</Tag>
-								</li>
-							))}
-						</ul>
-						<Button href={`/proyectos/${project.slug}`} variant="secondary" size="default" class="w-full">
-							Ver detalle
-							<Icon name="external-link" class="h-4 w-4" aria-hidden="true" />
-						</Button>
-					</CardContent>
-				</Card>
+				<div
+					class="project-item"
+					data-title={project.title.toLowerCase()}
+					data-description={project.description.toLowerCase()}
+					data-status={project.status}
+					data-tech={project.techStack.join('|').toLowerCase()}
+				>
+					<ProjectCard {...project} />
+				</div>
 			))}
 		</section>
+
+		<p id="projects-empty" class="hidden rounded-lg border border-border-subtle bg-bg-card px-4 py-3 text-sm text-tx-secondary">
+			No hay proyectos que coincidan con esos filtros.
+		</p>
 	</main>
+
+	<script>
+		const searchInput = document.getElementById('project-search') as HTMLInputElement | null;
+		const resetButton = document.getElementById('filters-reset') as HTMLButtonElement | null;
+		const techInputs = Array.from(document.querySelectorAll('.tech-filter') ) as HTMLInputElement[];
+		const statusButtons = Array.from(document.querySelectorAll('.status-filter')) as HTMLButtonElement[];
+		const projectItems = Array.from(document.querySelectorAll('.project-item')) as HTMLDivElement[];
+		const emptyState = document.getElementById('projects-empty');
+
+		let selectedStatus = 'all';
+
+		const params = new URLSearchParams(window.location.search);
+		const initialQuery = params.get('q') ?? '';
+		const initialStatus = params.get('status') ?? 'all';
+		const initialTech = (params.get('tech') ?? '').split(',').filter(Boolean);
+
+		if (searchInput) searchInput.value = initialQuery;
+		selectedStatus = initialStatus;
+
+		techInputs.forEach((input) => {
+			if (initialTech.includes(input.value)) {
+				input.checked = true;
+			}
+		});
+
+		const syncStatusButtons = () => {
+			statusButtons.forEach((button) => {
+				const isActive = button.dataset.status === selectedStatus;
+				button.classList.toggle('border-accent-primary/35', isActive);
+				button.classList.toggle('bg-accent-primary/10', isActive);
+				button.classList.toggle('text-accent-glow', isActive);
+				button.classList.toggle('border-border-subtle', !isActive);
+				button.classList.toggle('bg-bg-main', !isActive);
+				button.classList.toggle('text-tx-secondary', !isActive);
+			});
+		};
+
+		const updateUrl = (query: string, tech: string[], status: string) => {
+			const next = new URLSearchParams();
+			if (query) next.set('q', query);
+			if (tech.length) next.set('tech', tech.join(','));
+			if (status !== 'all') next.set('status', status);
+			const nextUrl = `${window.location.pathname}${next.toString() ? `?${next.toString()}` : ''}`;
+			window.history.replaceState({}, '', nextUrl);
+		};
+
+		const applyFilters = () => {
+			const query = (searchInput?.value ?? '').trim().toLowerCase();
+			const selectedTech = techInputs.filter((input) => input.checked).map((input) => input.value.toLowerCase());
+
+			let visibleCount = 0;
+			projectItems.forEach((item) => {
+				const title = item.dataset.title ?? '';
+				const description = item.dataset.description ?? '';
+				const tech = item.dataset.tech ?? '';
+				const status = item.dataset.status ?? '';
+
+				const queryOk = !query || title.includes(query) || description.includes(query) || tech.includes(query);
+				const statusOk = selectedStatus === 'all' || status === selectedStatus;
+				const techOk = selectedTech.length === 0 || selectedTech.every((value) => tech.includes(value));
+
+				const show = queryOk && statusOk && techOk;
+				item.classList.toggle('hidden', !show);
+				if (show) visibleCount += 1;
+			});
+
+			emptyState?.classList.toggle('hidden', visibleCount > 0);
+			updateUrl(query, selectedTech, selectedStatus);
+		};
+
+		searchInput?.addEventListener('input', applyFilters);
+		techInputs.forEach((input) => input.addEventListener('change', applyFilters));
+		statusButtons.forEach((button) => {
+			button.addEventListener('click', () => {
+				selectedStatus = button.dataset.status ?? 'all';
+				syncStatusButtons();
+				applyFilters();
+			});
+		});
+
+		resetButton?.addEventListener('click', () => {
+			if (searchInput) searchInput.value = '';
+			techInputs.forEach((input) => {
+				input.checked = false;
+			});
+			selectedStatus = 'all';
+			syncStatusButtons();
+			applyFilters();
+		});
+
+		syncStatusButtons();
+		applyFilters();
+	</script>
 </Layout>
