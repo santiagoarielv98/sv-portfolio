@@ -7,9 +7,10 @@ import ProjectsSection from '../components/sections/ProjectsSection.astro';
 import EducationSection from '../components/sections/EducationSection.astro';
 import ContactFooter from '../components/sections/ContactFooter.astro';
 import portfolio from '../data/portfolio.json';
+import { projectCards } from '../data/projects';
 import '../styles/global.css';
 
-const { personal, about, skills, experience, education, projects } = portfolio;
+const { personal, about, skills, experience, education } = portfolio;
 ---
 
 <Layout title={`${personal.name} | ${personal.role}`} description={about}>
@@ -17,7 +18,7 @@ const { personal, about, skills, experience, education, projects } = portfolio;
 		<HeroSection personal={personal} about={about} />
 		<SkillsSection skills={skills} />
 		<ExperienceSection experience={experience} />
-		<ProjectsSection projects={projects} />
+		<ProjectsSection projects={projectCards} />
 		<EducationSection education={education} />
 		<ContactFooter email={personal.email} />
 	</main>

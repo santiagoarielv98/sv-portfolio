@@ -20,6 +20,7 @@ interface Props {
 const { title, description, techStack, status, link = '#', github = '#' } = Astro.props as Props;
 
 const statusVariant = status.toLowerCase().includes('planeado') ? 'warning' : 'success';
+const isInternalLink = link.startsWith('/');
 ---
 
 <Card as="article" class="group">
@@ -45,7 +46,12 @@ const statusVariant = status.toLowerCase().includes('planeado') ? 'warning' : 's
 		</ul>
 
 		<div class="flex items-center gap-4 text-sm">
-			<a href={link} class="inline-flex items-center gap-1 rounded-sm text-accent-glow transition-all duration-300 hover:text-accent-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-card" target="_blank" rel="noreferrer noopener">
+			<a
+				href={link}
+				class="inline-flex items-center gap-1 rounded-sm text-accent-glow transition-all duration-300 hover:text-accent-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-card"
+				target={isInternalLink ? undefined : '_blank'}
+				rel={isInternalLink ? undefined : 'noreferrer noopener'}
+			>
 				<Icon name="external-link" class="h-3.5 w-3.5 transition-transform duration-300" aria-hidden="true" />
 				Ver proyecto
 			</a>

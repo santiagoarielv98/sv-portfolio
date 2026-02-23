@@ -1,0 +1,62 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '../../layouts/Layout.astro';
+import Card from '../../components/ui/Card.astro';
+import CardHeader from '../../components/ui/CardHeader.astro';
+import CardTitle from '../../components/ui/CardTitle.astro';
+import CardDescription from '../../components/ui/CardDescription.astro';
+import CardContent from '../../components/ui/CardContent.astro';
+import Badge from '../../components/ui/Badge.astro';
+import Tag from '../../components/ui/Tag.astro';
+import Button from '../../components/ui/Button.astro';
+import { projects } from '../../data/projects';
+import '../../styles/global.css';
+---
+
+<Layout
+	title="Proyectos | Santiago Ariel Villanueva"
+	description="Listado de proyectos y productos construidos por Santiago Ariel Villanueva."
+>
+	<main class="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-5 sm:py-10 md:gap-12 md:px-8 md:py-14">
+		<header class="border-b border-border-subtle pb-8 md:pb-10">
+			<p class="mb-3 inline-flex items-center gap-2 font-mono text-xs text-accent-glow">
+				<Icon name="folder-open" class="h-4 w-4" aria-hidden="true" />
+				Catálogo de proyectos
+			</p>
+			<h1 class="mb-3 text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">Proyectos</h1>
+			<p class="max-w-3xl text-sm leading-relaxed text-tx-secondary md:text-base">
+				Una vista completa de productos y librerías con enfoque en performance, arquitectura y experiencia de usuario.
+			</p>
+		</header>
+
+		<section class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
+			{projects.map((project) => (
+				<Card as="article" class="group">
+					<CardHeader class="pb-0">
+						<div class="flex items-start justify-between gap-3">
+							<div class="flex h-11 w-11 items-center justify-center rounded-lg border border-border-subtle bg-bg-main text-accent-glow shadow-glass">
+								<Icon name="folder-code" class="h-5 w-5" aria-hidden="true" />
+							</div>
+							<Badge variant="outline" size="md">{project.year}</Badge>
+						</div>
+						<CardTitle class="mt-4 text-xl transition-colors duration-300 group-hover:text-accent-glow">{project.title}</CardTitle>
+						<CardDescription class="mt-2">{project.description}</CardDescription>
+					</CardHeader>
+					<CardContent class="pt-4">
+						<ul class="mb-5 flex flex-wrap gap-2">
+							{project.techStack.slice(0, 4).map((tech) => (
+								<li>
+									<Tag>{tech}</Tag>
+								</li>
+							))}
+						</ul>
+						<Button href={`/proyectos/${project.slug}`} variant="secondary" size="default" class="w-full">
+							Ver detalle
+							<Icon name="external-link" class="h-4 w-4" aria-hidden="true" />
+						</Button>
+					</CardContent>
+				</Card>
+			))}
+		</section>
+	</main>
+</Layout>

@@ -19,10 +19,16 @@ const { projects } = Astro.props as Props;
 ---
 
 <section>
-	<h2 class="mb-4 inline-flex items-center gap-2 text-2xl font-semibold md:mb-6">
-		<Icon name="folder-open" class="h-5 w-5 text-accent-glow transition-transform duration-300 hover:rotate-3" aria-hidden="true" />
-		Proyectos
-	</h2>
+	<div class="mb-4 flex items-center justify-between gap-3 md:mb-6">
+		<h2 class="inline-flex items-center gap-2 text-2xl font-semibold">
+			<Icon name="folder-open" class="h-5 w-5 text-accent-glow transition-transform duration-300 hover:rotate-3" aria-hidden="true" />
+			Proyectos
+		</h2>
+		<a href="/proyectos" class="inline-flex items-center gap-1 rounded-sm text-sm text-accent-glow transition-colors hover:text-accent-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-main">
+			Ver todos
+			<Icon name="external-link" class="h-4 w-4" aria-hidden="true" />
+		</a>
+	</div>
 	<div class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
 		{projects.map((project) => (
 			<ProjectCard {...project} />

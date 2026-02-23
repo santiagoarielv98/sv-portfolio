@@ -1,0 +1,156 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '../../layouts/Layout.astro';
+import Card from '../../components/ui/Card.astro';
+import CardHeader from '../../components/ui/CardHeader.astro';
+import CardTitle from '../../components/ui/CardTitle.astro';
+import CardDescription from '../../components/ui/CardDescription.astro';
+import CardContent from '../../components/ui/CardContent.astro';
+import Badge from '../../components/ui/Badge.astro';
+import Tag from '../../components/ui/Tag.astro';
+import Button from '../../components/ui/Button.astro';
+import { projects, type ProjectDetail } from '../../data/projects';
+import '../../styles/global.css';
+
+export function getStaticPaths() {
+	return projects.map((project) => ({
+		params: { slug: project.slug },
+		props: { project },
+	}));
+}
+
+const { project } = Astro.props as { project: ProjectDetail };
+---
+
+<Layout title={`${project.title} | Proyecto`} description={project.description}>
+	<main class="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-5 sm:py-10 md:gap-12 md:px-8 md:py-14">
+		<div class="flex flex-wrap items-center justify-between gap-3">
+			<Button href="/proyectos" variant="ghost" size="sm">
+				<Icon name="folder-open" class="h-4 w-4" aria-hidden="true" />
+				Volver a proyectos
+			</Button>
+			<Badge variant="outline" size="md">{project.status}</Badge>
+		</div>
+
+		<header class="border-b border-border-subtle pb-8 md:pb-10">
+			<p class="mb-3 text-xs font-mono text-accent-glow">{project.subtitle}</p>
+			<h1 class="mb-3 text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">{project.title}</h1>
+			<p class="max-w-3xl text-sm leading-relaxed text-tx-secondary md:text-base">{project.longDescription}</p>
+			<div class="mt-5 flex flex-wrap gap-2">
+				{project.techStack.map((tech) => (
+					<Tag>{tech}</Tag>
+				))}
+			</div>
+		</header>
+
+		<section class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5">
+			<Card as="article">
+				<CardHeader class="pb-0">
+					<CardTitle class="text-xl">Problema</CardTitle>
+					<CardDescription class="mt-2">Contexto de negocio y fricción principal.</CardDescription>
+				</CardHeader>
+				<CardContent class="pt-4">
+					<p class="text-sm leading-relaxed text-tx-secondary">{project.problem}</p>
+				</CardContent>
+			</Card>
+
+			<Card as="article">
+				<CardHeader class="pb-0">
+					<CardTitle class="text-xl">Solución</CardTitle>
+					<CardDescription class="mt-2">Arquitectura y decisiones técnicas aplicadas.</CardDescription>
+				</CardHeader>
+				<CardContent class="pt-4">
+					<p class="text-sm leading-relaxed text-tx-secondary">{project.solution}</p>
+				</CardContent>
+			</Card>
+		</section>
+
+		<section>
+			<h2 class="mb-4 text-2xl font-semibold md:mb-6">Galería</h2>
+			<div class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
+				{project.gallery.map((item) => (
+					<Card as="figure" class="gap-4">
+						<img src={item.image} alt={item.alt} loading="lazy" class="aspect-video w-full rounded-t-xl object-cover" />
+						<CardContent>
+							<figcaption class="text-sm text-tx-secondary">{item.caption}</figcaption>
+						</CardContent>
+					</Card>
+				))}
+			</div>
+		</section>
+
+		<section class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5">
+			<Card as="article">
+				<CardHeader class="pb-0">
+					<CardTitle class="text-xl">Features principales</CardTitle>
+				</CardHeader>
+				<CardContent class="pt-4">
+					<ul class="space-y-2 text-sm text-tx-secondary">
+						{project.features.map((feature) => (
+							<li class="flex gap-2">
+								<Icon name="circle-check" class="mt-0.5 h-4 w-4 shrink-0 text-accent-primary" aria-hidden="true" />
+								<span>{feature}</span>
+							</li>
+						))}
+					</ul>
+				</CardContent>
+			</Card>
+
+			<Card as="article">
+				<CardHeader class="pb-0">
+					<CardTitle class="text-xl">Retos técnicos</CardTitle>
+				</CardHeader>
+				<CardContent class="pt-4">
+					<ul class="space-y-2 text-sm text-tx-secondary">
+						{project.challenges.map((challenge) => (
+							<li class="flex gap-2">
+								<Icon name="circle-check" class="mt-0.5 h-4 w-4 shrink-0 text-state-warning" aria-hidden="true" />
+								<span>{challenge}</span>
+							</li>
+						))}
+					</ul>
+				</CardContent>
+			</Card>
+		</section>
+
+		<section class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5">
+			<Card as="article">
+				<CardHeader class="pb-0">
+					<CardTitle class="text-xl">Rol y alcance</CardTitle>
+				</CardHeader>
+				<CardContent class="pt-4 text-sm text-tx-secondary">
+					<p><span class="font-medium text-tx-main">Rol:</span> {project.role}</p>
+					<p class="mt-2"><span class="font-medium text-tx-main">Duración:</span> {project.duration}</p>
+					<p class="mt-2"><span class="font-medium text-tx-main">Año objetivo:</span> {project.year}</p>
+				</CardContent>
+			</Card>
+
+			<Card as="article">
+				<CardHeader class="pb-0">
+					<CardTitle class="text-xl">Impacto esperado</CardTitle>
+				</CardHeader>
+				<CardContent class="pt-4">
+					<ul class="space-y-2 text-sm text-tx-secondary">
+						{project.impact.map((item) => (
+							<li class="flex gap-2">
+								<Icon name="sparkles" class="mt-0.5 h-4 w-4 shrink-0 text-accent-secondary" aria-hidden="true" />
+								<span>{item}</span>
+							</li>
+						))}
+					</ul>
+				</CardContent>
+			</Card>
+		</section>
+
+		<div class="flex flex-wrap gap-3 border-t border-border-subtle pt-6 md:pt-8">
+			<Button href={project.link} target="_blank" rel="noreferrer noopener" variant="default">
+				Demo / Sitio
+				<Icon name="external-link" class="h-4 w-4" aria-hidden="true" />
+			</Button>
+			<Button href={project.github} target="_blank" rel="noreferrer noopener" variant="secondary">
+				Repositorio
+				<Icon name="github" class="h-4 w-4" aria-hidden="true" />
+			</Button>
+		</div>
+	</main>
+</Layout>
