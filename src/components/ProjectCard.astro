@@ -1,64 +1,93 @@
 ---
-import { Icon } from 'astro-icon/components'
-import Card from './ui/Card.astro';
-import CardHeader from './ui/CardHeader.astro';
-import CardTitle from './ui/CardTitle.astro';
-import CardDescription from './ui/CardDescription.astro';
-import CardContent from './ui/CardContent.astro';
-import Badge from './ui/Badge.astro';
-import Tag from './ui/Tag.astro';
+import { Icon } from "astro-icon/components";
+import Card from "./ui/Card.astro";
+import CardHeader from "./ui/CardHeader.astro";
+import CardTitle from "./ui/CardTitle.astro";
+import CardDescription from "./ui/CardDescription.astro";
+import CardContent from "./ui/CardContent.astro";
+import Badge from "./ui/Badge.astro";
+import Tag from "./ui/Tag.astro";
 
 interface Props {
-	title: string;
-	description: string;
-	techStack: string[];
-	status: string;
-	link?: string;
-	github?: string;
+  title: string;
+  description: string;
+  techStack: string[];
+  status: string;
+  link?: string;
+  github?: string;
 }
 
-const { title, description, techStack, status, link = '#', github = '#' } = Astro.props as Props;
+const {
+  title,
+  description,
+  techStack,
+  status,
+  link = "#",
+  github = "#",
+} = Astro.props as Props;
 
-const statusVariant = status.toLowerCase().includes('planeado') ? 'warning' : 'success';
-const isInternalLink = link.startsWith('/');
+const statusVariant = status.toLowerCase().includes("planeado")
+  ? "warning"
+  : "success";
+const isInternalLink = link.startsWith("/");
 ---
 
 <Card as="article" class="group">
-	<CardHeader class="pb-0">
-		<div class="flex items-start justify-between gap-3">
-			<div class="flex h-11 w-11 items-center justify-center rounded-lg border border-border-subtle bg-bg-main text-accent-glow shadow-glass">
-				<Icon name="code" class="h-5 w-5" aria-hidden="true" />
-			</div>
-			<Badge variant={statusVariant} size="md">{status}</Badge>
-		</div>
+  <CardHeader class="pb-0">
+    <div class="flex items-start justify-between gap-3">
+      <div
+        class="border-border-subtle bg-bg-main text-accent-glow shadow-glass flex h-11 w-11 items-center justify-center rounded-lg border"
+      >
+        <Icon name="code" class="h-5 w-5" aria-hidden="true" />
+      </div>
+      <Badge variant={statusVariant} size="md">{status}</Badge>
+    </div>
 
-		<CardTitle class="mt-4 transition-colors duration-300 group-hover:text-accent-glow">{title}</CardTitle>
-		<CardDescription class="mt-2">{description}</CardDescription>
-	</CardHeader>
+    <CardTitle
+      class="group-hover:text-accent-glow mt-4 transition-colors duration-300"
+      >{title}</CardTitle
+    >
+    <CardDescription class="mt-2">{description}</CardDescription>
+  </CardHeader>
 
-	<CardContent class="pt-4">
-		<ul class="mb-5 flex flex-wrap gap-2 md:mb-6">
-			{techStack.map((tech) => (
-				<li>
-					<Tag interactive>{tech}</Tag>
-				</li>
-			))}
-		</ul>
+  <CardContent class="pt-4">
+    <ul class="mb-5 flex flex-wrap gap-2 md:mb-6">
+      {
+        techStack.map((tech) => (
+          <li>
+            <Tag interactive>{tech}</Tag>
+          </li>
+        ))
+      }
+    </ul>
 
-		<div class="flex items-center gap-4 text-sm">
-			<a
-				href={link}
-				class="group/link inline-flex items-center gap-1 rounded-sm text-accent-glow transition-all duration-300 hover:text-accent-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-card"
-				target={isInternalLink ? undefined : '_blank'}
-				rel={isInternalLink ? undefined : 'noreferrer noopener'}
-			>
-				<Icon name="external-link" class="h-3.5 w-3.5 transition-opacity duration-300 group-hover/link:opacity-85" aria-hidden="true" />
-				Ver proyecto
-			</a>
-			<a href={github} class="group/repo inline-flex items-center gap-1 text-tx-secondary transition-all duration-300 hover:text-tx-main focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-card rounded-sm" target="_blank" rel="noreferrer noopener">
-				<Icon name="github" class="h-3.5 w-3.5 transition-transform duration-300 group-hover/repo:scale-110" aria-hidden="true" />
-				Repositorio
-			</a>
-		</div>
-	</CardContent>
+    <div class="flex items-center gap-4 text-sm">
+      <a
+        href={link}
+        class="group/link text-accent-glow hover:text-accent-primary focus-visible:ring-accent-primary/50 focus-visible:ring-offset-bg-card inline-flex items-center gap-1 rounded-sm transition-all duration-300 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+        target={isInternalLink ? undefined : "_blank"}
+        rel={isInternalLink ? undefined : "noreferrer noopener"}
+      >
+        <Icon
+          name="external-link"
+          class="h-3.5 w-3.5 transition-opacity duration-300 group-hover/link:opacity-85"
+          aria-hidden="true"
+        />
+        Ver proyecto
+      </a>
+      <a
+        href={github}
+        class="group/repo text-tx-secondary hover:text-tx-main focus-visible:ring-accent-primary/50 focus-visible:ring-offset-bg-card inline-flex items-center gap-1 rounded-sm transition-all duration-300 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+        target="_blank"
+        rel="noreferrer noopener"
+      >
+        <Icon
+          name="github"
+          class="h-3.5 w-3.5 transition-transform duration-300 group-hover/repo:scale-110"
+          aria-hidden="true"
+        />
+        Repositorio
+      </a>
+    </div>
+  </CardContent>
 </Card>

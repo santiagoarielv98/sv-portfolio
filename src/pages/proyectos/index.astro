@@ -1,315 +1,403 @@
 ---
-import { Icon } from 'astro-icon/components';
-import { getCollection } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
-import ProjectCard from '../../components/ProjectCard.astro';
-import Button from '../../components/ui/Button.astro';
-import '../../styles/global.css';
+import { Icon } from "astro-icon/components";
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import Button from "../../components/ui/Button.astro";
+import "../../styles/global.css";
 
-const projectEntries = await getCollection('projects');
-const toSlug = (id: string) => id.replace(/\.md$/, '');
+const projectEntries = await getCollection("projects");
+const toSlug = (id: string) => id.replace(/\.md$/, "");
 
 const projects = projectEntries
-	.map((entry) => ({
-		slug: toSlug(entry.id),
-		title: entry.data.title,
-		description: entry.data.description,
-		techStack: entry.data.techStack,
-		status: entry.data.status,
-		year: entry.data.year,
-		github: entry.data.github,
-		link: `/proyectos/${toSlug(entry.id)}`,
-	}))
-	.sort((a, b) => Number(b.year) - Number(a.year));
+  .map((entry) => ({
+    slug: toSlug(entry.id),
+    title: entry.data.title,
+    description: entry.data.description,
+    techStack: entry.data.techStack,
+    status: entry.data.status,
+    year: entry.data.year,
+    github: entry.data.github,
+    link: `/proyectos/${toSlug(entry.id)}`,
+  }))
+  .sort((a, b) => Number(b.year) - Number(a.year));
 
-const allTechnologies = [...new Set(projects.flatMap((project) => project.techStack))].sort();
+const allTechnologies = [
+  ...new Set(projects.flatMap((project) => project.techStack)),
+].sort();
 const allStatuses = [...new Set(projects.map((project) => project.status))];
 ---
 
 <Layout
-	title="Proyectos | Santiago Ariel Villanueva"
-	description="Listado de proyectos y productos construidos por Santiago Ariel Villanueva."
+  title="Proyectos | Santiago Ariel Villanueva"
+  description="Listado de proyectos y productos construidos por Santiago Ariel Villanueva."
 >
-	<main class="motion-enter mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-5 sm:py-10 md:gap-12 md:px-8 md:py-14">
-		<div class="flex flex-wrap items-center justify-between gap-3">
-			<Button href="/" variant="ghost" size="sm">
-				<Icon name="home" class="h-4 w-4" aria-hidden="true" />
-				Volver al inicio
-			</Button>
-		</div>
+  <main
+    class="motion-enter mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-5 sm:py-10 md:gap-12 md:px-8 md:py-14"
+  >
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <Button href="/" variant="ghost" size="sm">
+        <Icon name="home" class="h-4 w-4" aria-hidden="true" />
+        Volver al inicio
+      </Button>
+    </div>
 
-		<header class="border-b border-border-subtle pb-8 md:pb-10">
-			<p class="mb-3 inline-flex items-center gap-2 font-mono text-xs text-accent-glow">
-				<Icon name="folder-open" class="h-4 w-4" aria-hidden="true" />
-				Catálogo de proyectos
-			</p>
-			<h1 class="mb-3 text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">Proyectos</h1>
-			<p class="max-w-3xl text-sm leading-relaxed text-tx-secondary md:text-base">
-				Una vista completa de productos y librerías con enfoque en performance, arquitectura y experiencia de usuario.
-			</p>
-		</header>
+    <header class="border-border-subtle border-b pb-8 md:pb-10">
+      <p
+        class="text-accent-glow mb-3 inline-flex items-center gap-2 font-mono text-xs"
+      >
+        <Icon name="folder-open" class="h-4 w-4" aria-hidden="true" />
+        Catálogo de proyectos
+      </p>
+      <h1 class="mb-3 text-3xl leading-tight font-bold sm:text-4xl md:text-5xl">
+        Proyectos
+      </h1>
+      <p
+        class="text-tx-secondary max-w-3xl text-sm leading-relaxed md:text-base"
+      >
+        Una vista completa de productos y librerías con enfoque en performance,
+        arquitectura y experiencia de usuario.
+      </p>
+    </header>
 
-		<section class="rounded-xl border border-border-subtle bg-bg-card p-4 shadow-glass sm:p-5 md:p-6">
-			<div class="mb-4 grid gap-3 md:grid-cols-[1fr_auto] md:items-end">
-				<label class="flex flex-col gap-1.5">
-					<span class="inline-flex items-center gap-1.5 text-xs font-mono text-tx-secondary">
-						<Icon name="search" class="h-3.5 w-3.5" aria-hidden="true" />
-						Buscar proyecto
-					</span>
-					<input
-						id="project-search"
-						type="search"
-						placeholder="Buscar por título, descripción o tecnología..."
-						class="h-10 rounded-lg border border-border-subtle bg-bg-main px-3 text-sm text-tx-main outline-none transition-colors placeholder:text-tx-muted focus:border-accent-primary/50"
-					/>
-				</label>
-				<Button
-					id="filters-reset"
-					type="button"
-					variant="filter"
-					size="chip"
-					class="h-10 px-3 text-sm"
-				>
-					<Icon name="filter" class="h-3.5 w-3.5" aria-hidden="true" />
-					Limpiar filtros
-				</Button>
-			</div>
+    <section
+      class="border-border-subtle bg-bg-card shadow-glass rounded-xl border p-4 sm:p-5 md:p-6"
+    >
+      <div class="mb-4 grid gap-3 md:grid-cols-[1fr_auto] md:items-end">
+        <label class="flex flex-col gap-1.5">
+          <span
+            class="text-tx-secondary inline-flex items-center gap-1.5 font-mono text-xs"
+          >
+            <Icon name="search" class="h-3.5 w-3.5" aria-hidden="true" />
+            Buscar proyecto
+          </span>
+          <input
+            id="project-search"
+            type="search"
+            placeholder="Buscar por título, descripción o tecnología..."
+            class="border-border-subtle bg-bg-main text-tx-main placeholder:text-tx-muted focus:border-accent-primary/50 h-10 rounded-lg border px-3 text-sm transition-colors outline-none"
+          />
+        </label>
+        <Button
+          id="filters-reset"
+          type="button"
+          variant="filter"
+          size="chip"
+          class="h-10 px-3 text-sm"
+        >
+          <Icon name="filter" class="h-3.5 w-3.5" aria-hidden="true" />
+          Limpiar filtros
+        </Button>
+      </div>
 
-			<div class="mb-3">
-				<p class="mb-2 inline-flex items-center gap-1.5 text-xs font-mono text-tx-secondary">
-					<Icon name="cpu" class="h-3.5 w-3.5" aria-hidden="true" />
-					Filtrar por tecnología
-				</p>
-				<div class="flex flex-wrap gap-2">
-					{allTechnologies.map((tech) => (
-						<Button type="button" variant="filter" size="chip" class="tech-filter" data-tech={tech}>{tech}</Button>
-					))}
-				</div>
-			</div>
+      <div class="mb-3">
+        <p
+          class="text-tx-secondary mb-2 inline-flex items-center gap-1.5 font-mono text-xs"
+        >
+          <Icon name="cpu" class="h-3.5 w-3.5" aria-hidden="true" />
+          Filtrar por tecnología
+        </p>
+        <div class="flex flex-wrap gap-2">
+          {
+            allTechnologies.map((tech) => (
+              <Button
+                type="button"
+                variant="filter"
+                size="chip"
+                class="tech-filter"
+                data-tech={tech}
+              >
+                {tech}
+              </Button>
+            ))
+          }
+        </div>
+      </div>
 
-			<div>
-				<p class="mb-2 inline-flex items-center gap-1.5 text-xs font-mono text-tx-secondary">
-					<Icon name="circle-check" class="h-3.5 w-3.5" aria-hidden="true" />
-					Estado
-				</p>
-				<div class="flex flex-wrap gap-2">
-					<Button type="button" variant="filter-active" size="chip" data-status="all" class="status-filter">Todos</Button>
-					{allStatuses.map((status) => (
-						<Button type="button" variant="filter" size="chip" data-status={status} class="status-filter">{status}</Button>
-					))}
-				</div>
-			</div>
-		</section>
+      <div>
+        <p
+          class="text-tx-secondary mb-2 inline-flex items-center gap-1.5 font-mono text-xs"
+        >
+          <Icon name="circle-check" class="h-3.5 w-3.5" aria-hidden="true" />
+          Estado
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <Button
+            type="button"
+            variant="filter-active"
+            size="chip"
+            data-status="all"
+            class="status-filter">Todos</Button
+          >
+          {
+            allStatuses.map((status) => (
+              <Button
+                type="button"
+                variant="filter"
+                size="chip"
+                data-status={status}
+                class="status-filter"
+              >
+                {status}
+              </Button>
+            ))
+          }
+        </div>
+      </div>
+    </section>
 
-		<section id="projects-grid" class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
-			{projects.map((project, i) => (
-				<div
-					class="project-item"
-					data-title={project.title.toLowerCase()}
-					data-description={project.description.toLowerCase()}
-					data-status={project.status}
-					data-tech={project.techStack.join('|').toLowerCase()}
-					style={`view-transition-name: project-${i};`}
-				>
-					<ProjectCard {...project} />
-				</div>
-			))}
-		</section>
+    <section
+      id="projects-grid"
+      class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3"
+    >
+      {
+        projects.map((project, i) => (
+          <div
+            class="project-item"
+            data-title={project.title.toLowerCase()}
+            data-description={project.description.toLowerCase()}
+            data-status={project.status}
+            data-tech={project.techStack.join("|").toLowerCase()}
+            style={`view-transition-name: project-${i};`}
+          >
+            <ProjectCard {...project} />
+          </div>
+        ))
+      }
+    </section>
 
-		<p id="projects-empty" class="hidden rounded-lg border border-border-subtle bg-bg-card px-4 py-3 text-sm text-tx-secondary">
-			No hay proyectos que coincidan con esos filtros.
-		</p>
-	</main>
+    <p
+      id="projects-empty"
+      class="border-border-subtle bg-bg-card text-tx-secondary hidden rounded-lg border px-4 py-3 text-sm"
+    >
+      No hay proyectos que coincidan con esos filtros.
+    </p>
+  </main>
 
-	<style>
-		.project-item {
-			contain: layout;
-			view-transition-class: project-item;
-		}
+  <style>
+    .project-item {
+      contain: layout;
+      view-transition-class: project-item;
+    }
 
-		::view-transition-old(.project-item) {
-			animation: vt-project-out var(--motion-base) var(--motion-ease) both;
-		}
+    ::view-transition-old(.project-item) {
+      animation: vt-project-out var(--motion-base) var(--motion-ease) both;
+    }
 
-		::view-transition-new(.project-item) {
-			animation: vt-project-in var(--motion-base) var(--motion-ease) both;
-		}
+    ::view-transition-new(.project-item) {
+      animation: vt-project-in var(--motion-base) var(--motion-ease) both;
+    }
 
-		::view-transition-group(.project-item) {
-			animation-duration: var(--motion-slow);
-			animation-timing-function: var(--motion-ease);
-		}
+    ::view-transition-group(.project-item) {
+      animation-duration: var(--motion-slow);
+      animation-timing-function: var(--motion-ease);
+    }
 
-		@keyframes vt-project-in {
-			from {
-				opacity: 0;
-				transform: scale(0.96);
-			}
-		}
+    @keyframes vt-project-in {
+      from {
+        opacity: 0;
+        transform: scale(0.96);
+      }
+    }
 
-		@keyframes vt-project-out {
-			to {
-				opacity: 0;
-				transform: scale(0.96);
-			}
-		}
+    @keyframes vt-project-out {
+      to {
+        opacity: 0;
+        transform: scale(0.96);
+      }
+    }
 
-		@media (prefers-reduced-motion: reduce) {
-			::view-transition-old(.project-item),
-			::view-transition-new(.project-item),
-			::view-transition-group(.project-item) {
-				animation: none !important;
-			}
-		}
-	</style>
+    @media (prefers-reduced-motion: reduce) {
+      ::view-transition-old(.project-item),
+      ::view-transition-new(.project-item),
+      ::view-transition-group(.project-item) {
+        animation: none !important;
+      }
+    }
+  </style>
 
-	<script>
-		const filtersWindow = window as Window & { __projectFiltersReady?: boolean };
+  <script>
+    const filtersWindow = window as Window & {
+      __projectFiltersReady?: boolean;
+    };
 
-		const initProjectFilters = () => {
-			const searchInput = document.getElementById('project-search') as HTMLInputElement | null;
-			const resetButton = document.getElementById('filters-reset') as HTMLButtonElement | null;
-			const techButtons = Array.from(document.querySelectorAll('.tech-filter')) as HTMLButtonElement[];
-			const statusButtons = Array.from(document.querySelectorAll('.status-filter')) as HTMLButtonElement[];
-			const projectItems = Array.from(document.querySelectorAll('.project-item')) as HTMLDivElement[];
-			const emptyState = document.getElementById('projects-empty');
+    const initProjectFilters = () => {
+      const searchInput = document.getElementById(
+        "project-search",
+      ) as HTMLInputElement | null;
+      const resetButton = document.getElementById(
+        "filters-reset",
+      ) as HTMLButtonElement | null;
+      const techButtons = Array.from(
+        document.querySelectorAll(".tech-filter"),
+      ) as HTMLButtonElement[];
+      const statusButtons = Array.from(
+        document.querySelectorAll(".status-filter"),
+      ) as HTMLButtonElement[];
+      const projectItems = Array.from(
+        document.querySelectorAll(".project-item"),
+      ) as HTMLDivElement[];
+      const emptyState = document.getElementById("projects-empty");
 
-			if (!searchInput || projectItems.length === 0) return;
+      if (!searchInput || projectItems.length === 0) return;
 
-			let selectedStatus = 'all';
-			const selectedTech = new Set<string>();
+      let selectedStatus = "all";
+      const selectedTech = new Set<string>();
 
-			const params = new URLSearchParams(window.location.search);
-			const initialQuery = params.get('q') ?? '';
-			const initialStatus = params.get('status') ?? 'all';
-			const initialTech = (params.get('tech') ?? '').split(',').filter(Boolean);
+      const params = new URLSearchParams(window.location.search);
+      const initialQuery = params.get("q") ?? "";
+      const initialStatus = params.get("status") ?? "all";
+      const initialTech = (params.get("tech") ?? "").split(",").filter(Boolean);
 
-			searchInput.value = initialQuery;
-			selectedStatus = initialStatus;
-			initialTech.forEach((value) => selectedTech.add(value));
+      searchInput.value = initialQuery;
+      selectedStatus = initialStatus;
+      initialTech.forEach((value) => selectedTech.add(value));
 
-			const setFilterButtonState = (button: HTMLButtonElement, isActive: boolean) => {
-				button.classList.toggle('border-accent-primary/35', isActive);
-				button.classList.toggle('bg-accent-primary/10', isActive);
-				button.classList.toggle('text-accent-glow', isActive);
-				button.classList.toggle('shadow-glass', isActive);
+      const setFilterButtonState = (
+        button: HTMLButtonElement,
+        isActive: boolean,
+      ) => {
+        button.classList.toggle("border-accent-primary/35", isActive);
+        button.classList.toggle("bg-accent-primary/10", isActive);
+        button.classList.toggle("text-accent-glow", isActive);
+        button.classList.toggle("shadow-glass", isActive);
 
-				button.classList.toggle('border-border-subtle', !isActive);
-				button.classList.toggle('bg-bg-main', !isActive);
-				button.classList.toggle('text-tx-secondary', !isActive);
-				button.classList.toggle('hover:border-border-strong', !isActive);
-				button.classList.toggle('hover:text-tx-main', !isActive);
-			};
+        button.classList.toggle("border-border-subtle", !isActive);
+        button.classList.toggle("bg-bg-main", !isActive);
+        button.classList.toggle("text-tx-secondary", !isActive);
+        button.classList.toggle("hover:border-border-strong", !isActive);
+        button.classList.toggle("hover:text-tx-main", !isActive);
+      };
 
-			const syncStatusButtons = () => {
-				statusButtons.forEach((button) => {
-					setFilterButtonState(button, button.dataset.status === selectedStatus);
-				});
-			};
+      const syncStatusButtons = () => {
+        statusButtons.forEach((button) => {
+          setFilterButtonState(
+            button,
+            button.dataset.status === selectedStatus,
+          );
+        });
+      };
 
-			const syncTechButtons = () => {
-				techButtons.forEach((button) => {
-					const tech = button.dataset.tech ?? '';
-					setFilterButtonState(button, selectedTech.has(tech));
-				});
-			};
+      const syncTechButtons = () => {
+        techButtons.forEach((button) => {
+          const tech = button.dataset.tech ?? "";
+          setFilterButtonState(button, selectedTech.has(tech));
+        });
+      };
 
-			const updateUrl = (query: string, status: string) => {
-				const next = new URLSearchParams();
-				if (query) next.set('q', query);
-				if (selectedTech.size) next.set('tech', Array.from(selectedTech).join(','));
-				if (status !== 'all') next.set('status', status);
-				const nextUrl = `${window.location.pathname}${next.toString() ? `?${next.toString()}` : ''}`;
-				window.history.replaceState({}, '', nextUrl);
-			};
+      const updateUrl = (query: string, status: string) => {
+        const next = new URLSearchParams();
+        if (query) next.set("q", query);
+        if (selectedTech.size)
+          next.set("tech", Array.from(selectedTech).join(","));
+        if (status !== "all") next.set("status", status);
+        const nextUrl = `${window.location.pathname}${next.toString() ? `?${next.toString()}` : ""}`;
+        window.history.replaceState({}, "", nextUrl);
+      };
 
-			const matchItem = (item: HTMLDivElement, query: string, selectedTechLower: string[]) => {
-				const title = item.dataset.title ?? '';
-				const description = item.dataset.description ?? '';
-				const tech = item.dataset.tech ?? '';
-				const status = item.dataset.status ?? '';
+      const matchItem = (
+        item: HTMLDivElement,
+        query: string,
+        selectedTechLower: string[],
+      ) => {
+        const title = item.dataset.title ?? "";
+        const description = item.dataset.description ?? "";
+        const tech = item.dataset.tech ?? "";
+        const status = item.dataset.status ?? "";
 
-				const queryOk = !query || title.includes(query) || description.includes(query) || tech.includes(query);
-				const statusOk = selectedStatus === 'all' || status === selectedStatus;
-				const techOk = selectedTechLower.length === 0 || selectedTechLower.every((value) => tech.includes(value));
-				return queryOk && statusOk && techOk;
-			};
+        const queryOk =
+          !query ||
+          title.includes(query) ||
+          description.includes(query) ||
+          tech.includes(query);
+        const statusOk = selectedStatus === "all" || status === selectedStatus;
+        const techOk =
+          selectedTechLower.length === 0 ||
+          selectedTechLower.every((value) => tech.includes(value));
+        return queryOk && statusOk && techOk;
+      };
 
-			const commitFilterChanges = () => {
-				const query = searchInput.value.trim().toLowerCase();
-				const selectedTechLower = Array.from(selectedTech).map((value) => value.toLowerCase());
+      const commitFilterChanges = () => {
+        const query = searchInput.value.trim().toLowerCase();
+        const selectedTechLower = Array.from(selectedTech).map((value) =>
+          value.toLowerCase(),
+        );
 
-				projectItems.forEach((item) => {
-					const shouldShow = matchItem(item, query, selectedTechLower);
-					item.classList.toggle('hidden', !shouldShow);
-				});
+        projectItems.forEach((item) => {
+          const shouldShow = matchItem(item, query, selectedTechLower);
+          item.classList.toggle("hidden", !shouldShow);
+        });
 
-				const visibleCount = projectItems.filter((item) => !item.classList.contains('hidden')).length;
-				emptyState?.classList.toggle('hidden', visibleCount > 0);
-				updateUrl(query, selectedStatus);
-			};
+        const visibleCount = projectItems.filter(
+          (item) => !item.classList.contains("hidden"),
+        ).length;
+        emptyState?.classList.toggle("hidden", visibleCount > 0);
+        updateUrl(query, selectedStatus);
+      };
 
-			const applyFilters = () => {
-				if (document.startViewTransition) {
-					document.documentElement.style.viewTransitionName = 'none';
-					const transition = document.startViewTransition(() => commitFilterChanges());
-					transition.finished.then(() => {
-						document.documentElement.style.viewTransitionName = '';
-					});
-				} else {
-					commitFilterChanges();
-				}
-			};
+      const applyFilters = () => {
+        if (document.startViewTransition) {
+          document.documentElement.style.viewTransitionName = "none";
+          const transition = document.startViewTransition(() =>
+            commitFilterChanges(),
+          );
+          transition.finished.then(() => {
+            document.documentElement.style.viewTransitionName = "";
+          });
+        } else {
+          commitFilterChanges();
+        }
+      };
 
-			if (searchInput.dataset.bound !== 'true') {
-				searchInput.addEventListener('input', applyFilters);
-				searchInput.dataset.bound = 'true';
-			}
+      if (searchInput.dataset.bound !== "true") {
+        searchInput.addEventListener("input", applyFilters);
+        searchInput.dataset.bound = "true";
+      }
 
-			techButtons.forEach((button) => {
-				if (button.dataset.bound === 'true') return;
-				button.addEventListener('click', () => {
-					const tech = button.dataset.tech ?? '';
-					if (!tech) return;
-					if (selectedTech.has(tech)) selectedTech.delete(tech);
-					else selectedTech.add(tech);
-					syncTechButtons();
-					applyFilters();
-				});
-				button.dataset.bound = 'true';
-			});
+      techButtons.forEach((button) => {
+        if (button.dataset.bound === "true") return;
+        button.addEventListener("click", () => {
+          const tech = button.dataset.tech ?? "";
+          if (!tech) return;
+          if (selectedTech.has(tech)) selectedTech.delete(tech);
+          else selectedTech.add(tech);
+          syncTechButtons();
+          applyFilters();
+        });
+        button.dataset.bound = "true";
+      });
 
-			statusButtons.forEach((button) => {
-				if (button.dataset.bound === 'true') return;
-				button.addEventListener('click', () => {
-					selectedStatus = button.dataset.status ?? 'all';
-					syncStatusButtons();
-					applyFilters();
-				});
-				button.dataset.bound = 'true';
-			});
+      statusButtons.forEach((button) => {
+        if (button.dataset.bound === "true") return;
+        button.addEventListener("click", () => {
+          selectedStatus = button.dataset.status ?? "all";
+          syncStatusButtons();
+          applyFilters();
+        });
+        button.dataset.bound = "true";
+      });
 
-			if (resetButton && resetButton.dataset.bound !== 'true') {
-				resetButton.addEventListener('click', () => {
-					searchInput.value = '';
-					selectedTech.clear();
-					selectedStatus = 'all';
-					syncTechButtons();
-					syncStatusButtons();
-					applyFilters();
-				});
-				resetButton.dataset.bound = 'true';
-			}
+      if (resetButton && resetButton.dataset.bound !== "true") {
+        resetButton.addEventListener("click", () => {
+          searchInput.value = "";
+          selectedTech.clear();
+          selectedStatus = "all";
+          syncTechButtons();
+          syncStatusButtons();
+          applyFilters();
+        });
+        resetButton.dataset.bound = "true";
+      }
 
-			syncTechButtons();
-			syncStatusButtons();
-			commitFilterChanges();
-		};
+      syncTechButtons();
+      syncStatusButtons();
+      commitFilterChanges();
+    };
 
-		initProjectFilters();
-		if (!filtersWindow.__projectFiltersReady) {
-			document.addEventListener('astro:page-load', initProjectFilters);
-			filtersWindow.__projectFiltersReady = true;
-		}
-	</script>
+    initProjectFilters();
+    if (!filtersWindow.__projectFiltersReady) {
+      document.addEventListener("astro:page-load", initProjectFilters);
+      filtersWindow.__projectFiltersReady = true;
+    }
+  </script>
 </Layout>

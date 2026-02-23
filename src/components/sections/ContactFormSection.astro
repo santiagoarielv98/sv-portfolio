@@ -1,106 +1,123 @@
 ---
-import { Icon } from 'astro-icon/components';
-import Button from '../ui/Button.astro';
-import Toast from '../ui/Toast.astro';
+import { Icon } from "astro-icon/components";
+import Button from "../ui/Button.astro";
+import Toast from "../ui/Toast.astro";
 
 interface Props {
-	email: string;
+  email: string;
 }
 
 const { email } = Astro.props as Props;
 ---
 
-<section id="contacto" class="border-t border-border-subtle pt-8 md:pt-10">
-	<div class="mb-5">
-		<p class="mb-2 font-mono text-xs text-accent-glow">Contacto</p>
-		<h2 class="text-2xl font-semibold md:text-3xl">¿Trabajamos juntos?</h2>
-		<p class="mt-2 max-w-2xl text-sm text-tx-secondary md:text-base">
-			Maquetación del formulario de contacto para demo UX. El envío muestra una confirmación visual sin integrar backend.
-		</p>
-	</div>
+<section id="contacto" class="border-border-subtle border-t pt-8 md:pt-10">
+  <div class="mb-5">
+    <p class="text-accent-glow mb-2 font-mono text-xs">Contacto</p>
+    <h2 class="text-2xl font-semibold md:text-3xl">¿Trabajamos juntos?</h2>
+    <p class="text-tx-secondary mt-2 max-w-2xl text-sm md:text-base">
+      Maquetación del formulario de contacto para demo UX. El envío muestra una
+      confirmación visual sin integrar backend.
+    </p>
+  </div>
 
-	<form id="contact-form" class="surface p-4 sm:p-5 md:p-6">
-		<div class="grid gap-4 md:grid-cols-2">
-			<label class="flex flex-col gap-1.5 md:col-span-2">
-				<span class="text-sm font-medium text-tx-main">Correo electrónico</span>
-				<input
-					type="email"
-					name="email"
-					required
-					placeholder={email}
-					class="h-10 rounded-lg border border-border-subtle bg-bg-main px-3 text-sm text-tx-main outline-none transition-colors placeholder:text-tx-muted focus:border-accent-primary/50"
-				/>
-			</label>
-			<label class="flex flex-col gap-1.5 md:col-span-2">
-				<span class="flex items-center justify-between text-sm font-medium text-tx-main">
-					<span>Mensaje</span>
-					<span class="text-xs font-normal text-tx-muted">Opcional</span>
-				</span>
-				<textarea
-					name="message"
-					rows={4}
-					placeholder="Contame brevemente el proyecto, objetivos y tiempos estimados..."
-					class="rounded-lg border border-border-subtle bg-bg-main px-3 py-2.5 text-sm text-tx-main outline-none transition-colors placeholder:text-tx-muted focus:border-accent-primary/50"
-				></textarea>
-			</label>
-		</div>
-		<div class="mt-4 flex flex-wrap items-center gap-3">
-			<Button type="submit" variant="default">
-				<Icon name="send" class="h-4 w-4" aria-hidden="true" />
-				Enviar mensaje
-			</Button>
-			<p class="text-xs text-tx-muted">
-				También podés escribir directo a
-				<a href={`mailto:${email}`} class="text-accent-glow hover:text-accent-primary"> {email}</a>
-			</p>
-		</div>
-	</form>
+  <form id="contact-form" class="surface p-4 sm:p-5 md:p-6">
+    <div class="grid gap-4 md:grid-cols-2">
+      <label class="flex flex-col gap-1.5 md:col-span-2">
+        <span class="text-tx-main text-sm font-medium">Correo electrónico</span>
+        <input
+          type="email"
+          name="email"
+          required
+          placeholder={email}
+          class="border-border-subtle bg-bg-main text-tx-main placeholder:text-tx-muted focus:border-accent-primary/50 h-10 rounded-lg border px-3 text-sm transition-colors outline-none"
+        />
+      </label>
+      <label class="flex flex-col gap-1.5 md:col-span-2">
+        <span
+          class="text-tx-main flex items-center justify-between text-sm font-medium"
+        >
+          <span>Mensaje</span>
+          <span class="text-tx-muted text-xs font-normal">Opcional</span>
+        </span>
+        <textarea
+          name="message"
+          rows={4}
+          placeholder="Contame brevemente el proyecto, objetivos y tiempos estimados..."
+          class="border-border-subtle bg-bg-main text-tx-main placeholder:text-tx-muted focus:border-accent-primary/50 rounded-lg border px-3 py-2.5 text-sm transition-colors outline-none"
+        ></textarea>
+      </label>
+    </div>
+    <div class="mt-4 flex flex-wrap items-center gap-3">
+      <Button type="submit" variant="default">
+        <Icon name="send" class="h-4 w-4" aria-hidden="true" />
+        Enviar mensaje
+      </Button>
+      <p class="text-tx-muted text-xs">
+        También podés escribir directo a
+        <a
+          href={`mailto:${email}`}
+          class="text-accent-glow hover:text-accent-primary"
+        >
+          {email}</a
+        >
+      </p>
+    </div>
+  </form>
 
-	<Toast id="contact-toast" title="Mensaje enviado" message="Tu consulta fue enviada correctamente. Te responderé pronto." variant="success" />
+  <Toast
+    id="contact-toast"
+    title="Mensaje enviado"
+    message="Tu consulta fue enviada correctamente. Te responderé pronto."
+    variant="success"
+  />
 </section>
 
 <script>
-	const contactWindow = window as Window & { __contactHandlersReady?: boolean };
+  const contactWindow = window as Window & { __contactHandlersReady?: boolean };
 
-	const initContactForm = () => {
-		const form = document.getElementById('contact-form') as HTMLFormElement | null;
-		const toast = document.getElementById('contact-toast');
-		if (!form || !toast) return;
+  const initContactForm = () => {
+    const form = document.getElementById(
+      "contact-form",
+    ) as HTMLFormElement | null;
+    const toast = document.getElementById("contact-toast");
+    if (!form || !toast) return;
 
-		let toastTimeout: number | undefined;
+    let toastTimeout: number | undefined;
 
-		const hideToast = () => {
-			toast.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
-			toast.classList.remove('opacity-100', 'scale-100');
-		};
+    const hideToast = () => {
+      toast.classList.add("opacity-0", "scale-95", "pointer-events-none");
+      toast.classList.remove("opacity-100", "scale-100");
+    };
 
-		const showToast = () => {
-			toast.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
-			toast.classList.add('opacity-100', 'scale-100');
-			if (toastTimeout) window.clearTimeout(toastTimeout);
-			toastTimeout = window.setTimeout(hideToast, 3000);
-		};
+    const showToast = () => {
+      toast.classList.remove("opacity-0", "scale-95", "pointer-events-none");
+      toast.classList.add("opacity-100", "scale-100");
+      if (toastTimeout) window.clearTimeout(toastTimeout);
+      toastTimeout = window.setTimeout(hideToast, 3000);
+    };
 
-		if (form.dataset.bound !== 'true') {
-			form.addEventListener('submit', (event) => {
-				event.preventDefault();
-				showToast();
-				form.reset();
-			});
-			form.dataset.bound = 'true';
-		}
+    if (form.dataset.bound !== "true") {
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        showToast();
+        form.reset();
+      });
+      form.dataset.bound = "true";
+    }
 
-		document.querySelectorAll('[data-toast-close="contact-toast"]').forEach((button) => {
-			const htmlButton = button as HTMLButtonElement;
-			if (htmlButton.dataset.bound === 'true') return;
-			htmlButton.addEventListener('click', hideToast);
-			htmlButton.dataset.bound = 'true';
-		});
-	};
+    document
+      .querySelectorAll('[data-toast-close="contact-toast"]')
+      .forEach((button) => {
+        const htmlButton = button as HTMLButtonElement;
+        if (htmlButton.dataset.bound === "true") return;
+        htmlButton.addEventListener("click", hideToast);
+        htmlButton.dataset.bound = "true";
+      });
+  };
 
-	initContactForm();
-	if (!contactWindow.__contactHandlersReady) {
-		document.addEventListener('astro:page-load', initContactForm);
-		contactWindow.__contactHandlersReady = true;
-	}
+  initContactForm();
+  if (!contactWindow.__contactHandlersReady) {
+    document.addEventListener("astro:page-load", initContactForm);
+    contactWindow.__contactHandlersReady = true;
+  }
 </script>

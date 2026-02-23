@@ -22,11 +22,26 @@
   "skills": [
     {
       "category": "Frontend",
-      "items": ["Next.js", "React", "Astro", "TypeScript", "Tailwind CSS", "Redux"]
+      "items": [
+        "Next.js",
+        "React",
+        "Astro",
+        "TypeScript",
+        "Tailwind CSS",
+        "Redux"
+      ]
     },
     {
       "category": "Backend & Cloud",
-      "items": ["Node.js", "NestJS", "Laravel", "Django", "AWS", "Firebase", "Google Cloud"]
+      "items": [
+        "Node.js",
+        "NestJS",
+        "Laravel",
+        "Django",
+        "AWS",
+        "Firebase",
+        "Google Cloud"
+      ]
     },
     {
       "category": "Bases de Datos & Herramientas",

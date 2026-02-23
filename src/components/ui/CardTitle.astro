@@ -1,13 +1,15 @@
 ---
 interface Props {
-	as?: 'h2' | 'h3' | 'h4';
-	class?: string;
+  as?: "h2" | "h3" | "h4";
+  class?: string;
 }
 
-const { as = 'h3', class: className = '' } = Astro.props as Props;
+const { as = "h3", class: className = "" } = Astro.props as Props;
 const Element = as;
 ---
 
-<Element class:list={['text-xl font-semibold text-tx-main leading-tight', className]}>
-	<slot />
+<Element
+  class:list={["text-tx-main text-xl leading-tight font-semibold", className]}
+>
+  <slot />
 </Element>

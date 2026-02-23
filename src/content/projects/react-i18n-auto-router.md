@@ -4,11 +4,11 @@ title: React i18n Auto-Router
 subtitle: Librería OSS para enrutado multilenguaje automático
 description: Librería Open Source para automatizar la configuración de rutas multilingües y detección de idioma en aplicaciones React complejas.
 status: Planeado
-year: '2026'
+year: "2026"
 role: Open Source Maintainer
 duration: Q3 2026 - Q4 2026
-github: '#'
-link: '#'
+github: "#"
+link: "#"
 techStack:
   - React
   - TypeScript

@@ -1,40 +1,42 @@
 ---
-import { getCollection } from 'astro:content';
-import Layout from '../layouts/Layout.astro';
-import HeroSection from '../components/sections/HeroSection.astro';
-import SkillsSection from '../components/sections/SkillsSection.astro';
-import ExperienceSection from '../components/sections/ExperienceSection.astro';
-import ProjectsSection from '../components/sections/ProjectsSection.astro';
-import EducationSection from '../components/sections/EducationSection.astro';
-import ContactFormSection from '../components/sections/ContactFormSection.astro';
-import ContactFooter from '../components/sections/ContactFooter.astro';
-import portfolio from '../data/portfolio.json';
-import '../styles/global.css';
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import HeroSection from "../components/sections/HeroSection.astro";
+import SkillsSection from "../components/sections/SkillsSection.astro";
+import ExperienceSection from "../components/sections/ExperienceSection.astro";
+import ProjectsSection from "../components/sections/ProjectsSection.astro";
+import EducationSection from "../components/sections/EducationSection.astro";
+import ContactFormSection from "../components/sections/ContactFormSection.astro";
+import ContactFooter from "../components/sections/ContactFooter.astro";
+import portfolio from "../data/portfolio.json";
+import "../styles/global.css";
 
 const { personal, about, skills, experience, education } = portfolio;
-const projectEntries = await getCollection('projects');
-const toSlug = (id: string) => id.replace(/\.md$/, '');
+const projectEntries = await getCollection("projects");
+const toSlug = (id: string) => id.replace(/\.md$/, "");
 const projectCards = projectEntries
-	.map((entry) => ({
-		title: entry.data.title,
-		description: entry.data.description,
-		techStack: entry.data.techStack,
-		status: entry.data.status,
-		link: `/proyectos/${toSlug(entry.id)}`,
-		github: entry.data.github,
-		year: entry.data.year,
-	}))
-	.sort((a, b) => Number(b.year) - Number(a.year));
+  .map((entry) => ({
+    title: entry.data.title,
+    description: entry.data.description,
+    techStack: entry.data.techStack,
+    status: entry.data.status,
+    link: `/proyectos/${toSlug(entry.id)}`,
+    github: entry.data.github,
+    year: entry.data.year,
+  }))
+  .sort((a, b) => Number(b.year) - Number(a.year));
 ---
 
 <Layout title={`${personal.name} | ${personal.role}`} description={about}>
-	<main class="motion-enter mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-8 sm:gap-12 sm:px-5 sm:py-10 md:gap-16 md:px-8 md:py-14">
-		<HeroSection personal={personal} about={about} />
-		<SkillsSection skills={skills} />
-		<ExperienceSection experience={experience} />
-		<ProjectsSection projects={projectCards} />
-		<EducationSection education={education} />
-		<ContactFormSection email={personal.email} />
-		<ContactFooter email={personal.email} />
-	</main>
+  <main
+    class="motion-enter mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-8 sm:gap-12 sm:px-5 sm:py-10 md:gap-16 md:px-8 md:py-14"
+  >
+    <HeroSection personal={personal} about={about} />
+    <SkillsSection skills={skills} />
+    <ExperienceSection experience={experience} />
+    <ProjectsSection projects={projectCards} />
+    <EducationSection education={education} />
+    <ContactFormSection email={personal.email} />
+    <ContactFooter email={personal.email} />
+  </main>
 </Layout>

@@ -1,53 +1,58 @@
 ---
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 
 interface Props {
-	id: string;
-	title: string;
-	message: string;
-	variant?: 'success' | 'warning' | 'error';
-	class?: string;
+  id: string;
+  title: string;
+  message: string;
+  variant?: "success" | "warning" | "error";
+  class?: string;
 }
 
 const {
-	id,
-	title,
-	message,
-	variant = 'success',
-	class: className = '',
+  id,
+  title,
+  message,
+  variant = "success",
+  class: className = "",
 } = Astro.props as Props;
 
 const accentClass = {
-	success: 'text-state-success border-state-success/20 bg-state-success/8',
-	warning: 'text-state-warning border-state-warning/20 bg-state-warning/8',
-	error: 'text-state-error border-state-error/20 bg-state-error/8',
+  success: "text-state-success border-state-success/20 bg-state-success/8",
+  warning: "text-state-warning border-state-warning/20 bg-state-warning/8",
+  error: "text-state-error border-state-error/20 bg-state-error/8",
 }[variant];
 ---
 
 <div
-	id={id}
-	class:list={[
-		'fixed bottom-4 right-4 z-50 w-[min(92vw,24rem)] rounded-xl border border-border-subtle bg-bg-card p-4 shadow-glass opacity-0 scale-95 pointer-events-none transition-[opacity,scale] duration-200 ease-out',
-		className,
-	]}
-	role="status"
-	aria-live="polite"
+  id={id}
+  class:list={[
+    "border-border-subtle bg-bg-card shadow-glass pointer-events-none fixed right-4 bottom-4 z-50 w-[min(92vw,24rem)] scale-95 rounded-xl border p-4 opacity-0 transition-[opacity,scale] duration-200 ease-out",
+    className,
+  ]}
+  role="status"
+  aria-live="polite"
 >
-	<div class="flex items-start gap-3">
-		<div class:list={['mt-0.5 inline-flex h-8 w-8 items-center justify-center rounded-lg border', accentClass]}>
-			<Icon name="circle-check" class="h-4 w-4" aria-hidden="true" />
-        </div>
-		<div class="flex-1">
-			<p class="text-sm font-semibold text-tx-main">{title}</p>
-			<p class="mt-1 text-xs text-tx-secondary">{message}</p>
-        </div>
-		<button
-			type="button"
-			data-toast-close={id}
-			class="rounded-md p-1 text-tx-muted transition-colors hover:bg-bg-hover hover:text-tx-main"
-			aria-label="Cerrar notificación"
-		>
-			<Icon name="x" class="h-4 w-4" aria-hidden="true" />
-		</button>
-	</div>
+  <div class="flex items-start gap-3">
+    <div
+      class:list={[
+        "mt-0.5 inline-flex h-8 w-8 items-center justify-center rounded-lg border",
+        accentClass,
+      ]}
+    >
+      <Icon name="circle-check" class="h-4 w-4" aria-hidden="true" />
+    </div>
+    <div class="flex-1">
+      <p class="text-tx-main text-sm font-semibold">{title}</p>
+      <p class="text-tx-secondary mt-1 text-xs">{message}</p>
+    </div>
+    <button
+      type="button"
+      data-toast-close={id}
+      class="text-tx-muted hover:bg-bg-hover hover:text-tx-main rounded-md p-1 transition-colors"
+      aria-label="Cerrar notificación"
+    >
+      <Icon name="x" class="h-4 w-4" aria-hidden="true" />
+    </button>
+  </div>
 </div>

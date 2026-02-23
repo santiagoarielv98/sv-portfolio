@@ -1,44 +1,53 @@
 ---
 interface Props {
-	href?: string;
-	ariaLabel?: string;
-	type?: 'button' | 'submit' | 'reset';
-	target?: '_blank' | '_self' | '_parent' | '_top';
-	rel?: string;
-	class?: string;
+  href?: string;
+  ariaLabel?: string;
+  type?: "button" | "submit" | "reset";
+  target?: "_blank" | "_self" | "_parent" | "_top";
+  rel?: string;
+  class?: string;
 }
 
-const { href, ariaLabel, type = 'button', target, rel, class: className = '' } = Astro.props as Props;
+const {
+  href,
+  ariaLabel,
+  type = "button",
+  target,
+  rel,
+  class: className = "",
+} = Astro.props as Props;
 ---
 
-{href ? (
-	<a
-		href={href}
-		aria-label={ariaLabel}
-		target={target}
-		rel={rel}
-		class:list={[
-			'relative inline-flex items-center justify-center overflow-hidden rounded-lg p-px transition duration-300 ease-out group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-main',
-			className,
-		]}
-	>
-		<span class="absolute inset-0 bg-linear-to-r from-accent-primary to-accent-secondary opacity-70 blur-sm transition-all duration-300 group-hover:opacity-100 group-hover:blur"></span>
-		<span class="relative inline-flex items-center gap-2 rounded-[7px] border border-white/10 bg-bg-main px-4 py-2.5 text-sm font-medium text-tx-main transition-all duration-300 group-hover:bg-bg-hover group-active:scale-[0.99] sm:px-5 sm:py-2.5 md:px-6 md:py-3">
-			<slot />
-		</span>
-	</a>
-) : (
-	<button
-		type={type}
-		aria-label={ariaLabel}
-		class:list={[
-			'relative inline-flex items-center justify-center overflow-hidden rounded-lg p-px transition duration-300 ease-out group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-main',
-			className,
-		]}
-	>
-		<span class="absolute inset-0 bg-linear-to-r from-accent-primary to-accent-secondary opacity-70 blur-sm transition-all duration-300 group-hover:opacity-100 group-hover:blur"></span>
-		<span class="relative inline-flex items-center gap-2 rounded-[7px] border border-white/10 bg-bg-main px-4 py-2.5 text-sm font-medium text-tx-main transition-all duration-300 group-hover:bg-bg-hover group-active:scale-[0.99] sm:px-5 sm:py-2.5 md:px-6 md:py-3">
-			<slot />
-		</span>
-	</button>
-)}
+{
+  href ? (
+    <a
+      href={href}
+      aria-label={ariaLabel}
+      target={target}
+      rel={rel}
+      class:list={[
+        "group focus-visible:ring-accent-primary/50 focus-visible:ring-offset-bg-main relative inline-flex items-center justify-center overflow-hidden rounded-lg p-px transition duration-300 ease-out focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
+        className,
+      ]}
+    >
+      <span class="from-accent-primary to-accent-secondary absolute inset-0 bg-linear-to-r opacity-70 blur-sm transition-all duration-300 group-hover:opacity-100 group-hover:blur" />
+      <span class="bg-bg-main text-tx-main group-hover:bg-bg-hover relative inline-flex items-center gap-2 rounded-[7px] border border-white/10 px-4 py-2.5 text-sm font-medium transition-all duration-300 group-active:scale-[0.99] sm:px-5 sm:py-2.5 md:px-6 md:py-3">
+        <slot />
+      </span>
+    </a>
+  ) : (
+    <button
+      type={type}
+      aria-label={ariaLabel}
+      class:list={[
+        "group focus-visible:ring-accent-primary/50 focus-visible:ring-offset-bg-main relative inline-flex items-center justify-center overflow-hidden rounded-lg p-px transition duration-300 ease-out focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
+        className,
+      ]}
+    >
+      <span class="from-accent-primary to-accent-secondary absolute inset-0 bg-linear-to-r opacity-70 blur-sm transition-all duration-300 group-hover:opacity-100 group-hover:blur" />
+      <span class="bg-bg-main text-tx-main group-hover:bg-bg-hover relative inline-flex items-center gap-2 rounded-[7px] border border-white/10 px-4 py-2.5 text-sm font-medium transition-all duration-300 group-active:scale-[0.99] sm:px-5 sm:py-2.5 md:px-6 md:py-3">
+        <slot />
+      </span>
+    </button>
+  )
+}

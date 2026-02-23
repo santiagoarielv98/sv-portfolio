@@ -1,33 +1,33 @@
 ---
-import { ClientRouter } from 'astro:transitions';
-import SiteNavigation from '../components/navigation/SiteNavigation.astro';
+import { ClientRouter } from "astro:transitions";
+import SiteNavigation from "../components/navigation/SiteNavigation.astro";
 
 const {
-	title = 'Santiago Villanueva | Full Stack Developer',
-	description = 'Portfolio profesional enfocado en JavaScript/TypeScript, cloud y arquitecturas de alto rendimiento.',
+  title = "Santiago Villanueva | Full Stack Developer",
+  description = "Portfolio profesional enfocado en JavaScript/TypeScript, cloud y arquitecturas de alto rendimiento.",
 } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="es" class="dark">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content={description} />
-		<meta name="theme-color" content="#09090B" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
-			rel="stylesheet"
-		/>
-		<title>{title}</title>
-	</head>
-	<body>
-		<SiteNavigation pathname={Astro.url.pathname} />
-		<slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#09090B" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <SiteNavigation pathname={Astro.url.pathname} />
+    <slot />
+  </body>
 </html>

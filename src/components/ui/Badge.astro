@@ -1,39 +1,46 @@
 ---
 interface Props {
-	variant?: 'default' | 'success' | 'warning' | 'error' | 'outline';
-	size?: 'sm' | 'md';
-	pill?: boolean;
-	dot?: boolean;
-	class?: string;
+  variant?: "default" | "success" | "warning" | "error" | "outline";
+  size?: "sm" | "md";
+  pill?: boolean;
+  dot?: boolean;
+  class?: string;
 }
 
-const { variant = 'default', size = 'md', pill = true, dot = false, class: className = '' } = Astro.props as Props;
+const {
+  variant = "default",
+  size = "md",
+  pill = true,
+  dot = false,
+  class: className = "",
+} = Astro.props as Props;
 
-const baseClass = 'inline-flex items-center gap-1.5 border font-mono font-medium';
+const baseClass =
+  "inline-flex items-center gap-1.5 border font-mono font-medium";
 
-const variantClass: Record<NonNullable<Props['variant']>, string> = {
-	default: 'border-accent-primary/30 bg-accent-primary/15 text-accent-glow',
-	success: 'border-state-success/30 bg-state-success/15 text-state-success',
-	warning: 'border-state-warning/30 bg-state-warning/15 text-state-warning',
-	error: 'border-state-error/30 bg-state-error/15 text-state-error',
-	outline: 'border-border-strong bg-transparent text-tx-secondary',
+const variantClass: Record<NonNullable<Props["variant"]>, string> = {
+  default: "border-accent-primary/30 bg-accent-primary/15 text-accent-glow",
+  success: "border-state-success/30 bg-state-success/15 text-state-success",
+  warning: "border-state-warning/30 bg-state-warning/15 text-state-warning",
+  error: "border-state-error/30 bg-state-error/15 text-state-error",
+  outline: "border-border-strong bg-transparent text-tx-secondary",
 };
 
-const sizeClass: Record<NonNullable<Props['size']>, string> = {
-	sm: 'px-2 py-0.5 text-[10px]',
-	md: 'px-2.5 py-1 text-xs',
+const sizeClass: Record<NonNullable<Props["size"]>, string> = {
+  sm: "px-2 py-0.5 text-[10px]",
+  md: "px-2.5 py-1 text-xs",
 };
 ---
 
 <span
-	class:list={[
-		baseClass,
-		variantClass[variant],
-		sizeClass[size],
-		pill ? 'rounded-full' : 'rounded-md',
-		className,
-	]}
+  class:list={[
+    baseClass,
+    variantClass[variant],
+    sizeClass[size],
+    pill ? "rounded-full" : "rounded-md",
+    className,
+  ]}
 >
-	{dot ? <span class="h-1.5 w-1.5 rounded-full bg-current"></span> : null}
-	<slot />
+  {dot ? <span class="h-1.5 w-1.5 rounded-full bg-current" /> : null}
+  <slot />
 </span>

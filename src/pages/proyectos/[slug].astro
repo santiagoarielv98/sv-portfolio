@@ -1,229 +1,318 @@
 ---
-import { Icon } from 'astro-icon/components';
-import { getCollection, type CollectionEntry } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
-import ProjectCard from '../../components/ProjectCard.astro';
-import Card from '../../components/ui/Card.astro';
-import CardHeader from '../../components/ui/CardHeader.astro';
-import CardTitle from '../../components/ui/CardTitle.astro';
-import CardDescription from '../../components/ui/CardDescription.astro';
-import CardContent from '../../components/ui/CardContent.astro';
-import Badge from '../../components/ui/Badge.astro';
-import Tag from '../../components/ui/Tag.astro';
-import Button from '../../components/ui/Button.astro';
-import '../../styles/global.css';
+import { Icon } from "astro-icon/components";
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import Card from "../../components/ui/Card.astro";
+import CardHeader from "../../components/ui/CardHeader.astro";
+import CardTitle from "../../components/ui/CardTitle.astro";
+import CardDescription from "../../components/ui/CardDescription.astro";
+import CardContent from "../../components/ui/CardContent.astro";
+import Badge from "../../components/ui/Badge.astro";
+import Tag from "../../components/ui/Tag.astro";
+import Button from "../../components/ui/Button.astro";
+import "../../styles/global.css";
 
 export async function getStaticPaths() {
-	const projectEntries = await getCollection('projects');
-	const toSlug = (id: string) => id.replace(/\.md$/, '');
-	return projectEntries.map((project) => ({
-		params: { slug: toSlug(project.id) },
-		props: { project },
-	}));
+  const projectEntries = await getCollection("projects");
+  const toSlug = (id: string) => id.replace(/\.md$/, "");
+  return projectEntries.map((project) => ({
+    params: { slug: toSlug(project.id) },
+    props: { project },
+  }));
 }
 
-const { project } = Astro.props as { project: CollectionEntry<'projects'> };
+const { project } = Astro.props as { project: CollectionEntry<"projects"> };
 const { Content } = await project.render();
-const toSlug = (id: string) => id.replace(/\.md$/, '');
+const toSlug = (id: string) => id.replace(/\.md$/, "");
 const currentSlug = toSlug(project.id);
-const allProjects = await getCollection('projects');
+const allProjects = await getCollection("projects");
 
 const scoredRelatedProjects = allProjects
-	.filter((entry) => toSlug(entry.id) !== currentSlug)
-	.map((entry) => {
-		const overlap = entry.data.techStack.filter((tech) => project.data.techStack.includes(tech)).length;
-		return {
-			slug: toSlug(entry.id),
-			title: entry.data.title,
-			description: entry.data.description,
-			techStack: entry.data.techStack,
-			status: entry.data.status,
-			year: Number(entry.data.year),
-			github: entry.data.github,
-			score: overlap,
-		};
-	})
-	.sort((a, b) => {
-		if (b.score !== a.score) return b.score - a.score;
-		const safeYearA = Number.isFinite(a.year) ? a.year : 0;
-		const safeYearB = Number.isFinite(b.year) ? b.year : 0;
-		return safeYearB - safeYearA;
-	});
+  .filter((entry) => toSlug(entry.id) !== currentSlug)
+  .map((entry) => {
+    const overlap = entry.data.techStack.filter((tech) =>
+      project.data.techStack.includes(tech),
+    ).length;
+    return {
+      slug: toSlug(entry.id),
+      title: entry.data.title,
+      description: entry.data.description,
+      techStack: entry.data.techStack,
+      status: entry.data.status,
+      year: Number(entry.data.year),
+      github: entry.data.github,
+      score: overlap,
+    };
+  })
+  .sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    const safeYearA = Number.isFinite(a.year) ? a.year : 0;
+    const safeYearB = Number.isFinite(b.year) ? b.year : 0;
+    return safeYearB - safeYearA;
+  });
 
-const relatedProjectsByMatch = scoredRelatedProjects.filter((entry) => entry.score > 0).slice(0, 3);
-const relatedProjects = relatedProjectsByMatch.length > 0 ? relatedProjectsByMatch : scoredRelatedProjects.slice(0, 3);
+const relatedProjectsByMatch = scoredRelatedProjects
+  .filter((entry) => entry.score > 0)
+  .slice(0, 3);
+const relatedProjects =
+  relatedProjectsByMatch.length > 0
+    ? relatedProjectsByMatch
+    : scoredRelatedProjects.slice(0, 3);
 ---
 
-<Layout title={`${project.data.title} | Proyecto`} description={project.data.description}>
-	<main class="motion-enter mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-5 sm:py-10 md:gap-12 md:px-8 md:py-14">
-		<div class="flex flex-wrap items-center justify-between gap-3">
-			<Button href="/proyectos" variant="ghost" size="sm">
-				<Icon name="folder-open" class="h-4 w-4" aria-hidden="true" />
-				Volver a proyectos
-			</Button>
-			<Badge variant="outline" size="md">{project.data.status}</Badge>
-		</div>
+<Layout
+  title={`${project.data.title} | Proyecto`}
+  description={project.data.description}
+>
+  <main
+    class="motion-enter mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-5 sm:py-10 md:gap-12 md:px-8 md:py-14"
+  >
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <Button href="/proyectos" variant="ghost" size="sm">
+        <Icon name="folder-open" class="h-4 w-4" aria-hidden="true" />
+        Volver a proyectos
+      </Button>
+      <Badge variant="outline" size="md">{project.data.status}</Badge>
+    </div>
 
-		<header class="border-b border-border-subtle pb-8 md:pb-10">
-			<p class="mb-3 text-xs font-mono text-accent-glow">{project.data.subtitle}</p>
-			<h1 class="mb-3 text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">{project.data.title}</h1>
-			<p class="max-w-3xl text-sm leading-relaxed text-tx-secondary md:text-base">{project.data.description}</p>
-			<div class="mt-5 flex flex-wrap gap-2">
-				{project.data.techStack.map((tech) => (
-					<Tag>{tech}</Tag>
-				))}
-			</div>
-		</header>
+    <header class="border-border-subtle border-b pb-8 md:pb-10">
+      <p class="text-accent-glow mb-3 font-mono text-xs">
+        {project.data.subtitle}
+      </p>
+      <h1 class="mb-3 text-3xl leading-tight font-bold sm:text-4xl md:text-5xl">
+        {project.data.title}
+      </h1>
+      <p
+        class="text-tx-secondary max-w-3xl text-sm leading-relaxed md:text-base"
+      >
+        {project.data.description}
+      </p>
+      <div class="mt-5 flex flex-wrap gap-2">
+        {project.data.techStack.map((tech) => <Tag>{tech}</Tag>)}
+      </div>
+    </header>
 
-		<div class="flex flex-wrap gap-3">
-			<Button href={project.data.link} target="_blank" rel="noreferrer noopener" variant="default">
-				Demo / Sitio
-				<Icon name="external-link" class="h-4 w-4" aria-hidden="true" />
-			</Button>
-			<Button href={project.data.github} target="_blank" rel="noreferrer noopener" variant="secondary">
-				Repositorio
-				<Icon name="github" class="h-4 w-4" aria-hidden="true" />
-			</Button>
-		</div>
+    <div class="flex flex-wrap gap-3">
+      <Button
+        href={project.data.link}
+        target="_blank"
+        rel="noreferrer noopener"
+        variant="default"
+      >
+        Demo / Sitio
+        <Icon name="external-link" class="h-4 w-4" aria-hidden="true" />
+      </Button>
+      <Button
+        href={project.data.github}
+        target="_blank"
+        rel="noreferrer noopener"
+        variant="secondary"
+      >
+        Repositorio
+        <Icon name="github" class="h-4 w-4" aria-hidden="true" />
+      </Button>
+    </div>
 
+    <section class="grid gap-3 sm:gap-4 lg:grid-cols-[1.25fr_0.75fr] lg:gap-5">
+      <Card as="article" class="h-fit">
+        <CardHeader class="pb-0">
+          <CardTitle class="text-xl">Detalle del proyecto</CardTitle>
+          <CardDescription class="mt-2"
+            >Documento técnico y funcional en formato de lectura.</CardDescription
+          >
+        </CardHeader>
+        <CardContent class="pt-4">
+          <article class="markdown-body">
+            <Content />
+          </article>
+        </CardContent>
+      </Card>
 
-		<section class="grid gap-3 sm:gap-4 lg:grid-cols-[1.25fr_0.75fr] lg:gap-5">
-			<Card as="article" class="h-fit">
-				<CardHeader class="pb-0">
-					<CardTitle class="text-xl">Detalle del proyecto</CardTitle>
-					<CardDescription class="mt-2">Documento técnico y funcional en formato de lectura.</CardDescription>
-				</CardHeader>
-				<CardContent class="pt-4">
-					<article class="markdown-body">
-						<Content />
-					</article>
-				</CardContent>
-			</Card>
+      <div class="space-y-3 sm:space-y-4 md:space-y-5">
+        <Card as="article">
+          <CardHeader class="pb-0">
+            <CardTitle class="text-xl">Rol y alcance</CardTitle>
+          </CardHeader>
+          <CardContent class="text-tx-secondary pt-4 text-sm">
+            <p>
+              <span class="text-tx-main font-medium">Rol:</span>
+              {project.data.role}
+            </p>
+            <p class="mt-2">
+              <span class="text-tx-main font-medium">Duración:</span>
+              {project.data.duration}
+            </p>
+            <p class="mt-2">
+              <span class="text-tx-main font-medium">Año objetivo:</span>
+              {project.data.year}
+            </p>
+          </CardContent>
+        </Card>
 
-			<div class="space-y-3 sm:space-y-4 md:space-y-5">
-				<Card as="article">
-					<CardHeader class="pb-0">
-						<CardTitle class="text-xl">Rol y alcance</CardTitle>
-					</CardHeader>
-					<CardContent class="pt-4 text-sm text-tx-secondary">
-						<p><span class="font-medium text-tx-main">Rol:</span> {project.data.role}</p>
-						<p class="mt-2"><span class="font-medium text-tx-main">Duración:</span> {project.data.duration}</p>
-						<p class="mt-2"><span class="font-medium text-tx-main">Año objetivo:</span> {project.data.year}</p>
-					</CardContent>
-				</Card>
+        <Card as="article">
+          <CardHeader class="pb-0">
+            <CardTitle class="text-xl">Features principales</CardTitle>
+          </CardHeader>
+          <CardContent class="pt-4">
+            <ul class="text-tx-secondary space-y-2 text-sm">
+              {
+                project.data.features.map((feature) => (
+                  <li class="flex gap-2">
+                    <Icon
+                      name="circle-check"
+                      class="text-accent-primary mt-0.5 h-4 w-4 shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span>{feature}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </CardContent>
+        </Card>
 
-				<Card as="article">
-					<CardHeader class="pb-0">
-						<CardTitle class="text-xl">Features principales</CardTitle>
-					</CardHeader>
-					<CardContent class="pt-4">
-						<ul class="space-y-2 text-sm text-tx-secondary">
-							{project.data.features.map((feature) => (
-								<li class="flex gap-2">
-									<Icon name="circle-check" class="mt-0.5 h-4 w-4 shrink-0 text-accent-primary" aria-hidden="true" />
-									<span>{feature}</span>
-								</li>
-							))}
-						</ul>
-					</CardContent>
-				</Card>
+        <Card as="article">
+          <CardHeader class="pb-0">
+            <CardTitle class="text-xl">Retos técnicos</CardTitle>
+          </CardHeader>
+          <CardContent class="pt-4">
+            <ul class="text-tx-secondary space-y-2 text-sm">
+              {
+                project.data.challenges.map((challenge) => (
+                  <li class="flex gap-2">
+                    <Icon
+                      name="triangle-alert"
+                      class="text-state-warning mt-0.5 h-4 w-4 shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span>{challenge}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+    </section>
 
-				<Card as="article">
-				<CardHeader class="pb-0">
-					<CardTitle class="text-xl">Retos técnicos</CardTitle>
-				</CardHeader>
-				<CardContent class="pt-4">
-					<ul class="space-y-2 text-sm text-tx-secondary">
-						{project.data.challenges.map((challenge) => (
-							<li class="flex gap-2">
-								<Icon name="triangle-alert" class="mt-0.5 h-4 w-4 shrink-0 text-state-warning" aria-hidden="true" />
-								<span>{challenge}</span>
-							</li>
-						))}
-					</ul>
-				</CardContent>
-				</Card>
-			</div>
-		</section>
+    <section>
+      <h2 class="mb-4 text-2xl font-semibold md:mb-6">Galería</h2>
+      <div class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
+        {
+          project.data.gallery.map((item) => (
+            <Card as="figure" class="gap-4">
+              <img
+                src={item.image}
+                alt={item.alt}
+                loading="lazy"
+                class="aspect-video w-full rounded-t-xl object-cover"
+              />
+              <CardContent>
+                <figcaption class="text-tx-secondary text-sm">
+                  {item.caption}
+                </figcaption>
+              </CardContent>
+            </Card>
+          ))
+        }
+      </div>
+    </section>
 
-		<section>
-			<h2 class="mb-4 text-2xl font-semibold md:mb-6">Galería</h2>
-			<div class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
-				{project.data.gallery.map((item) => (
-					<Card as="figure" class="gap-4">
-						<img src={item.image} alt={item.alt} loading="lazy" class="aspect-video w-full rounded-t-xl object-cover" />
-						<CardContent>
-							<figcaption class="text-sm text-tx-secondary">{item.caption}</figcaption>
-						</CardContent>
-					</Card>
-				))}
-			</div>
-		</section>
+    <section class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5">
+      <Card as="article">
+        <CardHeader class="pb-0">
+          <CardTitle class="text-xl">Impacto esperado</CardTitle>
+        </CardHeader>
+        <CardContent class="pt-4">
+          <ul class="text-tx-secondary space-y-2 text-sm">
+            {
+              project.data.impact.map((item) => (
+                <li class="flex gap-2">
+                  <Icon
+                    name="sparkles"
+                    class="text-accent-secondary mt-0.5 h-4 w-4 shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span>{item}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </CardContent>
+      </Card>
 
-		<section class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5">
-			<Card as="article">
-				<CardHeader class="pb-0">
-					<CardTitle class="text-xl">Impacto esperado</CardTitle>
-				</CardHeader>
-				<CardContent class="pt-4">
-					<ul class="space-y-2 text-sm text-tx-secondary">
-						{project.data.impact.map((item) => (
-							<li class="flex gap-2">
-								<Icon name="sparkles" class="mt-0.5 h-4 w-4 shrink-0 text-accent-secondary" aria-hidden="true" />
-								<span>{item}</span>
-							</li>
-						))}
-					</ul>
-				</CardContent>
-			</Card>
+      <Card as="article">
+        <CardHeader class="pb-0">
+          <CardTitle class="text-xl">Stack principal</CardTitle>
+        </CardHeader>
+        <CardContent class="pt-4">
+          <ul class="flex flex-wrap gap-2">
+            {
+              project.data.techStack.map((tech) => (
+                <li>
+                  <Tag>{tech}</Tag>
+                </li>
+              ))
+            }
+          </ul>
+        </CardContent>
+      </Card>
+    </section>
 
-			<Card as="article">
-				<CardHeader class="pb-0">
-					<CardTitle class="text-xl">Stack principal</CardTitle>
-				</CardHeader>
-				<CardContent class="pt-4">
-					<ul class="flex flex-wrap gap-2">
-						{project.data.techStack.map((tech) => (
-							<li><Tag>{tech}</Tag></li>
-						))}
-					</ul>
-				</CardContent>
-			</Card>
-		</section>
+    <div
+      class="border-border-subtle flex flex-wrap gap-3 border-t pt-6 md:pt-8"
+    >
+      <Button
+        href={project.data.link}
+        target="_blank"
+        rel="noreferrer noopener"
+        variant="default"
+      >
+        Demo / Sitio
+        <Icon name="external-link" class="h-4 w-4" aria-hidden="true" />
+      </Button>
+      <Button
+        href={project.data.github}
+        target="_blank"
+        rel="noreferrer noopener"
+        variant="secondary"
+      >
+        Repositorio
+        <Icon name="github" class="h-4 w-4" aria-hidden="true" />
+      </Button>
+    </div>
 
-		<div class="flex flex-wrap gap-3 border-t border-border-subtle pt-6 md:pt-8">
-			<Button href={project.data.link} target="_blank" rel="noreferrer noopener" variant="default">
-				Demo / Sitio
-				<Icon name="external-link" class="h-4 w-4" aria-hidden="true" />
-			</Button>
-			<Button href={project.data.github} target="_blank" rel="noreferrer noopener" variant="secondary">
-				Repositorio
-				<Icon name="github" class="h-4 w-4" aria-hidden="true" />
-			</Button>
-		</div>
-
-		{relatedProjects.length > 0 && (
-			<section class="border-t border-border-subtle pt-6 md:pt-8">
-				<div class="mb-4 flex items-center justify-between gap-3 md:mb-6">
-					<h2 class="inline-flex items-center gap-2 text-2xl font-semibold">
-						<Icon name="sparkles" class="h-5 w-5 text-accent-secondary" aria-hidden="true" />
-						Otros proyectos similares
-					</h2>
-					<Button href="/proyectos" variant="ghost" size="sm">Ver todos</Button>
-				</div>
-				<div class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
-					{relatedProjects.map((entry) => (
-						<ProjectCard
-							title={entry.title}
-							description={entry.description}
-							techStack={entry.techStack}
-							status={entry.status}
-							link={`/proyectos/${entry.slug}`}
-							github={entry.github}
-						/>
-					))}
-				</div>
-			</section>
-		)}
-	</main>
+    {
+      relatedProjects.length > 0 && (
+        <section class="border-border-subtle border-t pt-6 md:pt-8">
+          <div class="mb-4 flex items-center justify-between gap-3 md:mb-6">
+            <h2 class="inline-flex items-center gap-2 text-2xl font-semibold">
+              <Icon
+                name="sparkles"
+                class="text-accent-secondary h-5 w-5"
+                aria-hidden="true"
+              />
+              Otros proyectos similares
+            </h2>
+            <Button href="/proyectos" variant="ghost" size="sm">
+              Ver todos
+            </Button>
+          </div>
+          <div class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
+            {relatedProjects.map((entry) => (
+              <ProjectCard
+                title={entry.title}
+                description={entry.description}
+                techStack={entry.techStack}
+                status={entry.status}
+                link={`/proyectos/${entry.slug}`}
+                github={entry.github}
+              />
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </main>
 </Layout>

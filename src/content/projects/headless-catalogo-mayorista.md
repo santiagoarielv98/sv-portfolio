@@ -4,11 +4,11 @@ title: Gestor Headless de Catálogos Mayoristas
 subtitle: CMS orientado a alto volumen y venta conversacional
 description: CMS ultra rápido para comercios de gran volumen (repuestos automotores) con integración directa a Meta Business para ventas vía WhatsApp.
 status: Planeado
-year: '2026'
+year: "2026"
 role: Frontend Performance / Backend API
 duration: Q2 2026 - Q4 2026
-github: '#'
-link: '#'
+github: "#"
+link: "#"
 techStack:
   - Astro
   - Laravel

@@ -1,46 +1,46 @@
 ---
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 
 interface Props {
-	buttonClass?: string;
+  buttonClass?: string;
 }
 
-const { buttonClass = '' } = Astro.props as Props;
+const { buttonClass = "" } = Astro.props as Props;
 ---
 
 <button
-	id="themeToggle"
-	type="button"
-	class:list={[
-		'inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border-subtle bg-bg-card text-tx-secondary transition-colors hover:border-border-strong hover:text-tx-main',
-		buttonClass,
-	]}
-	aria-label="Cambiar tema"
-	title="Cambiar tema"
+  id="themeToggle"
+  type="button"
+  class:list={[
+    "border-border-subtle bg-bg-card text-tx-secondary hover:border-border-strong hover:text-tx-main inline-flex h-9 w-9 items-center justify-center rounded-lg border transition-colors",
+    buttonClass,
+  ]}
+  aria-label="Cambiar tema"
+  title="Cambiar tema"
 >
-	<Icon name="sun" class="h-4 w-4" aria-hidden="true" />
-	<Icon name="moon" class="h-4 w-4" aria-hidden="true" />
+  <Icon name="sun" class="h-4 w-4" aria-hidden="true" />
+  <Icon name="moon" class="h-4 w-4" aria-hidden="true" />
 </button>
 
 <script is:inline>
   const theme = (() => {
-    const localStorageTheme = localStorage?.getItem("theme") ?? '';
-    if (['dark', 'light'].includes(localStorageTheme)) {
+    const localStorageTheme = localStorage?.getItem("theme") ?? "";
+    if (["dark", "light"].includes(localStorageTheme)) {
       return localStorageTheme;
     }
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
     }
-      return 'light';
+    return "light";
   })();
 
-  if (theme === 'light') {
-    document.documentElement.classList.remove('dark');
+  if (theme === "light") {
+    document.documentElement.classList.remove("dark");
   } else {
-    document.documentElement.classList.add('dark');
+    document.documentElement.classList.add("dark");
   }
 
-  window.localStorage.setItem('theme', theme);
+  window.localStorage.setItem("theme", theme);
 
   const handleToggleClick = () => {
     const element = document.documentElement;
@@ -48,7 +48,9 @@ const { buttonClass = '' } = Astro.props as Props;
 
     const isDark = element.classList.contains("dark");
     localStorage.setItem("theme", isDark ? "dark" : "light");
-  }
+  };
 
-  document.getElementById("themeToggle")?.addEventListener("click", handleToggleClick);
+  document
+    .getElementById("themeToggle")
+    ?.addEventListener("click", handleToggleClick);
 </script>

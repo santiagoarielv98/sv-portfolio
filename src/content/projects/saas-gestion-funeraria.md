@@ -4,11 +4,11 @@ title: Sistema B2B de Gestión Funeraria (SaaS)
 subtitle: Plataforma logística, inventario y facturación para operaciones críticas
 description: Plataforma integral para la administración logística, gestión de inventarios y facturación automatizada de servicios funerarios.
 status: Planeado
-year: '2026'
+year: "2026"
 role: Full Stack / Arquitectura Cloud
 duration: Q1 2026 - Q4 2026
-github: '#'
-link: '#'
+github: "#"
+link: "#"
 techStack:
   - Next.js
   - NestJS

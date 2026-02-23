@@ -1,19 +1,22 @@
 ---
 interface Props {
-	as?: 'div' | 'article' | 'section';
-	class?: string;
+  as?: "div" | "article" | "section";
+  class?: string;
 }
 
-const { as = 'div', class: className = '' } = Astro.props as Props;
+const { as = "div", class: className = "" } = Astro.props as Props;
 const Element = as;
 ---
 
 <Element
-	class:list={[
-		'flex flex-col group/card relative overflow-hidden rounded-xl border border-border-subtle bg-bg-card shadow-glass transition-[border-color,box-shadow,opacity] duration-300 hover:border-accent-primary/30 hover:shadow-glow-primary focus-within:border-accent-primary/35 focus-within:shadow-glow-primary',
-		className,
-	]}
+  class:list={[
+    "group/card border-border-subtle bg-bg-card shadow-glass hover:border-accent-primary/30 hover:shadow-glow-primary focus-within:border-accent-primary/35 focus-within:shadow-glow-primary relative flex flex-col overflow-hidden rounded-xl border transition-[border-color,box-shadow,opacity] duration-300",
+    className,
+  ]}
 >
-	<div class="pointer-events-none absolute inset-0 bg-linear-to-br from-accent-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover/card:opacity-100 group-focus-within/card:opacity-100"></div>
-	<slot />
+  <div
+    class="from-accent-primary/5 pointer-events-none absolute inset-0 bg-linear-to-br to-transparent opacity-0 transition-opacity duration-300 group-focus-within/card:opacity-100 group-hover/card:opacity-100"
+  >
+  </div>
+  <slot />
 </Element>

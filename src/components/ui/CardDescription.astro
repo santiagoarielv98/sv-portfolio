@@ -1,11 +1,11 @@
 ---
 interface Props {
-	class?: string;
+  class?: string;
 }
 
-const { class: className = '' } = Astro.props as Props;
+const { class: className = "" } = Astro.props as Props;
 ---
 
-<p class:list={['text-sm leading-relaxed text-tx-secondary', className]}>
-	<slot />
+<p class:list={["text-tx-secondary text-sm leading-relaxed", className]}>
+  <slot />
 </p>

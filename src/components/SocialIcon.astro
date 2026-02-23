@@ -1,19 +1,21 @@
 ---
-import { Icon } from 'astro-icon/components'
+import { Icon } from "astro-icon/components";
 
 interface Props {
-	platform: string;
-	class?: string;
+  platform: string;
+  class?: string;
 }
 
-const { platform, class: className = 'h-4 w-4' } = Astro.props as Props;
+const { platform, class: className = "h-4 w-4" } = Astro.props as Props;
 const normalized = platform.toLowerCase();
 ---
 
-{normalized === 'github' ? (
-	<Icon name="github" class={className} aria-hidden="true" />
-) : normalized === 'linkedin' ? (
-	<Icon name="linkedin" class={className} aria-hidden="true" />
-) : (
-	<Icon name="link" class={className} aria-hidden="true" />
-)}
+{
+  normalized === "github" ? (
+    <Icon name="github" class={className} aria-hidden="true" />
+  ) : normalized === "linkedin" ? (
+    <Icon name="linkedin" class={className} aria-hidden="true" />
+  ) : (
+    <Icon name="link" class={className} aria-hidden="true" />
+  )
+}
