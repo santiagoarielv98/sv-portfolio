@@ -52,7 +52,7 @@ const isInternalLink = link.startsWith('/');
 				target={isInternalLink ? undefined : '_blank'}
 				rel={isInternalLink ? undefined : 'noreferrer noopener'}
 			>
-				<Icon name="external-link" class="h-3.5 w-3.5 transition-transform duration-300 group-hover/link:translate-x-0.5" aria-hidden="true" />
+				<Icon name="external-link" class="h-3.5 w-3.5 transition-opacity duration-300 group-hover/link:opacity-85" aria-hidden="true" />
 				Ver proyecto
 			</a>
 			<a href={github} class="group/repo inline-flex items-center gap-1 text-tx-secondary transition-all duration-300 hover:text-tx-main focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-card rounded-sm" target="_blank" rel="noreferrer noopener">

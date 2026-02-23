@@ -63,14 +63,16 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 						class="h-10 rounded-lg border border-border-subtle bg-bg-main px-3 text-sm text-tx-main outline-none transition-colors placeholder:text-tx-muted focus:border-accent-primary/50"
 					/>
 				</label>
-				<button
+				<Button
 					id="filters-reset"
 					type="button"
-					class="inline-flex h-10 items-center justify-center rounded-lg border border-border-subtle px-3 text-sm text-tx-secondary transition-colors hover:border-border-strong hover:text-tx-main"
+					variant="filter"
+					size="chip"
+					class="h-10 px-3 text-sm"
 				>
-					<Icon name="filter" class="mr-1 h-3.5 w-3.5" aria-hidden="true" />
+					<Icon name="filter" class="h-3.5 w-3.5" aria-hidden="true" />
 					Limpiar filtros
-				</button>
+				</Button>
 			</div>
 
 			<div class="mb-3">
@@ -80,10 +82,7 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 				</p>
 				<div class="flex flex-wrap gap-2">
 					{allTechnologies.map((tech) => (
-						<label class="tech-chip inline-flex cursor-pointer items-center gap-2 rounded-lg border border-border-subtle bg-bg-main px-2.5 py-1.5 text-xs text-tx-secondary transition-colors hover:border-border-strong hover:text-tx-main">
-							<input class="tech-filter sr-only" type="checkbox" value={tech} />
-							<span>{tech}</span>
-						</label>
+						<Button type="button" variant="filter" size="chip" class="tech-filter" data-tech={tech}>{tech}</Button>
 					))}
 				</div>
 			</div>
@@ -94,9 +93,9 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 					Estado
 				</p>
 				<div class="flex flex-wrap gap-2">
-					<button type="button" data-status="all" class="status-filter rounded-lg border border-accent-primary/35 bg-accent-primary/10 px-2.5 py-1.5 text-xs text-accent-glow">Todos</button>
+					<Button type="button" variant="filter-active" size="chip" data-status="all" class="status-filter">Todos</Button>
 					{allStatuses.map((status) => (
-						<button type="button" data-status={status} class="status-filter rounded-lg border border-border-subtle bg-bg-main px-2.5 py-1.5 text-xs text-tx-secondary transition-colors hover:border-border-strong hover:text-tx-main">{status}</button>
+						<Button type="button" variant="filter" size="chip" data-status={status} class="status-filter">{status}</Button>
 					))}
 				</div>
 			</div>
@@ -127,7 +126,7 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 		const initProjectFilters = () => {
 			const searchInput = document.getElementById('project-search') as HTMLInputElement | null;
 			const resetButton = document.getElementById('filters-reset') as HTMLButtonElement | null;
-			const techInputs = Array.from(document.querySelectorAll('.tech-filter')) as HTMLInputElement[];
+			const techButtons = Array.from(document.querySelectorAll('.tech-filter')) as HTMLButtonElement[];
 			const statusButtons = Array.from(document.querySelectorAll('.status-filter')) as HTMLButtonElement[];
 			const projectItems = Array.from(document.querySelectorAll('.project-item')) as HTMLDivElement[];
 			const emptyState = document.getElementById('projects-empty');
@@ -135,6 +134,7 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 			if (!searchInput || projectItems.length === 0) return;
 
 			let selectedStatus = 'all';
+			const selectedTech = new Set<string>();
 
 			const params = new URLSearchParams(window.location.search);
 			const initialQuery = params.get('q') ?? '';
@@ -143,84 +143,83 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 
 			searchInput.value = initialQuery;
 			selectedStatus = initialStatus;
+			initialTech.forEach((value) => selectedTech.add(value));
 
-			techInputs.forEach((input) => {
-				if (initialTech.includes(input.value)) {
-					input.checked = true;
-				}
-			});
-
-		const syncStatusButtons = () => {
-			statusButtons.forEach((button) => {
-				const isActive = button.dataset.status === selectedStatus;
+			const setFilterButtonState = (button: HTMLButtonElement, isActive: boolean) => {
 				button.classList.toggle('border-accent-primary/35', isActive);
 				button.classList.toggle('bg-accent-primary/10', isActive);
 				button.classList.toggle('text-accent-glow', isActive);
+				button.classList.toggle('shadow-glass', isActive);
+
 				button.classList.toggle('border-border-subtle', !isActive);
 				button.classList.toggle('bg-bg-main', !isActive);
 				button.classList.toggle('text-tx-secondary', !isActive);
-			});
-		};
+				button.classList.toggle('hover:border-border-strong', !isActive);
+				button.classList.toggle('hover:text-tx-main', !isActive);
+			};
 
-		const syncTechChips = () => {
-			techInputs.forEach((input) => {
-				const chip = input.closest('.tech-chip');
-				if (!chip) return;
+			const syncStatusButtons = () => {
+				statusButtons.forEach((button) => {
+					setFilterButtonState(button, button.dataset.status === selectedStatus);
+				});
+			};
 
-				chip.classList.toggle('border-accent-primary/35', input.checked);
-				chip.classList.toggle('bg-accent-primary/10', input.checked);
-				chip.classList.toggle('text-accent-glow', input.checked);
-				chip.classList.toggle('border-border-subtle', !input.checked);
-				chip.classList.toggle('bg-bg-main', !input.checked);
-				chip.classList.toggle('text-tx-secondary', !input.checked);
-			});
-		};
+			const syncTechButtons = () => {
+				techButtons.forEach((button) => {
+					const tech = button.dataset.tech ?? '';
+					setFilterButtonState(button, selectedTech.has(tech));
+				});
+			};
 
-		const updateUrl = (query: string, tech: string[], status: string) => {
-			const next = new URLSearchParams();
-			if (query) next.set('q', query);
-			if (tech.length) next.set('tech', tech.join(','));
-			if (status !== 'all') next.set('status', status);
-			const nextUrl = `${window.location.pathname}${next.toString() ? `?${next.toString()}` : ''}`;
-			window.history.replaceState({}, '', nextUrl);
-		};
+			const updateUrl = (query: string, status: string) => {
+				const next = new URLSearchParams();
+				if (query) next.set('q', query);
+				if (selectedTech.size) next.set('tech', Array.from(selectedTech).join(','));
+				if (status !== 'all') next.set('status', status);
+				const nextUrl = `${window.location.pathname}${next.toString() ? `?${next.toString()}` : ''}`;
+				window.history.replaceState({}, '', nextUrl);
+			};
 
-		const applyFilters = () => {
-			const query = (searchInput?.value ?? '').trim().toLowerCase();
-			const selectedTech = techInputs.filter((input) => input.checked).map((input) => input.value.toLowerCase());
+			const applyFilters = () => {
+				const query = searchInput.value.trim().toLowerCase();
+				const selectedTechLower = Array.from(selectedTech).map((value) => value.toLowerCase());
 
-			let visibleCount = 0;
-			projectItems.forEach((item) => {
-				const title = item.dataset.title ?? '';
-				const description = item.dataset.description ?? '';
-				const tech = item.dataset.tech ?? '';
-				const status = item.dataset.status ?? '';
+				let visibleCount = 0;
+				projectItems.forEach((item) => {
+					const title = item.dataset.title ?? '';
+					const description = item.dataset.description ?? '';
+					const tech = item.dataset.tech ?? '';
+					const status = item.dataset.status ?? '';
 
-				const queryOk = !query || title.includes(query) || description.includes(query) || tech.includes(query);
-				const statusOk = selectedStatus === 'all' || status === selectedStatus;
-				const techOk = selectedTech.length === 0 || selectedTech.every((value) => tech.includes(value));
+					const queryOk = !query || title.includes(query) || description.includes(query) || tech.includes(query);
+					const statusOk = selectedStatus === 'all' || status === selectedStatus;
+					const techOk = selectedTechLower.length === 0 || selectedTechLower.every((value) => tech.includes(value));
 
-				const show = queryOk && statusOk && techOk;
-				item.classList.toggle('hidden', !show);
-				if (show) visibleCount += 1;
-			});
+					const show = queryOk && statusOk && techOk;
+					item.classList.toggle('hidden', !show);
+					if (show) visibleCount += 1;
+				});
 
-			emptyState?.classList.toggle('hidden', visibleCount > 0);
-			updateUrl(query, selectedTech, selectedStatus);
-		};
+				emptyState?.classList.toggle('hidden', visibleCount > 0);
+				updateUrl(query, selectedStatus);
+			};
 
 			if (searchInput.dataset.bound !== 'true') {
 				searchInput.addEventListener('input', applyFilters);
 				searchInput.dataset.bound = 'true';
 			}
 
-			techInputs.forEach((input) => {
-				if (input.dataset.bound === 'true') return;
-				input.addEventListener('change', () => {
-					syncTechChips();
+			techButtons.forEach((button) => {
+				if (button.dataset.bound === 'true') return;
+				button.addEventListener('click', () => {
+					const tech = button.dataset.tech ?? '';
+					if (!tech) return;
+					if (selectedTech.has(tech)) selectedTech.delete(tech);
+					else selectedTech.add(tech);
+					syncTechButtons();
 					applyFilters();
 				});
-				input.dataset.bound = 'true';
+				button.dataset.bound = 'true';
 			});
 
 			statusButtons.forEach((button) => {
@@ -236,18 +235,16 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 			if (resetButton && resetButton.dataset.bound !== 'true') {
 				resetButton.addEventListener('click', () => {
 					searchInput.value = '';
-					techInputs.forEach((input) => {
-						input.checked = false;
-					});
+					selectedTech.clear();
 					selectedStatus = 'all';
-					syncTechChips();
+					syncTechButtons();
 					syncStatusButtons();
 					applyFilters();
 				});
 				resetButton.dataset.bound = 'true';
 			}
 
-			syncTechChips();
+			syncTechButtons();
 			syncStatusButtons();
 			applyFilters();
 		};

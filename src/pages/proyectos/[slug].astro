@@ -43,10 +43,11 @@ const scoredRelatedProjects = allProjects
 			score: overlap,
 		};
 	})
-	.filter((entry) => entry.score > 0)
 	.sort((a, b) => {
 		if (b.score !== a.score) return b.score - a.score;
-		return b.year - a.year;
+		const safeYearA = Number.isFinite(a.year) ? a.year : 0;
+		const safeYearB = Number.isFinite(b.year) ? b.year : 0;
+		return safeYearB - safeYearA;
 	});
 
 const relatedProjectsByMatch = scoredRelatedProjects.filter((entry) => entry.score > 0).slice(0, 3);
