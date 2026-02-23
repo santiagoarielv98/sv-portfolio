@@ -1,0 +1,45 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	techStack: string[];
+	status: string;
+	link?: string;
+	github?: string;
+}
+
+const { title, description, techStack, status, link = '#', github = '#' } = Astro.props as Props;
+
+const statusClass = status.toLowerCase().includes('planeado')
+	? 'bg-state-warning/15 text-state-warning border-state-warning/30'
+	: 'bg-state-success/15 text-state-success border-state-success/30';
+---
+
+<article class="group relative overflow-hidden rounded-xl border border-border-subtle bg-bg-card p-6 shadow-glass transition-all duration-300 hover:border-accent-primary/30 hover:shadow-glow-primary">
+	<div class="absolute inset-0 bg-linear-to-br from-accent-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+
+	<div class="relative z-10">
+		<div class="mb-4 flex items-start justify-between gap-3">
+			<div class="flex h-11 w-11 items-center justify-center rounded-lg border border-border-subtle bg-bg-main text-accent-glow shadow-glass">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5" aria-hidden="true">
+					<path d="M12 6v12m6-6H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+				</svg>
+			</div>
+			<span class:list={['rounded-full border px-3 py-1 font-mono text-xs', statusClass]}>{status}</span>
+		</div>
+
+		<h3 class="mb-2 text-xl font-bold text-tx-main transition-colors group-hover:text-accent-glow">{title}</h3>
+		<p class="mb-5 text-sm leading-relaxed text-tx-secondary">{description}</p>
+
+		<ul class="mb-6 flex flex-wrap gap-2">
+			{techStack.map((tech) => (
+				<li class="rounded-lg border border-border-subtle bg-bg-hover px-2.5 py-1 font-mono text-xs text-tx-secondary">{tech}</li>
+			))}
+		</ul>
+
+		<div class="flex items-center gap-3 text-sm">
+			<a href={link} class="text-accent-glow transition-colors hover:text-accent-primary">Ver proyecto</a>
+			<a href={github} class="text-tx-secondary transition-colors hover:text-tx-main">Repositorio</a>
+		</div>
+	</div>
+</article>

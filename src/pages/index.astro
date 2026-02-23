@@ -1,12 +1,109 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import PrimaryButton from '../components/PrimaryButton.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import portfolio from '../data/portfolio.json';
 import '../styles/global.css';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const { personal, about, skills, experience, education, projects } = portfolio;
+
+const formatMonthYear = (value: string) => {
+	const [year, month] = value.split('-').map(Number);
+	if (!year || !month) return value;
+	return new Date(year, month - 1, 1).toLocaleDateString('es-AR', {
+		month: 'short',
+		year: 'numeric',
+	});
+};
+
+const formatPeriod = (startDate: string, endDate: string) => {
+	const start = formatMonthYear(startDate);
+	const end = endDate.toLowerCase() === 'presente' ? 'Presente' : formatMonthYear(endDate);
+	return `${start} — ${end}`;
+};
 ---
 
-<Layout>
-	<Welcome />
+<Layout title={`${personal.name} | ${personal.role}`} description={about}>
+	<main class="mx-auto flex w-full max-w-6xl flex-col gap-16 px-6 py-14 md:px-8">
+		<header class="border-b border-border-subtle pb-10">
+			<div class="mb-6 inline-flex items-center gap-2 rounded-full border border-accent-primary/20 bg-accent-primary/10 px-3 py-1 font-mono text-xs font-medium text-accent-glow">
+				<span class="h-2 w-2 animate-pulse rounded-full bg-accent-glow"></span>
+				{personal.availability}
+			</div>
+			<h1 class="mb-4 max-w-4xl text-4xl font-bold leading-tight md:text-5xl">{personal.name}</h1>
+			<p class="mb-6 max-w-3xl text-lg text-tx-secondary">{personal.role} · {personal.location}</p>
+			<p class="max-w-3xl text-base leading-relaxed text-tx-secondary">{about}</p>
+
+			<div class="mt-8 flex flex-wrap gap-4">
+				{personal.social.map((item) => (
+					<PrimaryButton href={item.url} ariaLabel={`Abrir ${item.platform}`}>
+						{item.platform}
+					</PrimaryButton>
+				))}
+			</div>
+		</header>
+
+		<section>
+			<h2 class="mb-6 text-2xl font-semibold">Skills</h2>
+			<div class="grid gap-5 md:grid-cols-3">
+				{skills.map((group) => (
+					<article class="surface p-5">
+						<h3 class="mb-4 text-lg font-semibold text-tx-main">{group.category}</h3>
+						<ul class="flex flex-wrap gap-2">
+							{group.items.map((item) => (
+								<li class="rounded-lg border border-border-subtle bg-bg-hover px-2.5 py-1 font-mono text-xs text-tx-secondary">{item}</li>
+							))}
+						</ul>
+					</article>
+				))}
+			</div>
+		</section>
+
+		<section>
+			<h2 class="mb-6 text-2xl font-semibold">Experiencia</h2>
+			<div class="space-y-5">
+				{experience.map((job) => (
+					<article class="surface p-6">
+						<div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+							<h3 class="text-xl font-semibold">{job.role} · {job.company}</h3>
+							<span class="font-mono text-xs text-tx-secondary">{formatPeriod(job.startDate, job.endDate)}</span>
+						</div>
+						<p class="mb-4 text-sm text-tx-secondary">{job.location}</p>
+						<ul class="space-y-2 text-sm text-tx-secondary">
+							{job.highlights.map((line) => (
+								<li class="flex gap-2">
+									<span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-primary"></span>
+									<span>{line}</span>
+								</li>
+							))}
+						</ul>
+					</article>
+				))}
+			</div>
+		</section>
+
+		<section>
+			<h2 class="mb-6 text-2xl font-semibold">Proyectos</h2>
+			<div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+				{projects.map((project) => (
+					<ProjectCard {...project} />
+				))}
+			</div>
+		</section>
+
+		<section class="surface p-6">
+			<h2 class="mb-4 text-2xl font-semibold">Educación</h2>
+			{education.map((item) => (
+				<div class="mb-4 last:mb-0">
+					<h3 class="text-lg font-semibold text-tx-main">{item.degree}</h3>
+					<p class="text-sm text-tx-secondary">{item.institution} · {item.location}</p>
+					<p class="mt-1 font-mono text-xs text-tx-secondary">{formatPeriod(item.startDate, item.endDate)}</p>
+				</div>
+			))}
+		</section>
+
+		<footer class="border-t border-border-subtle pt-8 text-sm text-tx-secondary">
+			<p>Contacto: <a class="text-accent-glow hover:text-accent-primary" href={`mailto:${personal.email}`}>{personal.email}</a></p>
+		</footer>
+	</main>
 </Layout>

@@ -1,1 +1,90 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+	--font-sans: 'Inter', sans-serif;
+	--font-display: 'Plus Jakarta Sans', sans-serif;
+	--font-mono: 'JetBrains Mono', monospace;
+
+	--color-bg-main: #09090b;
+	--color-bg-card: #18181b;
+	--color-bg-hover: #27272a;
+
+	--color-tx-main: #fafafa;
+	--color-tx-secondary: #a1a1aa;
+	--color-tx-muted: #52525b;
+
+	--color-accent-primary: #3b82f6;
+	--color-accent-glow: #60a5fa;
+	--color-accent-secondary: #f97316;
+
+	--color-state-success: #10b981;
+	--color-state-warning: #f59e0b;
+	--color-state-error: #ef4444;
+
+	--color-border-subtle: rgba(255, 255, 255, 0.08);
+	--color-border-strong: rgba(255, 255, 255, 0.15);
+
+	--shadow-glass: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 4px 16px rgba(0, 0, 0, 0.4);
+	--shadow-glow-primary: 0 0 20px -5px rgba(59, 130, 246, 0.4);
+	--shadow-glow-secondary: 0 0 20px -5px rgba(249, 115, 22, 0.4);
+}
+
+@layer base {
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		min-height: 100%;
+	}
+
+	body {
+		background-color: var(--color-bg-main);
+		color: var(--color-tx-main);
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-display);
+		letter-spacing: -0.02em;
+	}
+
+	::selection {
+		background-color: rgb(59 130 246 / 0.35);
+		color: #ffffff;
+	}
+
+	::-webkit-scrollbar {
+		width: 8px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: #09090b;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: #27272a;
+		border-radius: 999px;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: #3f3f46;
+	}
+}
+
+@layer utilities {
+	.surface {
+		border-radius: 0.75rem;
+		border: 1px solid var(--color-border-subtle);
+		background-color: var(--color-bg-card);
+		box-shadow: var(--shadow-glass);
+	}
+}

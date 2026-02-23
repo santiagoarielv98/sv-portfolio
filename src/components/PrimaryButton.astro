@@ -1,0 +1,40 @@
+---
+interface Props {
+	href?: string;
+	ariaLabel?: string;
+	type?: 'button' | 'submit' | 'reset';
+	class?: string;
+}
+
+const { href, ariaLabel, type = 'button', class: className = '' } = Astro.props as Props;
+---
+
+{href ? (
+	<a
+		href={href}
+		aria-label={ariaLabel}
+		class:list={[
+			'relative inline-flex items-center justify-center overflow-hidden rounded-lg p-px group',
+			className,
+		]}
+	>
+		<span class="absolute inset-0 bg-linear-to-r from-accent-primary to-accent-secondary opacity-70 blur-sm transition-opacity group-hover:opacity-100"></span>
+		<span class="relative inline-flex items-center gap-2 rounded-[7px] border border-white/10 bg-bg-main px-6 py-3 text-sm font-medium text-tx-main transition-colors group-hover:bg-bg-hover">
+			<slot />
+		</span>
+	</a>
+) : (
+	<button
+		type={type}
+		aria-label={ariaLabel}
+		class:list={[
+			'relative inline-flex items-center justify-center overflow-hidden rounded-lg p-px group',
+			className,
+		]}
+	>
+		<span class="absolute inset-0 bg-linear-to-r from-accent-primary to-accent-secondary opacity-70 blur-sm transition-opacity group-hover:opacity-100"></span>
+		<span class="relative inline-flex items-center gap-2 rounded-[7px] border border-white/10 bg-bg-main px-6 py-3 text-sm font-medium text-tx-main transition-colors group-hover:bg-bg-hover">
+			<slot />
+		</span>
+	</button>
+)}
