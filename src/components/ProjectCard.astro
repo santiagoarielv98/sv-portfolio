@@ -1,4 +1,6 @@
 ---
+import { FolderCode, ExternalLink, Github } from '@lucide/astro';
+
 interface Props {
 	title: string;
 	description: string;
@@ -21,9 +23,7 @@ const statusClass = status.toLowerCase().includes('planeado')
 	<div class="relative z-10">
 		<div class="mb-4 flex items-start justify-between gap-3">
 			<div class="flex h-11 w-11 items-center justify-center rounded-lg border border-border-subtle bg-bg-main text-accent-glow shadow-glass">
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5" aria-hidden="true">
-					<path d="M12 6v12m6-6H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
-				</svg>
+				<FolderCode class="h-5 w-5" aria-hidden="true" />
 			</div>
 			<span class:list={['rounded-full border px-3 py-1 font-mono text-xs', statusClass]}>{status}</span>
 		</div>
@@ -37,9 +37,15 @@ const statusClass = status.toLowerCase().includes('planeado')
 			))}
 		</ul>
 
-		<div class="flex items-center gap-3 text-sm">
-			<a href={link} class="text-accent-glow transition-colors hover:text-accent-primary">Ver proyecto</a>
-			<a href={github} class="text-tx-secondary transition-colors hover:text-tx-main">Repositorio</a>
+		<div class="flex items-center gap-4 text-sm">
+			<a href={link} class="inline-flex items-center gap-1 text-accent-glow transition-colors hover:text-accent-primary" target="_blank" rel="noreferrer noopener">
+				<ExternalLink class="h-3.5 w-3.5" aria-hidden="true" />
+				Ver proyecto
+			</a>
+			<a href={github} class="inline-flex items-center gap-1 text-tx-secondary transition-colors hover:text-tx-main" target="_blank" rel="noreferrer noopener">
+				<Github class="h-3.5 w-3.5" aria-hidden="true" />
+				Repositorio
+			</a>
 		</div>
 	</div>
 </article>

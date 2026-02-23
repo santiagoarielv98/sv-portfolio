@@ -3,16 +3,20 @@ interface Props {
 	href?: string;
 	ariaLabel?: string;
 	type?: 'button' | 'submit' | 'reset';
+	target?: '_blank' | '_self' | '_parent' | '_top';
+	rel?: string;
 	class?: string;
 }
 
-const { href, ariaLabel, type = 'button', class: className = '' } = Astro.props as Props;
+const { href, ariaLabel, type = 'button', target, rel, class: className = '' } = Astro.props as Props;
 ---
 
 {href ? (
 	<a
 		href={href}
 		aria-label={ariaLabel}
+		target={target}
+		rel={rel}
 		class:list={[
 			'relative inline-flex items-center justify-center overflow-hidden rounded-lg p-px group',
 			className,

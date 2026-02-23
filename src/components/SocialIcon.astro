@@ -1,0 +1,19 @@
+---
+import { Github, Linkedin, Link } from '@lucide/astro';
+
+interface Props {
+	platform: string;
+	class?: string;
+}
+
+const { platform, class: className = 'h-4 w-4' } = Astro.props as Props;
+const normalized = platform.toLowerCase();
+---
+
+{normalized === 'github' ? (
+	<Github class={className} aria-hidden="true" />
+) : normalized === 'linkedin' ? (
+	<Linkedin class={className} aria-hidden="true" />
+) : (
+	<Link class={className} aria-hidden="true" />
+)}
