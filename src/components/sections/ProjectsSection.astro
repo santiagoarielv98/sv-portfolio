@@ -1,5 +1,5 @@
 ---
-import { FolderOpen } from '@lucide/astro';
+import { Icon } from 'astro-icon/components';
 import ProjectCard from '../ProjectCard.astro';
 
 interface ProjectItem {
@@ -20,7 +20,7 @@ const { projects } = Astro.props as Props;
 
 <section>
 	<h2 class="mb-6 inline-flex items-center gap-2 text-2xl font-semibold">
-		<FolderOpen class="h-5 w-5 text-accent-glow" aria-hidden="true" />
+		<Icon name="folder-open" class="h-5 w-5 text-accent-glow" aria-hidden="true" />
 		Proyectos
 	</h2>
 	<div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">

@@ -1,5 +1,5 @@
 ---
-import { Calendar, MapPin, CheckCircle2 } from '@lucide/astro';
+import { Icon } from 'astro-icon/components';
 import { formatPeriod } from '../../utils/date';
 
 interface ExperienceItem {
@@ -26,18 +26,18 @@ const { experience } = Astro.props as Props;
 				<div class="mb-3 flex flex-wrap items-center justify-between gap-3">
 					<h3 class="text-xl font-semibold">{job.role} · {job.company}</h3>
 					<span class="inline-flex items-center gap-1.5 font-mono text-xs text-tx-secondary">
-						<Calendar class="h-3.5 w-3.5" aria-hidden="true" />
+						<Icon name="calendar" class="h-3.5 w-3.5" aria-hidden="true" />
 						{formatPeriod(job.startDate, job.endDate)}
 					</span>
 				</div>
 				<p class="mb-4 inline-flex items-center gap-1.5 text-sm text-tx-secondary">
-					<MapPin class="h-3.5 w-3.5" aria-hidden="true" />
+					<Icon name="map-pin" class="h-3.5 w-3.5" aria-hidden="true" />
 					{job.location}
 				</p>
 				<ul class="space-y-2 text-sm text-tx-secondary">
 					{job.highlights.map((line) => (
 						<li class="flex gap-2">
-							<CheckCircle2 class="mt-0.5 h-4 w-4 shrink-0 text-accent-primary" aria-hidden="true" />
+							<Icon name="circle-check" class="mt-0.5 h-4 w-4 shrink-0 text-accent-primary" aria-hidden="true" />
 							<span>{line}</span>
 						</li>
 					))}

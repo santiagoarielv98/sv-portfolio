@@ -1,5 +1,5 @@
 ---
-import { GraduationCap, Calendar, MapPin } from '@lucide/astro';
+import { Icon } from 'astro-icon/components';
 import { formatPeriod } from '../../utils/date';
 
 interface EducationItem {
@@ -19,18 +19,18 @@ const { education } = Astro.props as Props;
 
 <section class="surface p-6">
 	<h2 class="mb-4 inline-flex items-center gap-2 text-2xl font-semibold">
-		<GraduationCap class="h-5 w-5 text-accent-secondary" aria-hidden="true" />
+		<Icon name="school" class="h-5 w-5 text-accent-secondary" aria-hidden="true" />
 		Educación
 	</h2>
 	{education.map((item) => (
 		<div class="mb-4 last:mb-0">
 			<h3 class="text-lg font-semibold text-tx-main">{item.degree}</h3>
 			<p class="mt-1 inline-flex items-center gap-1.5 text-sm text-tx-secondary">
-				<MapPin class="h-3.5 w-3.5" aria-hidden="true" />
+				<Icon name="map-pin" class="h-3.5 w-3.5" aria-hidden="true" />
 				{item.institution} · {item.location}
 			</p>
 			<p class="mt-1 inline-flex items-center gap-1.5 font-mono text-xs text-tx-secondary">
-				<Calendar class="h-3.5 w-3.5" aria-hidden="true" />
+				<Icon name="calendar" class="h-3.5 w-3.5" aria-hidden="true" />
 				{formatPeriod(item.startDate, item.endDate)}
 			</p>
 		</div>

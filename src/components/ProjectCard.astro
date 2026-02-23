@@ -1,5 +1,5 @@
 ---
-import { FolderCode, ExternalLink, Github } from '@lucide/astro';
+import { Icon } from 'astro-icon/components'
 
 interface Props {
 	title: string;
@@ -23,7 +23,7 @@ const statusClass = status.toLowerCase().includes('planeado')
 	<div class="relative z-10">
 		<div class="mb-4 flex items-start justify-between gap-3">
 			<div class="flex h-11 w-11 items-center justify-center rounded-lg border border-border-subtle bg-bg-main text-accent-glow shadow-glass">
-				<FolderCode class="h-5 w-5" aria-hidden="true" />
+				<Icon name="folder-code" class="h-5 w-5" aria-hidden="true" />
 			</div>
 			<span class:list={['rounded-full border px-3 py-1 font-mono text-xs', statusClass]}>{status}</span>
 		</div>
@@ -39,11 +39,11 @@ const statusClass = status.toLowerCase().includes('planeado')
 
 		<div class="flex items-center gap-4 text-sm">
 			<a href={link} class="inline-flex items-center gap-1 text-accent-glow transition-colors hover:text-accent-primary" target="_blank" rel="noreferrer noopener">
-				<ExternalLink class="h-3.5 w-3.5" aria-hidden="true" />
+				<Icon name="external-link" class="h-3.5 w-3.5" aria-hidden="true" />
 				Ver proyecto
 			</a>
 			<a href={github} class="inline-flex items-center gap-1 text-tx-secondary transition-colors hover:text-tx-main" target="_blank" rel="noreferrer noopener">
-				<Github class="h-3.5 w-3.5" aria-hidden="true" />
+				<Icon name="github" class="h-3.5 w-3.5" aria-hidden="true" />
 				Repositorio
 			</a>
 		</div>
