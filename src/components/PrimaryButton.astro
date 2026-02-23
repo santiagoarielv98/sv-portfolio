@@ -18,12 +18,12 @@ const { href, ariaLabel, type = 'button', target, rel, class: className = '' } =
 		target={target}
 		rel={rel}
 		class:list={[
-			'relative inline-flex items-center justify-center overflow-hidden rounded-lg p-px group',
+			'relative inline-flex items-center justify-center overflow-hidden rounded-lg p-px transition duration-300 ease-out group hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-main',
 			className,
 		]}
 	>
-		<span class="absolute inset-0 bg-linear-to-r from-accent-primary to-accent-secondary opacity-70 blur-sm transition-opacity group-hover:opacity-100"></span>
-		<span class="relative inline-flex items-center gap-2 rounded-[7px] border border-white/10 bg-bg-main px-6 py-3 text-sm font-medium text-tx-main transition-colors group-hover:bg-bg-hover">
+		<span class="absolute inset-0 bg-linear-to-r from-accent-primary to-accent-secondary opacity-70 blur-sm transition-all duration-300 group-hover:opacity-100 group-hover:blur"></span>
+		<span class="relative inline-flex items-center gap-2 rounded-[7px] border border-white/10 bg-bg-main px-6 py-3 text-sm font-medium text-tx-main transition-all duration-300 group-hover:bg-bg-hover group-active:scale-[0.99]">
 			<slot />
 		</span>
 	</a>
@@ -32,12 +32,12 @@ const { href, ariaLabel, type = 'button', target, rel, class: className = '' } =
 		type={type}
 		aria-label={ariaLabel}
 		class:list={[
-			'relative inline-flex items-center justify-center overflow-hidden rounded-lg p-px group',
+			'relative inline-flex items-center justify-center overflow-hidden rounded-lg p-px transition duration-300 ease-out group hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-main',
 			className,
 		]}
 	>
-		<span class="absolute inset-0 bg-linear-to-r from-accent-primary to-accent-secondary opacity-70 blur-sm transition-opacity group-hover:opacity-100"></span>
-		<span class="relative inline-flex items-center gap-2 rounded-[7px] border border-white/10 bg-bg-main px-6 py-3 text-sm font-medium text-tx-main transition-colors group-hover:bg-bg-hover">
+		<span class="absolute inset-0 bg-linear-to-r from-accent-primary to-accent-secondary opacity-70 blur-sm transition-all duration-300 group-hover:opacity-100 group-hover:blur"></span>
+		<span class="relative inline-flex items-center gap-2 rounded-[7px] border border-white/10 bg-bg-main px-6 py-3 text-sm font-medium text-tx-main transition-all duration-300 group-hover:bg-bg-hover group-active:scale-[0.99]">
 			<slot />
 		</span>
 	</button>

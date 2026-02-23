@@ -22,7 +22,7 @@ const { experience } = Astro.props as Props;
 	<h2 class="mb-6 text-2xl font-semibold">Experiencia</h2>
 	<div class="space-y-5">
 		{experience.map((job) => (
-			<article class="surface p-6">
+			<article class="surface group p-6 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-border-strong hover:shadow-glow-primary">
 				<div class="mb-3 flex flex-wrap items-center justify-between gap-3">
 					<h3 class="text-xl font-semibold">{job.role} · {job.company}</h3>
 					<span class="inline-flex items-center gap-1.5 font-mono text-xs text-tx-secondary">
@@ -30,14 +30,14 @@ const { experience } = Astro.props as Props;
 						{formatPeriod(job.startDate, job.endDate)}
 					</span>
 				</div>
-				<p class="mb-4 inline-flex items-center gap-1.5 text-sm text-tx-secondary">
+				<p class="mb-4 inline-flex items-center gap-1.5 text-sm text-tx-secondary transition-colors duration-300 hover:text-tx-main">
 					<Icon name="map-pin" class="h-3.5 w-3.5" aria-hidden="true" />
 					{job.location}
 				</p>
 				<ul class="space-y-2 text-sm text-tx-secondary">
 					{job.highlights.map((line) => (
-						<li class="flex gap-2">
-							<Icon name="circle-check" class="mt-0.5 h-4 w-4 shrink-0 text-accent-primary" aria-hidden="true" />
+						<li class="flex gap-2 transition-colors duration-300 hover:text-tx-main">
+							<Icon name="circle-check" class="mt-0.5 h-4 w-4 shrink-0 text-accent-primary transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
 							<span>{line}</span>
 						</li>
 					))}

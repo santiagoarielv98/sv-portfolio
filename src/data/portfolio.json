@@ -26,7 +26,7 @@
     },
     {
       "category": "Backend & Cloud",
-      "items": ["Node.js", "NestJS", "Laravel", "AWS Amplify", "Firebase", "Google Cloud"]
+      "items": ["Node.js", "NestJS", "Laravel", "Django", "AWS", "Firebase", "Google Cloud"]
     },
     {
       "category": "Bases de Datos & Herramientas",

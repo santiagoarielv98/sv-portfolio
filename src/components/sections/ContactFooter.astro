@@ -12,6 +12,6 @@ const { email } = Astro.props as Props;
 	<p class="inline-flex items-center gap-2">
 		<Icon name="mail" class="h-4 w-4 text-accent-glow" aria-hidden="true" />
 		Contacto:
-		<a class="text-accent-glow transition-colors hover:text-accent-primary" href={`mailto:${email}`}>{email}</a>
+		<a class="text-accent-glow transition-all duration-300 hover:text-accent-primary hover:underline focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-main" href={`mailto:${email}`}>{email}</a>
 	</p>
 </footer>
