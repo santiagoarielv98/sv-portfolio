@@ -17,7 +17,7 @@ const sizeClass: Record<NonNullable<Props['size']>, string> = {
 	class:list={[
 		'inline-flex items-center rounded-lg border border-border-subtle bg-bg-hover font-mono text-tx-secondary',
 		sizeClass[size],
-		interactive ? 'transition-colors duration-200 hover:border-border-strong hover:text-tx-main' : '',
+		interactive ? 'transition-[transform,color,border-color] duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:text-tx-main' : '',
 		className,
 	]}
 >

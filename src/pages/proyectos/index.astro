@@ -30,7 +30,7 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 	title="Proyectos | Santiago Ariel Villanueva"
 	description="Listado de proyectos y productos construidos por Santiago Ariel Villanueva."
 >
-	<main class="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-5 sm:py-10 md:gap-12 md:px-8 md:py-14">
+	<main class="motion-enter mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-5 sm:py-10 md:gap-12 md:px-8 md:py-14">
 		<div class="flex flex-wrap items-center justify-between gap-3">
 			<Button href="/" variant="ghost" size="sm">
 				<Icon name="home" class="h-4 w-4" aria-hidden="true" />
@@ -122,28 +122,33 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 	</main>
 
 	<script>
-		const searchInput = document.getElementById('project-search') as HTMLInputElement | null;
-		const resetButton = document.getElementById('filters-reset') as HTMLButtonElement | null;
-		const techInputs = Array.from(document.querySelectorAll('.tech-filter') ) as HTMLInputElement[];
-		const statusButtons = Array.from(document.querySelectorAll('.status-filter')) as HTMLButtonElement[];
-		const projectItems = Array.from(document.querySelectorAll('.project-item')) as HTMLDivElement[];
-		const emptyState = document.getElementById('projects-empty');
+		const filtersWindow = window as Window & { __projectFiltersReady?: boolean };
 
-		let selectedStatus = 'all';
+		const initProjectFilters = () => {
+			const searchInput = document.getElementById('project-search') as HTMLInputElement | null;
+			const resetButton = document.getElementById('filters-reset') as HTMLButtonElement | null;
+			const techInputs = Array.from(document.querySelectorAll('.tech-filter')) as HTMLInputElement[];
+			const statusButtons = Array.from(document.querySelectorAll('.status-filter')) as HTMLButtonElement[];
+			const projectItems = Array.from(document.querySelectorAll('.project-item')) as HTMLDivElement[];
+			const emptyState = document.getElementById('projects-empty');
 
-		const params = new URLSearchParams(window.location.search);
-		const initialQuery = params.get('q') ?? '';
-		const initialStatus = params.get('status') ?? 'all';
-		const initialTech = (params.get('tech') ?? '').split(',').filter(Boolean);
+			if (!searchInput || projectItems.length === 0) return;
 
-		if (searchInput) searchInput.value = initialQuery;
-		selectedStatus = initialStatus;
+			let selectedStatus = 'all';
 
-		techInputs.forEach((input) => {
-			if (initialTech.includes(input.value)) {
-				input.checked = true;
-			}
-		});
+			const params = new URLSearchParams(window.location.search);
+			const initialQuery = params.get('q') ?? '';
+			const initialStatus = params.get('status') ?? 'all';
+			const initialTech = (params.get('tech') ?? '').split(',').filter(Boolean);
+
+			searchInput.value = initialQuery;
+			selectedStatus = initialStatus;
+
+			techInputs.forEach((input) => {
+				if (initialTech.includes(input.value)) {
+					input.checked = true;
+				}
+			});
 
 		const syncStatusButtons = () => {
 			statusButtons.forEach((button) => {
@@ -204,34 +209,53 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 			updateUrl(query, selectedTech, selectedStatus);
 		};
 
-		searchInput?.addEventListener('input', applyFilters);
-		techInputs.forEach((input) => {
-			input.addEventListener('change', () => {
-				syncTechChips();
-				applyFilters();
-			});
-		});
-		statusButtons.forEach((button) => {
-			button.addEventListener('click', () => {
-				selectedStatus = button.dataset.status ?? 'all';
-				syncStatusButtons();
-				applyFilters();
-			});
-		});
+			if (searchInput.dataset.bound !== 'true') {
+				searchInput.addEventListener('input', applyFilters);
+				searchInput.dataset.bound = 'true';
+			}
 
-		resetButton?.addEventListener('click', () => {
-			if (searchInput) searchInput.value = '';
 			techInputs.forEach((input) => {
-				input.checked = false;
+				if (input.dataset.bound === 'true') return;
+				input.addEventListener('change', () => {
+					syncTechChips();
+					applyFilters();
+				});
+				input.dataset.bound = 'true';
 			});
-			selectedStatus = 'all';
+
+			statusButtons.forEach((button) => {
+				if (button.dataset.bound === 'true') return;
+				button.addEventListener('click', () => {
+					selectedStatus = button.dataset.status ?? 'all';
+					syncStatusButtons();
+					applyFilters();
+				});
+				button.dataset.bound = 'true';
+			});
+
+			if (resetButton && resetButton.dataset.bound !== 'true') {
+				resetButton.addEventListener('click', () => {
+					searchInput.value = '';
+					techInputs.forEach((input) => {
+						input.checked = false;
+					});
+					selectedStatus = 'all';
+					syncTechChips();
+					syncStatusButtons();
+					applyFilters();
+				});
+				resetButton.dataset.bound = 'true';
+			}
+
 			syncTechChips();
 			syncStatusButtons();
 			applyFilters();
-		});
+		};
 
-		syncTechChips();
-		syncStatusButtons();
-		applyFilters();
+		initProjectFilters();
+		if (!filtersWindow.__projectFiltersReady) {
+			document.addEventListener('astro:page-load', initProjectFilters);
+			filtersWindow.__projectFiltersReady = true;
+		}
 	</script>
 </Layout>

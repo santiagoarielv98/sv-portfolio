@@ -23,6 +23,8 @@ const { buttonClass = '' } = Astro.props as Props;
 </button>
 
 <script>
+	const themeWindow = window as Window & { __themeHandlersReady?: boolean };
+
 	const setTheme = (theme: 'dark' | 'light') => {
 		document.documentElement.classList.toggle('light', theme === 'light');
 		document.documentElement.classList.toggle('dark', theme === 'dark');
@@ -41,13 +43,26 @@ const { buttonClass = '' } = Astro.props as Props;
 		return 'dark';
 	};
 
-	const syncIcons = () => setTheme(getCurrentTheme());
-	syncIcons();
+	const initThemeToggle = () => {
+		setTheme(getCurrentTheme());
 
-	document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
-		button.addEventListener('click', () => {
-			const next = getCurrentTheme() === 'dark' ? 'light' : 'dark';
-			setTheme(next);
+		document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+			const htmlButton = button as HTMLButtonElement;
+			if (htmlButton.dataset.bound === 'true') return;
+
+			htmlButton.addEventListener('click', () => {
+				const next = getCurrentTheme() === 'dark' ? 'light' : 'dark';
+				setTheme(next);
+			});
+
+			htmlButton.dataset.bound = 'true';
 		});
-	});
+	};
+
+	initThemeToggle();
+
+	if (!themeWindow.__themeHandlersReady) {
+		document.addEventListener('astro:page-load', initThemeToggle);
+		themeWindow.__themeHandlersReady = true;
+	}
 </script>

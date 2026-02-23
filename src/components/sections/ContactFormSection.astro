@@ -10,7 +10,7 @@ interface Props {
 const { email } = Astro.props as Props;
 ---
 
-<section id="contacto" class="border-t border-border-subtle pt-8 md:pt-10">
+<section id="contacto" class="motion-enter border-t border-border-subtle pt-8 md:pt-10">
 	<div class="mb-5">
 		<p class="mb-2 font-mono text-xs text-accent-glow">Contacto</p>
 		<h2 class="text-2xl font-semibold md:text-3xl">¿Trabajamos juntos?</h2>
@@ -60,27 +60,45 @@ const { email } = Astro.props as Props;
 </section>
 
 <script>
-	const form = document.getElementById('contact-form') as HTMLFormElement | null;
-	const toast = document.getElementById('contact-toast');
-	let toastTimeout: number | undefined;
+	const contactWindow = window as Window & { __contactHandlersReady?: boolean };
 
-	const hideToast = () => {
-		toast?.classList.add('hidden');
+	const initContactForm = () => {
+		const form = document.getElementById('contact-form') as HTMLFormElement | null;
+		const toast = document.getElementById('contact-toast');
+		if (!form || !toast) return;
+
+		let toastTimeout: number | undefined;
+
+		const hideToast = () => {
+			toast?.classList.add('hidden');
+		};
+
+		const showToast = () => {
+			toast?.classList.remove('hidden');
+			if (toastTimeout) window.clearTimeout(toastTimeout);
+			toastTimeout = window.setTimeout(hideToast, 3000);
+		};
+
+		if (form.dataset.bound !== 'true') {
+			form.addEventListener('submit', (event) => {
+				event.preventDefault();
+				showToast();
+				form.reset();
+			});
+			form.dataset.bound = 'true';
+		}
+
+		document.querySelectorAll('[data-toast-close="contact-toast"]').forEach((button) => {
+			const htmlButton = button as HTMLButtonElement;
+			if (htmlButton.dataset.bound === 'true') return;
+			htmlButton.addEventListener('click', hideToast);
+			htmlButton.dataset.bound = 'true';
+		});
 	};
 
-	const showToast = () => {
-		toast?.classList.remove('hidden');
-		if (toastTimeout) window.clearTimeout(toastTimeout);
-		toastTimeout = window.setTimeout(hideToast, 3000);
-	};
-
-	form?.addEventListener('submit', (event) => {
-		event.preventDefault();
-		showToast();
-		form.reset();
-	});
-
-	document.querySelectorAll('[data-toast-close="contact-toast"]').forEach((button) => {
-		button.addEventListener('click', hideToast);
-	});
+	initContactForm();
+	if (!contactWindow.__contactHandlersReady) {
+		document.addEventListener('astro:page-load', initContactForm);
+		contactWindow.__contactHandlersReady = true;
+	}
 </script>
