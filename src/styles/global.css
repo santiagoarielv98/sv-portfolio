@@ -70,7 +70,6 @@
       color var(--motion-base) var(--motion-ease);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    padding-bottom: 5.5rem;
   }
 
   [data-icon="sun"] {

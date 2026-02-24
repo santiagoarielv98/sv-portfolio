@@ -7,7 +7,7 @@ import ExperienceSection from "../components/sections/ExperienceSection.astro";
 import ProjectsSection from "../components/sections/ProjectsSection.astro";
 import EducationSection from "../components/sections/EducationSection.astro";
 import ContactFormSection from "../components/sections/ContactFormSection.astro";
-import ContactFooter from "../components/sections/ContactFooter.astro";
+import SiteFooter from "../components/sections/SiteFooter.astro";
 import portfolio from "../data/portfolio.json";
 import "../styles/global.css";
 
@@ -37,6 +37,6 @@ const projectCards = projectEntries
     <ProjectsSection projects={projectCards} />
     <EducationSection education={education} />
     <ContactFormSection email={personal.email} />
-    <ContactFooter email={personal.email} />
+    <SiteFooter />
   </main>
 </Layout>

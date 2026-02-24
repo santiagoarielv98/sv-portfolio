@@ -1,0 +1,51 @@
+---
+import { navItems } from "../navigation/navItems";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-border-subtle border-t pt-6 md:pt-8">
+  <div class="mb-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+    <nav
+      aria-label="Sitemap"
+      class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1"
+    >
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class="text-tx-secondary hover:text-tx-main focus-visible:ring-accent-primary/50 focus-visible:ring-offset-bg-main rounded-sm text-sm transition-colors hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+
+  <p class="text-tx-muted mb-2 text-center text-xs">
+    © {year} Santiago Ariel Villanueva. Todos los derechos reservados.
+  </p>
+
+  <svg
+    viewBox="0 0 1200 260"
+    role="img"
+    aria-label="SV"
+    class="text-tx-muted block w-full"
+    preserveAspectRatio="xMidYMax meet"
+  >
+    <title>SV</title>
+    <text
+      x="50%"
+      y="100%"
+      text-anchor="middle"
+      dominant-baseline="text-after-edge"
+      fill="currentColor"
+      font-size="260"
+      font-weight="800"
+      letter-spacing="-10"
+    >
+      SV
+    </text>
+  </svg>
+</footer>

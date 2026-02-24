@@ -3,6 +3,7 @@ import { Icon } from "astro-icon/components";
 import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
+import SiteFooter from "../../components/sections/SiteFooter.astro";
 import Button from "../../components/ui/Button.astro";
 import "../../styles/global.css";
 
@@ -172,6 +173,8 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
     >
       No hay proyectos que coincidan con esos filtros.
     </p>
+
+    <SiteFooter />
   </main>
 
   <style>

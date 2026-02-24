@@ -3,6 +3,7 @@ import { Icon } from "astro-icon/components";
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
+import SiteFooter from "../../components/sections/SiteFooter.astro";
 import Card from "../../components/ui/Card.astro";
 import CardHeader from "../../components/ui/CardHeader.astro";
 import CardTitle from "../../components/ui/CardTitle.astro";
@@ -314,5 +315,7 @@ const relatedProjects =
         </section>
       )
     }
+
+    <SiteFooter />
   </main>
 </Layout>
