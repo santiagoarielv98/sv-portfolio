@@ -5,7 +5,6 @@ import CardHeader from "./ui/CardHeader.astro";
 import CardTitle from "./ui/CardTitle.astro";
 import CardDescription from "./ui/CardDescription.astro";
 import CardContent from "./ui/CardContent.astro";
-import Badge from "./ui/Badge.astro";
 import Tag from "./ui/Tag.astro";
 
 interface Props {
@@ -13,6 +12,11 @@ interface Props {
   description: string;
   techStack: string[];
   status: string;
+  gallery?: {
+    image: string;
+    alt: string;
+    caption: string;
+  }[];
   link?: string;
   github?: string;
 }
@@ -21,36 +25,112 @@ const {
   title,
   description,
   techStack,
-  status,
+  gallery = [],
   link = "#",
   github = "#",
 } = Astro.props as Props;
 
-const statusVariant = status.toLowerCase().includes("planeado")
-  ? "warning"
-  : "success";
 const isInternalLink = link.startsWith("/");
+const carouselId = title
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/(^-|-$)/g, "");
+const galleryItems = gallery.length
+  ? gallery
+  : [
+      {
+        image: "/projects/gallery-1.svg",
+        alt: `Vista previa de ${title}`,
+        caption: "Vista previa del proyecto.",
+      },
+    ];
 ---
 
 <Card as="article" class="group">
-  <CardHeader class="pb-0">
-    <div class="flex items-start justify-between gap-3">
-      <div
-        class="border-border-subtle bg-bg-main text-accent-glow shadow-glass flex h-11 w-11 items-center justify-center rounded-lg border"
-      >
-        <Icon name="code" class="h-5 w-5" aria-hidden="true" />
-      </div>
-      <Badge variant={statusVariant} size="md">{status}</Badge>
+  <div
+    data-project-carousel={carouselId}
+    class="relative aspect-[16/10] overflow-hidden"
+  >
+    {
+      galleryItems.map((item, index) => (
+        <figure
+          class:list={[
+            "absolute inset-0 h-full w-full transition-opacity duration-300",
+            index === 0 ? "opacity-100" : "pointer-events-none opacity-0",
+          ]}
+          data-carousel-image
+          data-slide={index}
+        >
+          <img
+            src={item.image}
+            alt={item.alt}
+            loading="lazy"
+            class="h-full w-full object-cover"
+          />
+        </figure>
+      ))
+    }
+
+    <div
+      class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/65 via-black/20 to-transparent"
+    >
     </div>
 
+    <button
+      type="button"
+      class="border-border-subtle bg-bg-card/80 text-tx-main hover:bg-bg-card focus-visible:ring-accent-primary/50 pointer-events-auto absolute top-1/2 left-3 z-20 -translate-y-1/2 rounded-full border p-1.5 backdrop-blur-xs transition-colors focus-visible:ring-2 focus-visible:outline-none"
+      data-carousel-prev
+      aria-label="Imagen anterior"
+    >
+      <Icon
+        name="arrow-right"
+        class="h-4 w-4 -scale-x-100"
+        aria-hidden="true"
+      />
+    </button>
+
+    <button
+      type="button"
+      class="border-border-subtle bg-bg-card/80 text-tx-main hover:bg-bg-card focus-visible:ring-accent-primary/50 pointer-events-auto absolute top-1/2 right-3 z-20 -translate-y-1/2 rounded-full border p-1.5 backdrop-blur-xs transition-colors focus-visible:ring-2 focus-visible:outline-none"
+      data-carousel-next
+      aria-label="Imagen siguiente"
+    >
+      <Icon name="arrow-right" class="h-4 w-4" aria-hidden="true" />
+    </button>
+
+    <div
+      class="pointer-events-auto absolute right-0 bottom-3 left-0 z-20 flex justify-center gap-1.5"
+    >
+      {
+        galleryItems.map((item, index) => (
+          <button
+            type="button"
+            data-carousel-dot
+            data-slide={index}
+            aria-label={`Ir a la imagen ${index + 1}: ${item.caption}`}
+            class:list={[
+              "border-border-subtle h-2.5 w-2.5 rounded-full border transition-all",
+              index === 0
+                ? "bg-accent-glow scale-110"
+                : "bg-bg-card/65 hover:bg-bg-card",
+            ]}
+          />
+        ))
+      }
+    </div>
+  </div>
+
+  <CardHeader class="pointer-events-none absolute inset-x-0 top-0 z-10 pb-0">
     <CardTitle
-      class="group-hover:text-accent-glow mt-4 transition-colors duration-300"
+      class="text-bg-card mt-4 line-clamp-2 transition-colors duration-300"
       >{title}</CardTitle
     >
-    <CardDescription class="mt-2">{description}</CardDescription>
+    <CardDescription class="text-bg-card/90 mt-2 line-clamp-2"
+      >{description}</CardDescription
+    >
   </CardHeader>
 
-  <CardContent class="pt-4">
+  <CardContent class="z-10 pt-4">
     <ul class="mb-5 flex flex-wrap gap-2 md:mb-6">
       {
         techStack.map((tech) => (
@@ -90,4 +170,78 @@ const isInternalLink = link.startsWith("/");
       </a>
     </div>
   </CardContent>
+
+  <script>
+    const carouselWindow = window as Window & {
+      __projectCarouselReady?: boolean;
+    };
+
+    const initProjectCarousels = () => {
+      const carousels = Array.from(
+        document.querySelectorAll("[data-project-carousel]"),
+      ) as HTMLElement[];
+
+      carousels.forEach((carousel) => {
+        if (carousel.dataset.bound === "true") return;
+
+        const images = Array.from(
+          carousel.querySelectorAll("[data-carousel-image]"),
+        ) as HTMLElement[];
+        const dots = Array.from(
+          carousel.querySelectorAll("[data-carousel-dot]"),
+        ) as HTMLButtonElement[];
+        const prevButton = carousel.querySelector(
+          "[data-carousel-prev]",
+        ) as HTMLButtonElement | null;
+        const nextButton = carousel.querySelector(
+          "[data-carousel-next]",
+        ) as HTMLButtonElement | null;
+
+        if (!images.length || !prevButton || !nextButton) return;
+
+        let currentIndex = 0;
+
+        const updateSlides = () => {
+          images.forEach((image, index) => {
+            const active = index === currentIndex;
+            image.classList.toggle("opacity-100", active);
+            image.classList.toggle("opacity-0", !active);
+            image.classList.toggle("pointer-events-none", !active);
+          });
+
+          dots.forEach((dot, index) => {
+            const active = index === currentIndex;
+            dot.classList.toggle("bg-accent-glow", active);
+            dot.classList.toggle("scale-110", active);
+            dot.classList.toggle("bg-bg-card/65", !active);
+          });
+        };
+
+        const moveBy = (step: number) => {
+          currentIndex = (currentIndex + step + images.length) % images.length;
+          updateSlides();
+        };
+
+        prevButton.addEventListener("click", () => moveBy(-1));
+        nextButton.addEventListener("click", () => moveBy(1));
+
+        dots.forEach((dot) => {
+          dot.addEventListener("click", () => {
+            const nextIndex = Number(dot.dataset.slide ?? "0");
+            if (Number.isNaN(nextIndex)) return;
+            currentIndex = nextIndex;
+            updateSlides();
+          });
+        });
+
+        carousel.dataset.bound = "true";
+      });
+    };
+
+    initProjectCarousels();
+    if (!carouselWindow.__projectCarouselReady) {
+      document.addEventListener("astro:page-load", initProjectCarousels);
+      carouselWindow.__projectCarouselReady = true;
+    }
+  </script>
 </Card>

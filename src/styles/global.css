@@ -117,20 +117,6 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #3f3f46;
   }
-
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: var(--motion-slow);
-    animation-timing-function: var(--motion-ease);
-  }
-
-  ::view-transition-old(root) {
-    animation-name: motion-fade-out;
-  }
-
-  ::view-transition-new(root) {
-    animation-name: motion-fade-in;
-  }
 }
 
 @layer utilities {
@@ -235,10 +221,5 @@
     animation-iteration-count: 1 !important;
     transition-duration: 1ms !important;
     scroll-behavior: auto !important;
-  }
-
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none !important;
   }
 }

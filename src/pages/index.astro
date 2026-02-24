@@ -22,6 +22,7 @@ const projectCards = projectEntries
     status: entry.data.status,
     link: `/proyectos/${toSlug(entry.id)}`,
     github: entry.data.github,
+    gallery: entry.data.gallery,
     year: entry.data.year,
   }))
   .sort((a, b) => Number(b.year) - Number(a.year));

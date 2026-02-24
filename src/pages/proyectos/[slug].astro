@@ -41,6 +41,7 @@ const scoredRelatedProjects = allProjects
       description: entry.data.description,
       techStack: entry.data.techStack,
       status: entry.data.status,
+      gallery: entry.data.gallery,
       year: Number(entry.data.year),
       github: entry.data.github,
       score: overlap,
@@ -307,6 +308,7 @@ const relatedProjects =
                 description={entry.description}
                 techStack={entry.techStack}
                 status={entry.status}
+                gallery={entry.gallery}
                 link={`/proyectos/${entry.slug}`}
                 github={entry.github}
               />

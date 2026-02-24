@@ -19,6 +19,7 @@ const projects = projectEntries
     status: entry.data.status,
     year: entry.data.year,
     github: entry.data.github,
+    gallery: entry.data.gallery,
     link: `/proyectos/${toSlug(entry.id)}`,
   }))
   .sort((a, b) => Number(b.year) - Number(a.year));
@@ -152,14 +153,13 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
       class="grid gap-3 sm:gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3"
     >
       {
-        projects.map((project, i) => (
+        projects.map((project) => (
           <div
             class="project-item"
             data-title={project.title.toLowerCase()}
             data-description={project.description.toLowerCase()}
             data-status={project.status}
             data-tech={project.techStack.join("|").toLowerCase()}
-            style={`view-transition-name: project-${i};`}
           >
             <ProjectCard {...project} />
           </div>
@@ -176,56 +176,6 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
 
     <SiteFooter />
   </main>
-
-  <style>
-    .project-item {
-      contain: layout;
-      view-transition-class: project-item;
-    }
-
-    ::view-transition-old(.project-item) {
-      animation: vt-project-out 300ms cubic-bezier(0.4, 0, 0.2, 1) both;
-    }
-
-    ::view-transition-new(.project-item) {
-      animation: vt-project-in 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    }
-
-    ::view-transition-group(.project-item) {
-      animation-duration: var(--motion-slow);
-      animation-timing-function: var(--motion-ease);
-    }
-
-    @keyframes vt-project-in {
-      from {
-        opacity: 0;
-        transform: translateY(150px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes vt-project-out {
-      from {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      to {
-        opacity: 0;
-        transform: translateY(150px);
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      ::view-transition-old(.project-item),
-      ::view-transition-new(.project-item),
-      ::view-transition-group(.project-item) {
-        animation: none !important;
-      }
-    }
-  </style>
 
   <script>
     const filtersWindow = window as Window & {
@@ -347,17 +297,7 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
       };
 
       const applyFilters = () => {
-        if (document.startViewTransition) {
-          document.documentElement.style.viewTransitionName = "none";
-          const transition = document.startViewTransition(() =>
-            commitFilterChanges(),
-          );
-          transition.finished.then(() => {
-            document.documentElement.style.viewTransitionName = "";
-          });
-        } else {
-          commitFilterChanges();
-        }
+        commitFilterChanges();
       };
 
       if (searchInput.dataset.bound !== "true") {

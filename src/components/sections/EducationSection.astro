@@ -43,7 +43,9 @@ const { education } = Astro.props as Props;
             </CardTitle>
             <CardDescription class="mt-2 inline-flex items-center gap-1.5">
               <Icon name="map-pin" class="h-3.5 w-3.5" aria-hidden="true" />
-              {item.institution} · {item.location}
+              <span class="flex-1">
+                {item.institution} · {item.location}
+              </span>
             </CardDescription>
           </CardHeader>
           <CardContent class="pt-3 md:pt-4">
