@@ -184,11 +184,11 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
     }
 
     ::view-transition-old(.project-item) {
-      animation: vt-project-out var(--motion-base) var(--motion-ease) both;
+      animation: vt-project-out 300ms cubic-bezier(0.4, 0, 0.2, 1) both;
     }
 
     ::view-transition-new(.project-item) {
-      animation: vt-project-in var(--motion-base) var(--motion-ease) both;
+      animation: vt-project-in 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
     }
 
     ::view-transition-group(.project-item) {
@@ -199,14 +199,22 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
     @keyframes vt-project-in {
       from {
         opacity: 0;
-        transform: scale(0.96);
+        transform: translateY(150px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
     @keyframes vt-project-out {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
       to {
         opacity: 0;
-        transform: scale(0.96);
+        transform: translateY(150px);
       }
     }
 
