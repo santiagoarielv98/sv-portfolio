@@ -5,6 +5,7 @@ import CardHeader from "./ui/CardHeader.astro";
 import CardTitle from "./ui/CardTitle.astro";
 import CardDescription from "./ui/CardDescription.astro";
 import CardContent from "./ui/CardContent.astro";
+import Button from "./ui/Button.astro";
 import Tag from "./ui/Tag.astro";
 
 interface Props {
@@ -49,7 +50,7 @@ const galleryItems = gallery.length
 <Card as="article" class="group">
   <div
     data-project-carousel={carouselId}
-    class="relative aspect-[16/10] overflow-hidden"
+    class="relative aspect-16/10 overflow-hidden"
   >
     {
       galleryItems.map((item, index) => (
@@ -76,30 +77,38 @@ const galleryItems = gallery.length
     >
     </div>
 
-    <button
-      type="button"
-      class="border-border-subtle bg-bg-card/80 text-tx-main hover:bg-bg-card focus-visible:ring-accent-primary/50 pointer-events-auto absolute top-1/2 left-3 z-20 -translate-y-1/2 rounded-full border p-1.5 backdrop-blur-xs transition-colors focus-visible:ring-2 focus-visible:outline-none"
-      data-carousel-prev
-      aria-label="Imagen anterior"
+    <div
+      class="pointer-events-auto absolute right-3 bottom-3 z-20 flex items-center gap-1.5"
     >
-      <Icon
-        name="arrow-right"
-        class="h-4 w-4 -scale-x-100"
-        aria-hidden="true"
-      />
-    </button>
+      <Button
+        type="button"
+        variant="secondary"
+        size="icon-xs"
+        class="bg-bg-card/80 h-8 w-8 rounded-full p-0 backdrop-blur-xs"
+        data-carousel-prev
+        ariaLabel="Imagen anterior"
+      >
+        <Icon
+          name="arrow-right"
+          class="h-4 w-4 -scale-x-100"
+          aria-hidden="true"
+        />
+      </Button>
 
-    <button
-      type="button"
-      class="border-border-subtle bg-bg-card/80 text-tx-main hover:bg-bg-card focus-visible:ring-accent-primary/50 pointer-events-auto absolute top-1/2 right-3 z-20 -translate-y-1/2 rounded-full border p-1.5 backdrop-blur-xs transition-colors focus-visible:ring-2 focus-visible:outline-none"
-      data-carousel-next
-      aria-label="Imagen siguiente"
-    >
-      <Icon name="arrow-right" class="h-4 w-4" aria-hidden="true" />
-    </button>
+      <Button
+        type="button"
+        variant="secondary"
+        size="icon-xs"
+        class="bg-bg-card/80 h-8 w-8 rounded-full p-0 backdrop-blur-xs"
+        data-carousel-next
+        ariaLabel="Imagen siguiente"
+      >
+        <Icon name="arrow-right" class="h-4 w-4" aria-hidden="true" />
+      </Button>
+    </div>
 
     <div
-      class="pointer-events-auto absolute right-0 bottom-3 left-0 z-20 flex justify-center gap-1.5"
+      class="pointer-events-auto absolute right-0 bottom-3 left-1/2 z-20 flex w-max -translate-x-1/2 justify-center gap-1.5"
     >
       {
         galleryItems.map((item, index) => (
@@ -120,9 +129,8 @@ const galleryItems = gallery.length
     </div>
   </div>
 
-  <CardHeader class="pointer-events-none absolute inset-x-0 top-0 z-10 pb-0">
-    <CardTitle
-      class="text-bg-card mt-4 line-clamp-2 transition-colors duration-300"
+  <CardHeader>
+    <CardTitle class="text-bg-card line-clamp-2 transition-colors duration-300"
       >{title}</CardTitle
     >
     <CardDescription class="text-bg-card/90 mt-2 line-clamp-2"
@@ -142,32 +150,26 @@ const galleryItems = gallery.length
     </ul>
 
     <div class="flex items-center gap-4 text-sm">
-      <a
+      <Button
         href={link}
-        class="group/link text-accent-glow hover:text-accent-primary focus-visible:ring-accent-primary/50 focus-visible:ring-offset-bg-card inline-flex items-center gap-1 rounded-sm transition-all duration-300 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+        variant="link"
+        class="group/link text-accent-glow"
         target={isInternalLink ? undefined : "_blank"}
         rel={isInternalLink ? undefined : "noreferrer noopener"}
       >
-        <Icon
-          name="external-link"
-          class="h-3.5 w-3.5 transition-opacity duration-300 group-hover/link:opacity-85"
-          aria-hidden="true"
-        />
+        <Icon name="external-link" class="h-3.5 w-3.5" aria-hidden="true" />
         Ver proyecto
-      </a>
-      <a
+      </Button>
+      <Button
         href={github}
-        class="group/repo text-tx-secondary hover:text-tx-main focus-visible:ring-accent-primary/50 focus-visible:ring-offset-bg-card inline-flex items-center gap-1 rounded-sm transition-all duration-300 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+        variant="link"
+        class="group/repo text-tx-secondary hover:text-tx-main"
         target="_blank"
         rel="noreferrer noopener"
       >
-        <Icon
-          name="github"
-          class="h-3.5 w-3.5 transition-transform duration-300 group-hover/repo:scale-110"
-          aria-hidden="true"
-        />
+        <Icon name="github" class="h-3.5 w-3.5" aria-hidden="true" />
         Repositorio
-      </a>
+      </Button>
     </div>
   </CardContent>
 

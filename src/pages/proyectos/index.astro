@@ -159,7 +159,7 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
             data-title={project.title.toLowerCase()}
             data-description={project.description.toLowerCase()}
             data-status={project.status}
-            data-tech={project.techStack.join("|").toLowerCase()}
+            dataw-tech={project.techStack.join("|").toLowerCase()}
           >
             <ProjectCard {...project} />
           </div>

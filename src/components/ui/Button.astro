@@ -9,9 +9,10 @@ interface Props {
     | "outline"
     | "ghost"
     | "link"
+    | "icon"
     | "filter"
     | "filter-active";
-  size?: "sm" | "default" | "lg" | "icon" | "chip";
+  size?: "sm" | "default" | "lg" | "icon" | "chip" | "icon-xs";
   target?: "_blank" | "_self" | "_parent" | "_top";
   rel?: string;
   disabled?: boolean;
@@ -44,6 +45,7 @@ const variantClass: Record<NonNullable<Props["variant"]>, string> = {
     "border border-border-strong bg-transparent text-tx-main hover:bg-bg-hover",
   ghost: "text-tx-secondary hover:bg-bg-hover hover:text-tx-main",
   link: "rounded-sm p-0 text-accent-glow underline-offset-4 hover:text-accent-primary hover:underline",
+  icon: "h-10 w-10 p-0",
   filter:
     "border border-border-subtle bg-bg-main text-tx-secondary hover:border-border-strong hover:text-tx-main",
   "filter-active":
@@ -55,6 +57,7 @@ const sizeClass: Record<NonNullable<Props["size"]>, string> = {
   default: "h-10 px-4 py-2 text-sm",
   lg: "h-11 px-6 text-sm",
   icon: "h-10 w-10 p-0",
+  "icon-xs": "h-8 w-8 p-0",
   chip: "h-8 px-2.5 py-1.5 text-xs",
 };
 
