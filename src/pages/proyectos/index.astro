@@ -35,7 +35,8 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
   description="Listado de proyectos y productos construidos por Santiago Ariel Villanueva."
 >
   <main
-    class="motion-enter mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-5 sm:py-10 md:gap-12 md:px-8 md:py-14"
+    class="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-5 sm:py-10 md:gap-12 md:px-8 md:py-14"
+    transition:animate="fade"
   >
     <div class="flex flex-wrap items-center justify-between gap-3">
       <Button href="/" variant="ghost" size="sm">
@@ -159,7 +160,7 @@ const allStatuses = [...new Set(projects.map((project) => project.status))];
             data-title={project.title.toLowerCase()}
             data-description={project.description.toLowerCase()}
             data-status={project.status}
-            dataw-tech={project.techStack.join("|").toLowerCase()}
+            data-tech={project.techStack.join("|").toLowerCase()}
           >
             <ProjectCard {...project} />
           </div>

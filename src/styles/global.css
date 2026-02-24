@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -30,11 +31,6 @@
     0 0 0 1px rgba(9, 9, 11, 0.08), 0 8px 24px rgba(9, 9, 11, 0.08);
   --shadow-glow-primary: 0 0 20px -5px rgba(59, 130, 246, 0.4);
   --shadow-glow-secondary: 0 0 20px -5px rgba(249, 115, 22, 0.4);
-
-  --motion-fast: 140ms;
-  --motion-base: 220ms;
-  --motion-slow: 340ms;
-  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
@@ -65,9 +61,6 @@
     background-color: var(--color-bg-main);
     color: var(--color-tx-main);
     font-family: var(--font-sans);
-    transition:
-      background-color var(--motion-base) var(--motion-ease),
-      color var(--motion-base) var(--motion-ease);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -116,110 +109,5 @@
 
   ::-webkit-scrollbar-thumb:hover {
     background: #3f3f46;
-  }
-}
-
-@layer utilities {
-  @keyframes motion-fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes motion-fade-out {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
-  }
-
-  .motion-enter {
-    animation: motion-fade-in var(--motion-slow) var(--motion-ease) both;
-  }
-
-  .surface {
-    border-radius: 0.75rem;
-    border: 1px solid var(--color-border-subtle);
-    background-color: var(--color-bg-card);
-    box-shadow: var(--shadow-glass);
-    transition:
-      transform var(--motion-base) var(--motion-ease),
-      border-color var(--motion-base) var(--motion-ease),
-      box-shadow var(--motion-slow) var(--motion-ease),
-      background-color var(--motion-base) var(--motion-ease);
-  }
-
-  .markdown-body {
-    color: var(--color-tx-secondary);
-    font-size: 0.95rem;
-    line-height: 1.7;
-  }
-
-  .markdown-body h2,
-  .markdown-body h3 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.6rem;
-    color: var(--color-tx-main);
-    font-family: var(--font-display);
-    letter-spacing: -0.02em;
-  }
-
-  .markdown-body p {
-    margin: 0.75rem 0;
-  }
-
-  .markdown-body ul,
-  .markdown-body ol {
-    margin: 0.75rem 0;
-    padding-left: 1.1rem;
-  }
-
-  .markdown-body li {
-    margin: 0.35rem 0;
-  }
-
-  .markdown-body strong {
-    color: var(--color-tx-main);
-    font-weight: 600;
-  }
-
-  .markdown-body a {
-    color: var(--color-accent-glow);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-
-  .markdown-body code {
-    padding: 0.1rem 0.35rem;
-    border-radius: 0.4rem;
-    border: 1px solid var(--color-border-subtle);
-    background-color: var(--color-bg-hover);
-    font-family: var(--font-mono);
-    font-size: 0.82em;
-    color: var(--color-tx-main);
-  }
-
-  .markdown-body blockquote {
-    margin: 1rem 0;
-    padding: 0.7rem 0.9rem;
-    border-left: 2px solid var(--color-accent-primary);
-    border-radius: 0.5rem;
-    background: rgb(59 130 246 / 0.08);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 1ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 1ms !important;
-    scroll-behavior: auto !important;
   }
 }
