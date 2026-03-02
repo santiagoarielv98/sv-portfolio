@@ -1,7 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
-import PrimaryButton from "../PrimaryButton.astro";
 import SocialIcon from "../SocialIcon.astro";
+import { Link } from "../ui/link";
 
 interface SocialLink {
   platform: string;
@@ -72,15 +72,15 @@ const { personal, about } = Astro.props as Props;
   <div class="mt-6 flex flex-wrap gap-3 md:mt-8 md:gap-4">
     {
       personal.social.map((item) => (
-        <PrimaryButton
+        <Link
           href={item.url}
-          ariaLabel={`Abrir ${item.platform}`}
+          aria-label={`Abrir ${item.platform}`}
           target="_blank"
           rel="noreferrer noopener"
         >
-          <SocialIcon platform={item.icon ?? item.platform} class="h-4 w-4" />
+          <SocialIcon platform={item.icon ?? item.platform} />
           <span>{item.platform}</span>
-        </PrimaryButton>
+        </Link>
       ))
     }
   </div>
