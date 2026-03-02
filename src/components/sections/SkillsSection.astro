@@ -1,7 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
-import Badge from "../ui/Badge.astro";
-import Tag from "../ui/Tag.astro";
+import { Badge } from "../ui/badge";
 import {
   Card,
   CardHeader,
@@ -48,7 +47,7 @@ const { skills } = Astro.props as Props;
             <ul class="flex flex-wrap gap-2">
               {group.items.map((item) => (
                 <li>
-                  <Tag interactive>{item}</Tag>
+                  <Badge variant="tag">{item}</Badge>
                 </li>
               ))}
             </ul>

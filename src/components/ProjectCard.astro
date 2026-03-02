@@ -1,12 +1,15 @@
 ---
 import { Icon } from "astro-icon/components";
-import Card from "./ui/Card.astro";
-import CardHeader from "./ui/CardHeader.astro";
-import CardTitle from "./ui/CardTitle.astro";
-import CardDescription from "./ui/CardDescription.astro";
-import CardContent from "./ui/CardContent.astro";
-import Button from "./ui/Button.astro";
-import Tag from "./ui/Tag.astro";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "./ui/card";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
+import { Link } from "./ui/link";
 
 interface Props {
   title: string;
@@ -47,7 +50,7 @@ const galleryItems = gallery.length
     ];
 ---
 
-<Card as="article" class="group">
+<Card>
   <div
     data-project-carousel={carouselId}
     class="relative aspect-16/10 overflow-hidden"
@@ -84,26 +87,24 @@ const galleryItems = gallery.length
         type="button"
         variant="secondary"
         size="icon-xs"
-        class="bg-bg-card/80 h-8 w-8 rounded-full p-0 backdrop-blur-xs"
-        data-carousel-prev
-        ariaLabel="Imagen anterior"
+        aria-label="Imagen anterior"
       >
         <Icon
           name="arrow-right"
           class="h-4 w-4 -scale-x-100"
           aria-hidden="true"
         />
+        <span class="sr-only">Imagen anterior</span>
       </Button>
 
       <Button
         type="button"
         variant="secondary"
         size="icon-xs"
-        class="bg-bg-card/80 h-8 w-8 rounded-full p-0 backdrop-blur-xs"
-        data-carousel-next
-        ariaLabel="Imagen siguiente"
+        aria-label="Imagen siguiente"
       >
         <Icon name="arrow-right" class="h-4 w-4" aria-hidden="true" />
+        <span class="sr-only">Imagen siguiente</span>
       </Button>
     </div>
 
@@ -130,120 +131,41 @@ const galleryItems = gallery.length
   </div>
 
   <CardHeader>
-    <CardTitle class="text-bg-card line-clamp-2 transition-colors duration-300"
-      >{title}</CardTitle
-    >
-    <CardDescription class="text-bg-card/90 mt-2 line-clamp-2"
-      >{description}</CardDescription
-    >
+    <CardTitle>{title}</CardTitle>
+    <CardDescription>{description}</CardDescription>
   </CardHeader>
 
-  <CardContent class="z-10 pt-4">
+  <CardContent className="z-10 pt-4">
     <ul class="mb-5 flex flex-wrap gap-2 md:mb-6">
       {
         techStack.map((tech) => (
           <li>
-            <Tag interactive>{tech}</Tag>
+            <Badge variant="tag">{tech}</Badge>
           </li>
         ))
       }
     </ul>
 
     <div class="flex items-center gap-4 text-sm">
-      <Button
+      <Link
         href={link}
         variant="link"
-        class="group/link text-accent-glow"
         target={isInternalLink ? undefined : "_blank"}
         rel={isInternalLink ? undefined : "noreferrer noopener"}
       >
-        <Icon name="external-link" class="h-3.5 w-3.5" aria-hidden="true" />
+        <Icon name="external-link" aria-hidden="true" />
         Ver proyecto
-      </Button>
-      <Button
+      </Link>
+      <Link
         href={github}
         variant="link"
-        class="group/repo text-tx-secondary hover:text-tx-main"
+        className="text-tx-secondary hover:text-tx-main"
         target="_blank"
         rel="noreferrer noopener"
       >
-        <Icon name="github" class="h-3.5 w-3.5" aria-hidden="true" />
+        <Icon name="github" aria-hidden="true" />
         Repositorio
-      </Button>
+      </Link>
     </div>
   </CardContent>
-
-  <script>
-    const carouselWindow = window as Window & {
-      __projectCarouselReady?: boolean;
-    };
-
-    const initProjectCarousels = () => {
-      const carousels = Array.from(
-        document.querySelectorAll("[data-project-carousel]"),
-      ) as HTMLElement[];
-
-      carousels.forEach((carousel) => {
-        if (carousel.dataset.bound === "true") return;
-
-        const images = Array.from(
-          carousel.querySelectorAll("[data-carousel-image]"),
-        ) as HTMLElement[];
-        const dots = Array.from(
-          carousel.querySelectorAll("[data-carousel-dot]"),
-        ) as HTMLButtonElement[];
-        const prevButton = carousel.querySelector(
-          "[data-carousel-prev]",
-        ) as HTMLButtonElement | null;
-        const nextButton = carousel.querySelector(
-          "[data-carousel-next]",
-        ) as HTMLButtonElement | null;
-
-        if (!images.length || !prevButton || !nextButton) return;
-
-        let currentIndex = 0;
-
-        const updateSlides = () => {
-          images.forEach((image, index) => {
-            const active = index === currentIndex;
-            image.classList.toggle("opacity-100", active);
-            image.classList.toggle("opacity-0", !active);
-            image.classList.toggle("pointer-events-none", !active);
-          });
-
-          dots.forEach((dot, index) => {
-            const active = index === currentIndex;
-            dot.classList.toggle("bg-accent-glow", active);
-            dot.classList.toggle("scale-110", active);
-            dot.classList.toggle("bg-bg-card/65", !active);
-          });
-        };
-
-        const moveBy = (step: number) => {
-          currentIndex = (currentIndex + step + images.length) % images.length;
-          updateSlides();
-        };
-
-        prevButton.addEventListener("click", () => moveBy(-1));
-        nextButton.addEventListener("click", () => moveBy(1));
-
-        dots.forEach((dot) => {
-          dot.addEventListener("click", () => {
-            const nextIndex = Number(dot.dataset.slide ?? "0");
-            if (Number.isNaN(nextIndex)) return;
-            currentIndex = nextIndex;
-            updateSlides();
-          });
-        });
-
-        carousel.dataset.bound = "true";
-      });
-    };
-
-    initProjectCarousels();
-    if (!carouselWindow.__projectCarouselReady) {
-      document.addEventListener("astro:page-load", initProjectCarousels);
-      carouselWindow.__projectCarouselReady = true;
-    }
-  </script>
 </Card>

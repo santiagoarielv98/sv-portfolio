@@ -1,6 +1,5 @@
 ---
 import { Icon } from "astro-icon/components";
-import SocialIcon from "../SocialIcon.astro";
 import { Link } from "../ui/link";
 
 interface SocialLink {
@@ -78,7 +77,7 @@ const { personal, about } = Astro.props as Props;
           target="_blank"
           rel="noreferrer noopener"
         >
-          <SocialIcon platform={item.icon ?? item.platform} />
+          <Icon name={item.icon} aria-hidden="true" />
           <span>{item.platform}</span>
         </Link>
       ))

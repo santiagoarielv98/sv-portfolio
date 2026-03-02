@@ -9,19 +9,16 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        // Matches Badge.astro default — blue-ish tint
         default:
           "border-accent-primary/30 bg-accent-primary/15 text-accent-glow",
-        // Matches Badge.astro outline
         secondary: "border-border-strong bg-transparent text-tx-secondary",
         outline: "border-border-strong bg-transparent text-tx-secondary",
-        // Matches Badge.astro error
         destructive: "border-state-error/30 bg-state-error/15 text-state-error",
-        // Portfolio-specific
         success:
           "border-state-success/30 bg-state-success/15 text-state-success",
         warning:
           "border-state-warning/30 bg-state-warning/15 text-state-warning",
+        tag: "border-border-subtle bg-bg-hover text-tx-secondary hover:border-border-strong hover:text-tx-main transition-[color,border-color,opacity] duration-200",
       },
       size: {
         sm: "px-2 py-0.5 text-[10px]",
